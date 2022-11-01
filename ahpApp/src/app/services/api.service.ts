@@ -8,10 +8,10 @@ export class ApiService {
   constructor(private http: HttpClient) {}
 
   postParticipant(data: any) {
-    return this.http.post<any>('http://localhost:3000/', data);
+    return this.http.post<any>('http://localhost:8080/', data);
   }
 
   getParticipants() {
-    return this.http.get<any>('http://localhost:3000/');
+    return this.http.get<any>('http://localhost:8080/participants');
   }
 }

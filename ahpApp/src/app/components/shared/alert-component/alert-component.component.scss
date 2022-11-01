@@ -1,0 +1,13 @@
+.alert-dialog-wrapper {
+  width: 300px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 20px;
+
+  .alert-dialog-buttons {
+    display: flex;
+    gap: 20px;
+    justify-content: flex-end;
+  }
+}

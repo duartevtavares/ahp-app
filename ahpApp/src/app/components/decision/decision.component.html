@@ -1,0 +1,18 @@
+<div class="decision-container">
+  <div class="participants">
+    <span class="add-participants-span">
+      <h3>Select the names of the participants in the decision:</h3>
+      <button class="add-button" mat-raised-button (click)="openDialog()">
+        Add participant
+      </button>
+    </span>
+
+    <participants-table-component></participants-table-component>
+
+    <div class="new-decision-button">
+      <a [routerLink]="'/new-decision'" routerLinkActive="active"
+        ><button mat-raised-button>Start new decision</button></a
+      >
+    </div>
+  </div>
+</div>

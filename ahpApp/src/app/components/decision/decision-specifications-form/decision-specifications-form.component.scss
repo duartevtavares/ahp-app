@@ -1,0 +1,101 @@
+.form-wrapper {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+
+  .form-card {
+    width: 80%;
+    padding: 40px;
+    margin-bottom: 40px;
+  }
+
+  form {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 50px;
+
+    .problem-goal {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+
+      .goal-form-field {
+        margin-top: 10px;
+        width: 90%;
+      }
+    }
+    .problem-alternatives {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+
+      .new-alternative-wrapper {
+        display: flex;
+        flex-direction: row;
+        gap: 10px;
+        align-items: center;
+
+        button {
+          width: 4%;
+        }
+      }
+
+      .alternatives-form-field {
+        margin-top: 10px;
+        width: 60%;
+      }
+      button {
+        margin-top: 10px;
+        width: 20%;
+      }
+    }
+
+    .problem-criteria {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+
+      .new-criteria-wrapper {
+        display: flex;
+        flex-direction: row;
+        gap: 10px;
+        align-items: center;
+
+        button {
+          width: 4%;
+        }
+      }
+
+      .criteria-form-field {
+        margin-top: 10px;
+        width: 40%;
+      }
+      button {
+        margin-top: 10px;
+        width: 20%;
+      }
+    }
+
+    .form-buttons {
+      height: 50px;
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+      margin-top: 50px;
+      gap: 30px;
+
+      .cancel-button {
+        height: 100%;
+        width: 100px;
+      }
+
+      .submit-button {
+        height: 100%;
+        width: 150px;
+        background-color: rgb(50, 47, 43);
+        color: white;
+      }
+    }
+  }
+}

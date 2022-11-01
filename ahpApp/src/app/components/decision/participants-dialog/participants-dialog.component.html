@@ -1,0 +1,39 @@
+<div mat-dialog-content class="mat-dialog">
+  <p class="title">Insert a participant from your organization:</p>
+  <mat-form-field class="participants-full-width" appearance="fill">
+    <mat-label>Available participants</mat-label>
+    <input
+      type="text"
+      matInput
+      [formControl]="myControl"
+      [matAutocomplete]="auto"
+      #input
+    />
+    <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn">
+      <mat-option
+        *ngFor="let option of filteredOptions | async"
+        [value]="option"
+      >
+        {{ option.name }}
+      </mat-option>
+    </mat-autocomplete>
+  </mat-form-field>
+</div>
+
+<div class="mat-dialog-actions">
+  <div>
+    <button mat-raised-button (click)="onCancel()" mat-dialog-close>
+      Close
+    </button>
+  </div>
+  <div>
+    <button
+      mat-raised-button
+      [mat-dialog-close]="data.name"
+      cdkFocusInitial
+      (click)="getParticipantName(input.value)"
+    >
+      Ok
+    </button>
+  </div>
+</div>

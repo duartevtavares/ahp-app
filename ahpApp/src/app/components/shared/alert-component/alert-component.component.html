@@ -1,0 +1,20 @@
+<div class="alert-dialog-wrapper">
+  <h2>Are you sure?</h2>
+
+  <div class="alert-dialog-buttons">
+    <button mat-raised-button class="cancel-button" mat-dialog-close>
+      Cancel
+    </button>
+
+    <a [routerLink]="''" routerLinkActive="active"
+      ><button
+        mat-raised-button
+        class="submit-button"
+        mat-dialog-close
+        type="submit"
+      >
+        Yes
+      </button></a
+    >
+  </div>
+</div>

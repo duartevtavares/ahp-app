@@ -1,0 +1,109 @@
+<div class="form-wrapper">
+  <mat-card class="form-card">
+    <form [formGroup]="decisionSpecificationsForm" (ngSubmit)="onSubmit()">
+      <div class="problem-goal">
+        <h2>Firstly, start by defining the goal of the problem:</h2>
+        <mat-form-field class="goal-form-field" appearance="fill">
+          <textarea
+            matInput
+            cdkTextareaAutosize
+            #autosize="cdkTextareaAutosize"
+            cdkAutosizeMinRows="1"
+            cdkAutosizeMaxRows="5"
+            class="problem-goal-text-area"
+            type="text"
+            formControlName="problemGoal"
+          >
+          </textarea>
+        </mat-form-field>
+      </div>
+
+      <div formArrayName="alternatives" class="problem-alternatives">
+        <h2>Next, add the alternatives to solve the problem:</h2>
+        <div
+          class="new-alternative-wrapper"
+          *ngFor="let alternatives of alternatives.controls; let i = index"
+        >
+          <!-- The repeated alternatives template -->
+          <mat-form-field class="alternatives-form-field" appearance="fill">
+            <input
+              matInput
+              id="alternatives-{{ i }}"
+              type="text"
+              [formControlName]="i"
+            />
+          </mat-form-field>
+          <button
+            class="delete-criteria-btn"
+            *ngIf="i > 0"
+            mat-icon-button
+            (click)="deleteAlternative(i)"
+          >
+            <mat-icon>close</mat-icon>
+          </button>
+        </div>
+        <button
+          mat-raised-button
+          type="button"
+          (click)="addAlternatives(alternatives.length)"
+        >
+          Add another alternative
+        </button>
+      </div>
+
+      <div formArrayName="criteria" class="problem-criteria">
+        <h2>Finally, choose the criteria to evaluate the parameters:</h2>
+        <div
+          class="new-criteria-wrapper"
+          *ngFor="let criteria of criteria.controls; let i = index"
+        >
+          <!-- The repeated criteria template -->
+          <mat-form-field class="criteria-form-field" appearance="fill">
+            <input
+              matInput
+              id="criteria-{{ i }}"
+              type="text"
+              [formControlName]="i"
+            /> </mat-form-field
+          ><button
+            class="delete-criteria-btn"
+            *ngIf="i > 0"
+            mat-icon-button
+            (click)="deleteCriteria(i)"
+          >
+            <mat-icon>close</mat-icon>
+          </button>
+        </div>
+        <button
+          mat-raised-button
+          type="button"
+          (click)="addCriteria(criteria.length)"
+        >
+          Add another criteria
+        </button>
+      </div>
+
+      <p>{{ decisionSpecificationsForm.value | json }}</p>
+      <p>{{ decisionSpecificationsForm.status }}</p>
+
+      <div class="form-buttons">
+        <button
+          mat-raised-button
+          class="cancel-button"
+          (click)="openDialog()"
+          type="cancel"
+        >
+          Cancel
+        </button>
+        <button
+          mat-raised-button
+          [disabled]="!decisionSpecificationsForm.valid"
+          class="submit-button"
+          type="submit"
+        >
+          Submit
+        </button>
+      </div>
+    </form>
+  </mat-card>
+</div>

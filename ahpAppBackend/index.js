@@ -1,10 +1,11 @@
 import express from "express";
-
 import { getParticipant, getParticipants, addParticipant } from "./db.js";
+
 const app = express();
 const PORT = 8080;
-
 app.use(express.json());
+app.use(express.text());
+app.use(express.urlencoded());
 
 app.use(function (req, res, next) {
   //Enabling CORS
@@ -19,6 +20,7 @@ app.use(function (req, res, next) {
 
 app.get("/participants", async (req, res) => {
   const participants = await getParticipants();
+  console.log("participantes: ", participants.name);
   res.send(participants);
 });
 
@@ -29,9 +31,10 @@ app.get("/participants/:id", async (req, res) => {
 });
 
 app.post("/participants", async (req, res) => {
-  const { firstName, lastName } = req.body;
-  const participant = await addParticipant(firstName, lastName);
-  res.send(participant);
+  const name = req.body;
+  console.log("name: ", name);
+  const participant = await addParticipant(name);
+  res.status(201).send(participant);
 });
 
 app.use((err, req, res, next) => {

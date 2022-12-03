@@ -14,7 +14,7 @@ export class ParticipantsDialogComponent implements OnInit {
   constructor(
     public dialogRef: MatDialogRef<ParticipantsDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: DialogData,
-    private api: ApiService
+    private service: ApiService
   ) {}
 
   myControl = new FormControl<string | DialogData>('');
@@ -47,9 +47,10 @@ export class ParticipantsDialogComponent implements OnInit {
     );
   }
 
-  getParticipantName(participantName: any) {
-    console.log(participantName);
-    console.log(this.options);
+  postParticipant(participantName: any) {
+    this.service
+      .postParticipant(participantName)
+      .subscribe((res) => console.log(res));
   }
 
   onCancel(): void {

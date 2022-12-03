@@ -1,5 +1,8 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { Injectable, OnInit } from '@angular/core';
+import { catchError, Observable } from 'rxjs';
+
+const baseUrl = 'http://localhost:8080/participants';
 
 @Injectable({
   providedIn: 'root',
@@ -7,11 +10,15 @@ import { Injectable } from '@angular/core';
 export class ApiService {
   constructor(private http: HttpClient) {}
 
-  postParticipant(data: any) {
-    return this.http.post<any>('http://localhost:8080/', data);
+  postParticipant(data: string) {
+    return this.http.post<any>(baseUrl, data);
   }
 
   getParticipants() {
-    return this.http.get<any>('http://localhost:8080/participants');
+    return this.http.get<any>(baseUrl);
+  }
+
+  getSpecificParticipant(data: number) {
+    return this.http.get<any>(`${baseUrl}/${data}`);
   }
 }

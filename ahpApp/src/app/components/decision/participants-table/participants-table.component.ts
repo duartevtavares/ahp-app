@@ -1,15 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ApiService } from 'src/app/services/api.service';
 
-export interface PeriodicElement {
-  name: string;
-}
-
-const ELEMENT_DATA: PeriodicElement[] = [
-  { name: 'John Mcnroe' },
-  { name: 'John Oliver' },
-];
-
 @Component({
   selector: 'participants-table-component',
   templateUrl: './participants-table.component.html',
@@ -17,19 +8,32 @@ const ELEMENT_DATA: PeriodicElement[] = [
 })
 export class ParticipantsTableComponent implements OnInit {
   displayedColumns: string[] = ['name'];
-  dataSource = ELEMENT_DATA;
-  participantName: string | undefined;
+  participantName = [];
 
   constructor(private service: ApiService) {}
 
   ngOnInit() {
     this.getParticipants();
+    this.getParticipant();
+    this.postParticipant('');
+  }
+
+  postParticipant(name: string) {
+    this.service.postParticipant('jose');
+  }
+
+  getParticipant() {
+    this.service.getSpecificParticipant(3).subscribe((response) => {
+      console.log('resposta: ', response);
+    });
   }
 
   getParticipants() {
     this.service.getParticipants().subscribe(
       (response) => {
         console.log('resposta: ', response);
+        this.participantName = response;
+        console.log(this.participantName);
       },
       (error) => {
         console.log('erro', error);

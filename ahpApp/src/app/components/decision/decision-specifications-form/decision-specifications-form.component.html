@@ -37,6 +37,7 @@
             class="delete-criteria-btn"
             *ngIf="i > 0"
             mat-icon-button
+            [disabled]="disabledAddButton"
             (click)="deleteAlternative(i)"
           >
             <mat-icon>close</mat-icon>
@@ -71,6 +72,7 @@
             class="delete-criteria-btn"
             *ngIf="i > 0"
             mat-icon-button
+            [disabled]="disabledAddButton"
             (click)="deleteCriteria(i)"
           >
             <mat-icon>close</mat-icon>
@@ -93,9 +95,10 @@
       <div class="form-buttons">
         <button
           mat-raised-button
+          type="button"
           class="cancel-button"
           (click)="openDialog()"
-          type="cancel"
+          [disabled]="disabledAddButton"
         >
           Cancel
         </button>
@@ -103,7 +106,7 @@
           mat-raised-button
           [disabled]="!decisionSpecificationsForm.valid"
           class="submit-button"
-          type="submit"
+          (click)="onSubmit()"
         >
           Submit
         </button>

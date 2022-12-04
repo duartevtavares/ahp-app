@@ -45,9 +45,7 @@ export class DecisionSpecificationsFormComponent {
       this.criteria.removeAt(this.criteria.value.length - 1);
     }
 
-    this.decisionSpecificationsForm.controls.problemGoal.disable();
-    this.decisionSpecificationsForm.controls.alternatives.disable();
-    this.decisionSpecificationsForm.controls.criteria.disable();
+    this.decisionSpecificationsForm.disable();
     this.disabledAddButton = true;
 
     console.log(this.decisionSpecificationsForm.value);

@@ -44,6 +44,8 @@
         </div>
         <button
           mat-raised-button
+          name="addButton"
+          [disabled]="disabledAddButton"
           type="button"
           (click)="addAlternatives(alternatives.length)"
         >
@@ -76,6 +78,8 @@
         </div>
         <button
           mat-raised-button
+          name="addButton"
+          [disabled]="disabledAddButton"
           type="button"
           (click)="addCriteria(criteria.length)"
         >

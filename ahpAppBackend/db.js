@@ -5,7 +5,7 @@ const pool = mysql
     host: "localhost",
     user: "root",
     password: "",
-    database: "mydb",
+    database: "thesis",
   })
   .promise();
 
@@ -39,6 +39,38 @@ export async function addParticipant(name) {
   return getParticipant(id);
 }
 
+//Users
+
+export async function getUsers() {
+  const [rows] = await pool.query("SELECT * FROM users");
+  return rows;
+}
+
+export async function getUser(id) {
+  const [rows] = await pool.query(
+    `
+     SELECT * 
+    FROM users
+    WHERE id = ?
+    `,
+    [id]
+  );
+  return rows[0];
+}
+
+export async function addUser(name, username, password) {
+  const [result] = await pool.query(
+    `
+    INSERT INTO 
+      users (name, username, password)
+      VALUES (?, ?, ?)
+      `,
+    [name, username, password]
+  );
+  const id = result.insertId;
+  //return getParticipant(id);
+}
+
 // const participant = await getParticipant(1);
 // console.log("o participante pedido: ", participant);
 
@@ -47,3 +79,9 @@ export async function addParticipant(name) {
 
 // const participants = await getParticipants();
 // console.log("todos os participantes: ", participants);
+
+// const result = await addUser("Maria Horta Serra", "mhs", "password");
+// console.log(result);
+
+const users = await getUsers();
+console.log("todos os users: ", users);

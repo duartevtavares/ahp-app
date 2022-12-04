@@ -18,19 +18,25 @@ export class ParticipantsDialogComponent implements OnInit {
   ) {}
 
   myControl = new FormControl<string | DialogData>('');
-  options: DialogData[] = [
-    { name: 'John Stuart' },
-    { name: 'Jeff Bezos' },
-    { name: 'Igor Lound' },
-  ];
-  filteredOptions?: Observable<DialogData[]>;
+  options = [];
+  filteredOptions?: Observable<any>;
 
   ngOnInit() {
+    this.service.getUsers().subscribe(
+      (response) => {
+        console.log(response);
+        this.options = response;
+      },
+      (error) => {
+        console.log('erro', error);
+      }
+    );
+
     this.filteredOptions = this.myControl.valueChanges.pipe(
       startWith(''),
       map((value) => {
         const name = typeof value === 'string' ? value : value?.name;
-        return name ? this._filter(name as string) : this.options.slice();
+        return name ? this._filter(name as string) : this.options;
       })
     );
   }
@@ -42,15 +48,17 @@ export class ParticipantsDialogComponent implements OnInit {
   private _filter(name: string): DialogData[] {
     const filterValue = name.toLowerCase();
 
-    return this.options.filter((option) =>
+    return this.options.filter((option: any) =>
       option.name.toLowerCase().includes(filterValue)
     );
   }
 
   postParticipant(participantName: any) {
+    console.log(participantName);
     this.service
       .postParticipant(participantName)
       .subscribe((res) => console.log(res));
+    this.service.getParticipants().subscribe((res) => console.log(res));
   }
 
   onCancel(): void {

@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { MatDialogRef } from '@angular/material/dialog';
 import { ApiService } from 'src/app/services/api.service';
+import { ParticipantsDialogComponent } from '../participants-dialog/participants-dialog.component';
 
 @Component({
   selector: 'participants-table-component',
@@ -14,26 +16,12 @@ export class ParticipantsTableComponent implements OnInit {
 
   ngOnInit() {
     this.getParticipants();
-    this.getParticipant();
-    this.postParticipant('');
-  }
-
-  postParticipant(name: string) {
-    this.service.postParticipant('jose');
-  }
-
-  getParticipant() {
-    this.service.getSpecificParticipant(3).subscribe((response) => {
-      console.log('resposta: ', response);
-    });
   }
 
   getParticipants() {
     this.service.getParticipants().subscribe(
       (response) => {
-        console.log('resposta: ', response);
         this.participantName = response;
-        console.log(this.participantName);
       },
       (error) => {
         console.log('erro', error);

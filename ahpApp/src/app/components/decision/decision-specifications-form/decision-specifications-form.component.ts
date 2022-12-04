@@ -23,6 +23,7 @@ export class DecisionSpecificationsFormComponent {
     criteria: this.fb.array([this.fb.control('', Validators.required)]),
   });
 
+  disabledAddButton = false;
   constructor(
     private fb: FormBuilder,
     public dialog: MatDialog,
@@ -43,6 +44,11 @@ export class DecisionSpecificationsFormComponent {
     if (this.criteria.value[this.criteria.value.length - 1] === '') {
       this.criteria.removeAt(this.criteria.value.length - 1);
     }
+
+    this.decisionSpecificationsForm.controls.problemGoal.disable();
+    this.decisionSpecificationsForm.controls.alternatives.disable();
+    this.decisionSpecificationsForm.controls.criteria.disable();
+    this.disabledAddButton = true;
 
     console.log(this.decisionSpecificationsForm.value);
 

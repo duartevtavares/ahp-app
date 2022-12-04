@@ -55,10 +55,6 @@ export class ParticipantsDialogComponent implements OnInit {
 
   postParticipant(participantName: any) {
     console.log(participantName);
-    this.service
-      .postParticipant(participantName)
-      .subscribe((res) => console.log(res));
-    this.service.getParticipants().subscribe((res) => console.log(res));
   }
 
   onCancel(): void {

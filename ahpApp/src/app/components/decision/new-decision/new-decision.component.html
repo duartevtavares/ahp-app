@@ -1,1 +1,21 @@
-<decision-specifications-form-component></decision-specifications-form-component>
+<div class="form-wrapper">
+  <mat-card class="form-card">
+    <h2>Now, let's proceed and give values to each criteria and alternative</h2>
+    <div class="alternativesClassification">
+      <div>
+        <ul *ngFor="let firstAlternative of firstColumnAlternativesArray">
+          {{
+            firstAlternative
+          }}
+        </ul>
+      </div>
+      <div>
+        <ul *ngFor="let secondAlternative of secondColumnAlternativesArray">
+          {{
+            secondAlternative
+          }}
+        </ul>
+      </div>
+    </div>
+  </mat-card>
+</div>

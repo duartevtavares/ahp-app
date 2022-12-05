@@ -23,6 +23,7 @@ import { ParticipantsDialogComponent } from './components/decision/participants-
 import { ParticipantsTableComponent } from './components/decision/participants-table/participants-table.component';
 import { AlertComponent } from './components/shared/alert-component/alert-component.component';
 import { ApiService } from './services/api.service';
+import { DecisionSpecificationsService } from './services/decision-specifications.service';
 
 @NgModule({
   declarations: [
@@ -51,7 +52,7 @@ import { ApiService } from './services/api.service';
     MatDialogModule,
     HttpClientModule,
   ],
-  providers: [ApiService],
+  providers: [ApiService, DecisionSpecificationsService],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

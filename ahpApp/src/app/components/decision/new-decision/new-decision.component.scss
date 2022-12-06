@@ -9,33 +9,32 @@
     margin-bottom: 40px;
   }
 
-  .alternatives-values-title {
+  .criteria-values-title {
     padding-bottom: 40px;
   }
 
-  .alternatives-classification {
+  .criteria-classification {
     display: flex;
     flex-direction: row;
     display: flex;
     justify-content: center;
-    gap: 40px;
 
     ul {
       padding: 0;
     }
 
-    .first-column-alternative {
+    .first-column-criteria {
       display: flex;
       flex-direction: row;
       gap: 40px;
       height: 70px;
 
-      .alternatives-mat-slider {
+      .criteria-mat-slider {
         width: 40vw;
       }
     }
 
-    .second-column-alternative {
+    .second-column-criteria {
       ul {
         height: 56px;
       }

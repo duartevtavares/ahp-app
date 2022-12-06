@@ -39,6 +39,12 @@ export class DecisionSpecificationsFormComponent {
     this.dialog.open(AlertComponent);
   }
 
+  edit() {
+    this.decisionSpecificationsForm.enable();
+    this.disabledAddButton = false;
+    this.formSubmited = false;
+  }
+
   onSubmit() {
     console.log(this.decisionSpecificationsForm.value);
     if (this.alternatives.value[this.alternatives.value.length - 1] === '') {

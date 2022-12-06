@@ -1,5 +1,44 @@
-.alternativesClassification {
+.form-wrapper {
+  width: 100%;
   display: flex;
-  flex-direction: row;
-  gap: 16px;
+  justify-content: center;
+
+  .form-card {
+    width: 80%;
+    padding: 40px;
+    margin-bottom: 40px;
+  }
+
+  .alternatives-values-title {
+    padding-bottom: 40px;
+  }
+
+  .alternatives-classification {
+    display: flex;
+    flex-direction: row;
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+
+    ul {
+      padding: 0;
+    }
+
+    .first-column-alternative {
+      display: flex;
+      flex-direction: row;
+      gap: 40px;
+      height: 70px;
+
+      .alternatives-mat-slider {
+        width: 40vw;
+      }
+    }
+
+    .second-column-alternative {
+      ul {
+        height: 56px;
+      }
+    }
+  }
 }

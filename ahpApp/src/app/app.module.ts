@@ -15,6 +15,7 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
+import { MatSliderModule } from '@angular/material/slider';
 import { MatTableModule } from '@angular/material/table';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { DecisionSpecificationsFormComponent } from './components/decision/decision-specifications-form/decision-specifications-form.component';
@@ -47,6 +48,7 @@ import { DecisionSpecificationsService } from './services/decision-specification
     MatCardModule,
     BrowserAnimationsModule,
     MatButtonModule,
+    MatSliderModule,
     MatTableModule,
     MatIconModule,
     MatDialogModule,

@@ -1,15 +1,25 @@
 <div class="form-wrapper">
   <mat-card class="form-card">
-    <h2>Now, let's proceed and give values to each criteria and alternative</h2>
-    <div class="alternativesClassification">
-      <div>
-        <ul *ngFor="let firstAlternative of firstColumnAlternativesArray">
-          {{
-            firstAlternative
-          }}
-        </ul>
+    <h2 class="alternatives-values-title">
+      Now, let's proceed and give values to each alternative:
+    </h2>
+    <div class="alternatives-classification">
+      <div class="first-column">
+        <div
+          class="first-column-alternative"
+          *ngFor="let firstAlternative of firstColumnAlternativesArray"
+        >
+          <ul>
+            {{
+              firstAlternative
+            }}
+          </ul>
+          <mat-slider class="alternatives-mat-slider">
+            <input matSliderThumb />
+          </mat-slider>
+        </div>
       </div>
-      <div>
+      <div class="second-column-alternative">
         <ul *ngFor="let secondAlternative of secondColumnAlternativesArray">
           {{
             secondAlternative

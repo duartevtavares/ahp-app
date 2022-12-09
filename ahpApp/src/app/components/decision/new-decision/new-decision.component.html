@@ -1,41 +1,96 @@
 <div class="form-wrapper">
   <mat-card class="form-card">
-    <h2 class="criteria-values-title">
-      Now, let's proceed and give values to each criteria:
-    </h2>
-    <div class="criteria-classification">
-      <div class="first-column">
-        <div
-          class="first-column-criteria"
-          *ngFor="let firstCriteria of firstColumnCriteriaArray; let i = index"
-        >
-          <ul>
+    <div class="criteria-values" *ngIf="decisionCriteria.length > 1">
+      <h2 class="criteria-values-title">
+        Now, let's proceed and give values to each criteria:
+      </h2>
+      <div class="criteria-classification">
+        <div class="first-column">
+          <div
+            class="first-column-criteria"
+            *ngFor="
+              let firstCriteria of firstColumnCriteriaArray;
+              let i = index
+            "
+          >
+            <ul>
+              {{
+                firstCriteria
+              }}
+            </ul>
+
+            <mat-slider
+              class="criteria-mat-slider"
+              [attr.id]="i"
+              [displayWith]="formatLabel"
+              tickInterval="1"
+              step="1"
+              min="1"
+              max="9"
+              value="5"
+              (input)="changeCriteriaValue($event, i)"
+            ></mat-slider>
+            <br />
+          </div>
+        </div>
+        <div class="second-column-criteria">
+          <ul *ngFor="let secondCriteria of secondColumnCriteriaArray">
             {{
-              firstCriteria
+              secondCriteria
             }}
           </ul>
-
-          <mat-slider
-            class="criteria-mat-slider"
-            [attr.id]="i"
-            thumbLabel
-            [displayWith]="formatLabel"
-            tickInterval="1"
-            step="1"
-            min="1"
-            max="9"
-            (input)="changeCriteriaValue($event, i)"
-          ></mat-slider>
-          <br />
         </div>
       </div>
-      <div class="second-column-criteria">
-        <ul *ngFor="let secondCriteria of secondColumnCriteriaArray">
-          {{
-            secondCriteria
-          }}
-        </ul>
+    </div>
+
+    <div class="alternative-values">
+      <h2 class="alternative-values-title">
+        Now, let's proceed and give values to each alternative:
+      </h2>
+      <div *ngFor="let criteria of decisionCriteria; let j = index">
+        <div class="alternatives-by-criteria-comparison">
+          <h5>Regarding {{ criteria }}, compare the alternatives</h5>
+        </div>
+        <div class="alternative-classification">
+          <div class="first-column">
+            <div
+              class="first-column-alternative"
+              *ngFor="
+                let firstAlternative of firstColumnAlternativesArray;
+                let i = index
+              "
+            >
+              <ul>
+                {{
+                  firstAlternative
+                }}
+              </ul>
+
+              <mat-slider
+                class="alternative-mat-slider"
+                [attr.id]="i"
+                [displayWith]="formatLabel"
+                tickInterval="1"
+                step="1"
+                min="1"
+                max="9"
+                value="5"
+                (input)="changeAlternativeValue($event, i, j)"
+              ></mat-slider>
+              <br />
+            </div>
+          </div>
+          <div class="second-column-alternative">
+            <ul *ngFor="let secondAlternative of secondColumnAlternativesArray">
+              {{
+                secondAlternative
+              }}
+            </ul>
+          </div>
+        </div>
       </div>
     </div>
+    <br /><br />
+    <pre>{{ alternativeComparisons | json }}</pre>
   </mat-card>
 </div>

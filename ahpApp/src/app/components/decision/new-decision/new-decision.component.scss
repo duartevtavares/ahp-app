@@ -9,11 +9,17 @@
     margin-bottom: 40px;
   }
 
-  .criteria-values-title {
+  .criteria-values-title,
+  .alternative-values-title {
     padding-bottom: 40px;
   }
 
-  .criteria-classification {
+  .alternatives-by-criteria-comparison {
+    margin: 0px 10px;
+  }
+
+  .criteria-classification,
+  .alternative-classification {
     display: flex;
     flex-direction: row;
     display: flex;
@@ -23,18 +29,21 @@
       padding: 0;
     }
 
-    .first-column-criteria {
+    .first-column-criteria,
+    .first-column-alternative {
       display: flex;
       flex-direction: row;
       gap: 40px;
       height: 70px;
 
-      .criteria-mat-slider {
+      .criteria-mat-slider,
+      .alternative-mat-slider {
         width: 40vw;
       }
     }
 
-    .second-column-criteria {
+    .second-column-criteria,
+    .second-column-alternative {
       ul {
         height: 56px;
       }

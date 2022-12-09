@@ -47,7 +47,7 @@
       <h2 class="alternative-values-title">
         Now, let's proceed and give values to each alternative:
       </h2>
-      <div *ngFor="let criteria of decisionCriteria; let j = index">
+      <div *ngFor="let criteria of decisionCriteria; let i = index">
         <div class="alternatives-by-criteria-comparison">
           <h5>Regarding {{ criteria }}, compare the alternatives</h5>
         </div>
@@ -57,7 +57,7 @@
               class="first-column-alternative"
               *ngFor="
                 let firstAlternative of firstColumnAlternativesArray;
-                let i = index
+                let j = index
               "
             >
               <ul>

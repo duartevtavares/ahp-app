@@ -46,18 +46,15 @@ export class DecisionSpecificationsFormComponent {
   }
 
   onSubmit() {
-    console.log(this.decisionSpecificationsForm.value);
     if (this.alternatives.value[this.alternatives.value.length - 1] === '') {
       this.alternatives.removeAt(this.alternatives.value.length - 1);
     }
     if (this.criteria.value[this.criteria.value.length - 1] === '') {
       this.criteria.removeAt(this.criteria.value.length - 1);
     }
-
     this.decisionSpecificationsForm.disable();
     this.disabledAddButton = true;
     this.formSubmited = true;
-
     this.decisionSpecifications = this.decisionSpecificationsForm.value;
     this.specsService.decisionSpecs = this.decisionSpecifications;
 
@@ -82,7 +79,6 @@ export class DecisionSpecificationsFormComponent {
   }
 
   addAlternatives(index: number) {
-    console.log(index);
     if (this.alternatives.value[index - 1] != '') {
       this.alternatives.push(this.fb.control(''));
     } else {
@@ -91,7 +87,6 @@ export class DecisionSpecificationsFormComponent {
   }
 
   addCriteria(index: number) {
-    console.log(index);
     if (this.criteria.value[index - 1] != '') {
       this.criteria.push(this.fb.control(''));
     } else {

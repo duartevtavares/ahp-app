@@ -22,7 +22,6 @@
             <mat-slider
               class="criteria-mat-slider"
               [attr.id]="i"
-              [displayWith]="formatLabel"
               tickInterval="1"
               step="1"
               min="1"
@@ -68,8 +67,7 @@
 
               <mat-slider
                 class="alternative-mat-slider"
-                [attr.id]="i"
-                [displayWith]="formatLabel"
+                [attr.id]="j"
                 tickInterval="1"
                 step="1"
                 min="1"
@@ -91,6 +89,7 @@
       </div>
     </div>
     <br /><br />
-    <pre>{{ alternativeComparisons | json }}</pre>
+    <pre>{{ criteriaComparisonsValues | json }}</pre>
+    <pre>{{ alternativeComparisonsValues | json }}</pre>
   </mat-card>
 </div>

@@ -9,29 +9,22 @@ import { DecisionSpecificationsService } from 'src/app/services/decision-specifi
 export class NewDecisionComponent implements OnInit {
   decisionCriteria: any;
   decisionAlternatives: any;
+
   firstColumnCriteriaArray: any = [];
   secondColumnCriteriaArray: any = [];
-
   firstColumnAlternativesArray: any = [];
   secondColumnAlternativesArray: any = [];
 
-  criteriaValues: any[] = [];
-  alternativeValues: any[] = [];
-  criteriaComparisons: any[] = [];
-  alternativeComparisons: any[] = [];
+  criteriaComparisonsValues: any[] = [];
+  alternativeComparisonsValues: any[] = [];
 
-  slidervalue: any;
-  formatLabel(val: number) {
-    return val;
-  }
-  value = 5;
+  initialValue = 5;
 
   constructor(public specsService: DecisionSpecificationsService) {}
 
   ngOnInit(): void {
     this.decisionCriteria = this.specsService.decisionSpecs.criteria;
     this.decisionAlternatives = this.specsService.decisionSpecs.alternatives;
-    let alternativesInitialValues: number[] = [];
 
     this.createDecisionComparisonColumns(this.decisionCriteria, 'criteria');
     this.createDecisionComparisonColumns(
@@ -39,60 +32,7 @@ export class NewDecisionComponent implements OnInit {
       'alternatives'
     );
 
-    this.fillCriteriaAndAlternativesArrays(alternativesInitialValues);
-    // for (let i = 0; i < this.firstColumnAlternativesArray.length; i++) {
-    //   alternativesLength.push(5);
-    // }
-
-    // for (let i = 0; i < this.decisionCriteria.length; i++) {
-    //   this.alternativeComparisons.push(alternativesLength);
-    // }
-
-    // for (let i = 0; i < this.firstColumnCriteriaArray.length; i++) {
-    //   this.criteriaComparisons.push(5);
-    // }
-
-    //   for (let i = 0; i < this.decisionCriteria.length - 1; i++) {
-    //     for (let j = 0; j < this.decisionCriteria.length - i - 1; j++) {
-    //       this.firstColumnCriteriaArray.push(this.decisionCriteria[i]);
-    //     }
-    //   }
-    //   for (let i = 0; i < this.decisionCriteria.length - 1; i++) {
-    //     for (let j = 1 + i; j < this.decisionCriteria.length; j++) {
-    //       this.secondColumnCriteriaArray.push(this.decisionCriteria[j]);
-    //     }
-    //   }
-    //   console.log(this.firstColumnCriteriaArray);
-    //   console.log(this.secondColumnCriteriaArray);
-
-    //   for (let i = 0; i < this.decisionAlternatives.length - 1; i++) {
-    //     for (let j = 0; j < this.decisionAlternatives.length - i - 1; j++) {
-    //       this.firstColumnAlternativesArray.push(this.decisionAlternatives[i]);
-    //     }
-    //   }
-    //   for (let i = 0; i < this.decisionAlternatives.length - 1; i++) {
-    //     for (let j = 1 + i; j < this.decisionAlternatives.length; j++) {
-    //       this.secondColumnAlternativesArray.push(this.decisionAlternatives[j]);
-    //     }
-    //   }
-    //   console.log(this.firstColumnAlternativesArray);
-    //   console.log(this.secondColumnAlternativesArray);
-  }
-
-  fillCriteriaAndAlternativesArrays(alternativesArrayInitialValues: number[]) {
-    for (let i = 0; i < this.firstColumnAlternativesArray.length; i++) {
-      alternativesArrayInitialValues.push(5);
-    }
-
-    for (let i = 0; i < this.decisionCriteria.length; i++) {
-      this.alternativeComparisons.push(alternativesArrayInitialValues);
-    }
-    console.log(this.alternativeComparisons);
-
-    for (let i = 0; i < this.firstColumnCriteriaArray.length; i++) {
-      this.criteriaComparisons.push(5);
-    }
-    console.log(this.criteriaComparisons);
+    this.createArraysInitialValues();
   }
 
   createDecisionComparisonColumns(namesToBeCompared: [], step: string) {
@@ -118,13 +58,25 @@ export class NewDecisionComponent implements OnInit {
     }
   }
 
-  changeCriteriaValue(event: any, i: number) {
-    this.criteriaValues[i] = event.value;
-    console.log(this.criteriaValues);
+  createArraysInitialValues() {
+    for (let i = 0; i < this.decisionCriteria.length; i++) {
+      this.alternativeComparisonsValues.push([]);
+    }
+    for (let i = 0; i < this.decisionCriteria.length; i++) {
+      for (let j = 0; j < this.firstColumnAlternativesArray.length; j++) {
+        this.alternativeComparisonsValues[i][j] = this.initialValue;
+      }
+    }
+    for (let i = 0; i < this.firstColumnCriteriaArray.length; i++) {
+      this.criteriaComparisonsValues.push(this.initialValue);
+    }
   }
 
-  changeAlternativeValue(event: any, i: number, j: number) {
-    this.alternativeComparisons[i][j] = event.value;
-    console.log(this.alternativeComparisons);
+  changeCriteriaValue(event: any, index: number) {
+    this.criteriaComparisonsValues[index] = event.value;
+  }
+
+  changeAlternativeValue(event: any, index: number, otherIndex: number) {
+    this.alternativeComparisonsValues[index][otherIndex] = event.value;
   }
 }

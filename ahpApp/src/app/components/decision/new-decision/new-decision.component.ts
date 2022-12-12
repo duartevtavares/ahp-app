@@ -1,3 +1,4 @@
+import { DecimalPipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { DecisionSpecificationsService } from 'src/app/services/decision-specifications.service';
 
@@ -18,7 +19,10 @@ export class NewDecisionComponent implements OnInit {
   criteriaComparisonsValues: any[] = [];
   alternativeComparisonsValues: any[] = [];
 
-  matrix: any[] = [];
+  realCriteriaMatrix: any[] = [];
+  realCriteriaValuesArray: any[] = [];
+  criteriaMatrixToShow: any[] = [];
+  criteriaStringArray: any[] = [];
 
   initialValue = 5;
 
@@ -79,9 +83,8 @@ export class NewDecisionComponent implements OnInit {
     this.criteriaComparisonsValues[index] = event.value;
     // this.changeInputValuesToMatrixValues(this.criteriaComparisonsValues);
 
-    //this.changeInputValuesToMatrixValues(this.criteriaComparisonsValues);
-    this.createEmptyMatrix();
-    //this.createMatrix(newValuesArray);
+    this.changeInputValuesToMatrixValues(this.criteriaComparisonsValues);
+    this.createMatrix(this.realCriteriaValuesArray, this.criteriaStringArray);
   }
 
   changeAlternativeValue(event: any, index: number, otherIndex: number) {
@@ -90,77 +93,111 @@ export class NewDecisionComponent implements OnInit {
 
   createEmptyMatrix() {
     for (let i = 0; i < this.decisionCriteria.length; i++) {
-      this.matrix.push([]);
+      this.realCriteriaMatrix.push([]);
+      this.criteriaMatrixToShow.push([]);
     }
     for (let i = 0; i < this.decisionCriteria.length; i++) {
       for (let j = 0; j < this.decisionCriteria.length; j++) {
-        this.matrix[i][j] = 0;
+        this.realCriteriaMatrix[i][j] = 1;
+        this.criteriaMatrixToShow[i][j] = '1';
       }
     }
   }
 
-  createMatrix(vector: number[]) {
+  createMatrix(realValuesVector: number[], valuesToShowVector: string[]) {
     let k = 0;
     for (let i = 0; i < this.decisionCriteria.length; i++) {
       for (let j = 1 + i; j < this.decisionCriteria.length; j++) {
-        this.matrix[i][j] = vector[k];
+        this.realCriteriaMatrix[i][j] = realValuesVector[k].toFixed(2);
+        this.realCriteriaMatrix[j][i] = (1 / realValuesVector[k]).toFixed(2);
+        this.criteriaMatrixToShow[i][j] = valuesToShowVector[k];
+        this.criteriaMatrixToShow[j][i] =
+          valuesToShowVector[k + valuesToShowVector.length / 2];
         k++;
       }
     }
 
-    k = 0;
-    for (let i = 0; i < this.decisionCriteria.length; i++) {
-      for (let j = 1 + i; j < this.decisionCriteria.length; j++) {
-        let stringVal = vector[k].toString();
-        this.matrix[j][i] = '1/' + stringVal;
-        k++;
-      }
-    }
+    // k = 0;
+    // for (let i = 0; i < this.decisionCriteria.length; i++) {
+    //   for (let j = 1 + i; j < this.decisionCriteria.length; j++) {
+    //     let stringVal = vector[k].toString();
+    //     this.matrix[j][i] = '1/' + stringVal;
+    //     k++;
+    //   }
+    // }
 
-    for (let i = 0; i < this.decisionCriteria.length; i++) {
-      for (let j = 0; j < this.decisionCriteria.length; j++) {
-        if (i === j) {
-          this.matrix[i][j] = 1;
-        }
-      }
-    }
-    console.log(this.matrix);
+    // for (let i = 0; i < this.decisionCriteria.length; i++) {
+    //   for (let j = 0; j < this.decisionCriteria.length; j++) {
+    //     if (i === j) {
+    //       this.realCriteriaMatrix[i][j] = 1;
+    //     }
+    //   }
+    // }
+    console.log(this.criteriaMatrixToShow);
+    console.log(this.realCriteriaMatrix);
   }
 
   changeInputValuesToMatrixValues(valuesArray: number[]) {
-    let newValuesArray = [];
     console.log(valuesArray.length);
     for (let i = 0; i < valuesArray.length; i++) {
       switch (valuesArray[i]) {
         case 1:
-          newValuesArray[i] = 1 / 9;
+          this.realCriteriaValuesArray[i] = 1 / 9;
+          this.criteriaStringArray[i] = '1/9';
+          this.criteriaStringArray[i + this.firstColumnCriteriaArray.length] =
+            '9';
           break;
         case 2:
-          newValuesArray[i] = 1 / 7;
+          this.realCriteriaValuesArray[i] = 1 / 7;
+          this.criteriaStringArray[i] = '1/7';
+          this.criteriaStringArray[i + this.firstColumnCriteriaArray.length] =
+            '7';
           break;
         case 3:
-          newValuesArray[i] = 1 / 5;
+          this.realCriteriaValuesArray[i] = 1 / 5;
+          this.criteriaStringArray[i] = '1/5';
+          this.criteriaStringArray[i + this.firstColumnCriteriaArray.length] =
+            '5';
           break;
         case 4:
-          newValuesArray[i] = 1 / 3;
+          this.realCriteriaValuesArray[i] = 1 / 3;
+          this.criteriaStringArray[i] = '1/3';
+          this.criteriaStringArray[i + this.firstColumnCriteriaArray.length] =
+            '3';
           break;
         case 5:
-          newValuesArray[i] = 1;
+          this.realCriteriaValuesArray[i] = 1;
+          this.criteriaStringArray[i] = '1';
+          this.criteriaStringArray[i + this.firstColumnCriteriaArray.length] =
+            '1';
           break;
         case 6:
-          newValuesArray[i] = 3;
+          this.realCriteriaValuesArray[i] = 3;
+          this.criteriaStringArray[i] = '3';
+          this.criteriaStringArray[i + this.firstColumnCriteriaArray.length] =
+            '1/3';
           break;
         case 7:
-          newValuesArray[i] = 5;
+          this.realCriteriaValuesArray[i] = 5;
+          this.criteriaStringArray[i] = '5';
+          this.criteriaStringArray[i + this.firstColumnCriteriaArray.length] =
+            '1/5';
           break;
         case 8:
-          newValuesArray[i] = 7;
+          this.realCriteriaValuesArray[i] = 7;
+          this.criteriaStringArray[i] = '7';
+          this.criteriaStringArray[i + this.firstColumnCriteriaArray.length] =
+            '1/7';
           break;
         case 9:
-          newValuesArray[i] = 9;
+          this.realCriteriaValuesArray[i] = 9;
+          this.criteriaStringArray[i] = '9';
+          this.criteriaStringArray[i + this.firstColumnCriteriaArray.length] =
+            '1/9';
           break;
       }
     }
-    console.log(newValuesArray);
+    console.log(this.realCriteriaValuesArray);
+    console.log(this.criteriaStringArray);
   }
 }

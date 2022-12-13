@@ -1,4 +1,3 @@
-import { DecimalPipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { DecisionSpecificationsService } from 'src/app/services/decision-specifications.service';
 
@@ -25,6 +24,7 @@ export class NewDecisionComponent implements OnInit {
   criteriaStringArray: any[] = [];
 
   initialValue = 5;
+  showCriteriaMatrix = false;
 
   constructor(public specsService: DecisionSpecificationsService) {}
 
@@ -81,7 +81,6 @@ export class NewDecisionComponent implements OnInit {
 
   changeCriteriaValue(event: any, index: number) {
     this.criteriaComparisonsValues[index] = event.value;
-    // this.changeInputValuesToMatrixValues(this.criteriaComparisonsValues);
 
     this.changeInputValuesToMatrixValues(this.criteriaComparisonsValues);
     this.createMatrix(this.realCriteriaValuesArray, this.criteriaStringArray);
@@ -117,24 +116,8 @@ export class NewDecisionComponent implements OnInit {
       }
     }
 
-    // k = 0;
-    // for (let i = 0; i < this.decisionCriteria.length; i++) {
-    //   for (let j = 1 + i; j < this.decisionCriteria.length; j++) {
-    //     let stringVal = vector[k].toString();
-    //     this.matrix[j][i] = '1/' + stringVal;
-    //     k++;
-    //   }
-    // }
-
-    // for (let i = 0; i < this.decisionCriteria.length; i++) {
-    //   for (let j = 0; j < this.decisionCriteria.length; j++) {
-    //     if (i === j) {
-    //       this.realCriteriaMatrix[i][j] = 1;
-    //     }
-    //   }
-    // }
-    console.log(this.criteriaMatrixToShow);
-    console.log(this.realCriteriaMatrix);
+    // console.log(this.criteriaMatrixToShow);
+    // console.log(this.realCriteriaMatrix);
   }
 
   changeInputValuesToMatrixValues(valuesArray: number[]) {
@@ -197,7 +180,15 @@ export class NewDecisionComponent implements OnInit {
           break;
       }
     }
-    console.log(this.realCriteriaValuesArray);
-    console.log(this.criteriaStringArray);
+    // console.log(this.realCriteriaValuesArray);
+    // console.log(this.criteriaStringArray);
+  }
+
+  displayCriteriaMatrix() {
+    if (this.showCriteriaMatrix === false) {
+      this.showCriteriaMatrix = true;
+    } else {
+      this.showCriteriaMatrix = false;
+    }
   }
 }

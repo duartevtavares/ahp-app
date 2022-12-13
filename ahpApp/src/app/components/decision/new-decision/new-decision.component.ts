@@ -188,9 +188,6 @@ export class NewDecisionComponent implements OnInit {
         k++;
       }
     }
-
-    // console.log(this.criteriaMatrixToShow);
-    // console.log(this.realCriteriaMatrix);
   }
 
   changeInputValuesToMatrixValues(valuesArray: number[]) {

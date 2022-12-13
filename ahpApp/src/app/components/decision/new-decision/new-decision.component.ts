@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { DecisionSpecificationsService } from 'src/app/services/decision-specifications.service';
+import { MathService } from 'src/app/services/math.service';
 
 @Component({
   selector: 'new-decision-component',
@@ -23,8 +24,41 @@ export class NewDecisionComponent implements OnInit {
   criteriaMatrixToShow: any[] = [];
   criteriaStringArray: any[] = [];
 
+  criteriaWeightsArray: number[] = [];
+
   initialValue = 5;
   showCriteriaMatrix = false;
+
+  single = [
+    {
+      name: 'edjdhddndnd',
+      value: 8340000,
+    },
+    {
+      name: 'gqwert',
+      value: 5900000,
+    },
+    {
+      name: 'fasdfger',
+      value: 8980000,
+    },
+    {
+      name: 'hajshsghs shsh',
+      value: 5006000,
+    },
+    {
+      name: 'dhagsgsgsgs',
+      value: 894000,
+    },
+    {
+      name: 'rjwuwye dhdyd',
+      value: 5400000,
+    },
+    {
+      name: 'France',
+      value: 7100000,
+    },
+  ];
 
   formatLabel(val: number) {
     switch (val) {
@@ -58,7 +92,10 @@ export class NewDecisionComponent implements OnInit {
     return val;
   }
 
-  constructor(public specsService: DecisionSpecificationsService) {}
+  constructor(
+    public specsService: DecisionSpecificationsService,
+    public mathService: MathService
+  ) {}
 
   ngOnInit(): void {
     this.decisionCriteria = this.specsService.decisionSpecs.criteria;
@@ -116,6 +153,10 @@ export class NewDecisionComponent implements OnInit {
 
     this.changeInputValuesToMatrixValues(this.criteriaComparisonsValues);
     this.createMatrix(this.realCriteriaValuesArray, this.criteriaStringArray);
+    this.criteriaWeightsArray = this.mathService.weightCalculation(
+      this.realCriteriaMatrix,
+      this.decisionCriteria.length
+    );
   }
 
   changeAlternativeValue(event: any, index: number, otherIndex: number) {
@@ -153,7 +194,6 @@ export class NewDecisionComponent implements OnInit {
   }
 
   changeInputValuesToMatrixValues(valuesArray: number[]) {
-    console.log(valuesArray.length);
     for (let i = 0; i < valuesArray.length; i++) {
       switch (valuesArray[i]) {
         case 1:

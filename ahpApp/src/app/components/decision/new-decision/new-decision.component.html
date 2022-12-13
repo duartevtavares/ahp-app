@@ -57,6 +57,21 @@
             </tr>
           </table>
         </ng-container>
+
+        <ng-container *ngIf="showCriteriaMatrix">
+          <ngx-charts-bar-vertical
+            [view]="[500, 200]"
+            [results]="single"
+            [gradient]="false"
+            [xAxis]="true"
+            [yAxis]="true"
+            [legend]="false"
+            [showXAxisLabel]="true"
+            [showYAxisLabel]="true"
+          >
+          </ngx-charts-bar-vertical>
+        </ng-container>
+
         <button
           class="criteria-matrix-btn"
           mat-raised-button

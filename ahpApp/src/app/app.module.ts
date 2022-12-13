@@ -18,6 +18,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSliderModule } from '@angular/material/slider';
 import { MatTableModule } from '@angular/material/table';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { DecisionSpecificationsFormComponent } from './components/decision/decision-specifications-form/decision-specifications-form.component';
 import { NewDecisionComponent } from './components/decision/new-decision/new-decision.component';
 import { ParticipantsDialogComponent } from './components/decision/participants-dialog/participants-dialog.component';
@@ -25,6 +26,7 @@ import { ParticipantsTableComponent } from './components/decision/participants-t
 import { AlertComponent } from './components/shared/alert-component/alert-component.component';
 import { ApiService } from './services/api.service';
 import { DecisionSpecificationsService } from './services/decision-specifications.service';
+import { MathService } from './services/math.service';
 
 @NgModule({
   declarations: [
@@ -52,9 +54,10 @@ import { DecisionSpecificationsService } from './services/decision-specification
     MatTableModule,
     MatIconModule,
     MatDialogModule,
+    NgxChartsModule,
     HttpClientModule,
   ],
-  providers: [ApiService, DecisionSpecificationsService],
+  providers: [ApiService, DecisionSpecificationsService, MathService],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

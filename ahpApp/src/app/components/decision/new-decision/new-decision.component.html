@@ -23,6 +23,8 @@
               <mat-slider
                 class="criteria-mat-slider"
                 [attr.id]="i"
+                thumbLabel
+                [displayWith]="formatLabel"
                 tickInterval="1"
                 step="1"
                 min="1"
@@ -92,6 +94,8 @@
               <mat-slider
                 class="alternative-mat-slider"
                 [attr.id]="j"
+                thumbLabel
+                [displayWith]="formatLabel"
                 tickInterval="1"
                 step="1"
                 min="1"

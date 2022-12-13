@@ -9,6 +9,32 @@
     margin-bottom: 40px;
   }
 
+  .criteria-wrapper {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    margin-bottom: 40px;
+
+    .criteria-matrix {
+      width: 40%;
+      margin-bottom: 20px;
+      td,
+      th {
+        border: 1px solid #dddddd;
+        text-align: left;
+        padding: 2px;
+      }
+    }
+
+    .criteria-matrix-btn {
+      font-size: smaller;
+      background-color: rgb(50, 47, 43);
+      color: white;
+    }
+  }
+
   .criteria-values-title,
   .alternative-values-title {
     padding-bottom: 40px;
@@ -33,6 +59,7 @@
     .first-column-alternative {
       display: flex;
       flex-direction: row;
+      justify-content: flex-end;
       gap: 40px;
       height: 70px;
 

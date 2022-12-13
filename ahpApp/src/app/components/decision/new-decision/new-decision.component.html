@@ -4,41 +4,65 @@
       <h2 class="criteria-values-title">
         Now, let's proceed and give values to each criteria:
       </h2>
-      <div class="criteria-classification">
-        <div class="first-column">
-          <div
-            class="first-column-criteria"
-            *ngFor="
-              let firstCriteria of firstColumnCriteriaArray;
-              let i = index
-            "
-          >
-            <ul>
+      <div class="criteria-wrapper">
+        <div class="criteria-classification">
+          <div class="first-column">
+            <div
+              class="first-column-criteria"
+              *ngFor="
+                let firstCriteria of firstColumnCriteriaArray;
+                let i = index
+              "
+            >
+              <ul>
+                {{
+                  firstCriteria
+                }}
+              </ul>
+
+              <mat-slider
+                class="criteria-mat-slider"
+                [attr.id]="i"
+                tickInterval="1"
+                step="1"
+                min="1"
+                max="9"
+                value="5"
+                (input)="changeCriteriaValue($event, i)"
+              ></mat-slider>
+              <br />
+            </div>
+          </div>
+          <div class="second-column-criteria">
+            <ul *ngFor="let secondCriteria of secondColumnCriteriaArray">
               {{
-                firstCriteria
+                secondCriteria
               }}
             </ul>
-
-            <mat-slider
-              class="criteria-mat-slider"
-              [attr.id]="i"
-              tickInterval="1"
-              step="1"
-              min="1"
-              max="9"
-              value="5"
-              (input)="changeCriteriaValue($event, i)"
-            ></mat-slider>
-            <br />
           </div>
         </div>
-        <div class="second-column-criteria">
-          <ul *ngFor="let secondCriteria of secondColumnCriteriaArray">
-            {{
-              secondCriteria
-            }}
-          </ul>
-        </div>
+        <ng-container *ngIf="showCriteriaMatrix">
+          <table class="criteria-matrix">
+            <tr>
+              <th></th>
+              <th *ngFor="let criteria of decisionCriteria">{{ criteria }}</th>
+            </tr>
+            <tr *ngFor="let criteria of decisionCriteria; let i = index">
+              <th>{{ decisionCriteria[i] }}</th>
+              <td *ngFor="let criteria of decisionCriteria; let j = index">
+                {{ criteriaMatrixToShow[i][j] }}
+              </td>
+            </tr>
+          </table>
+        </ng-container>
+        <button
+          class="criteria-matrix-btn"
+          mat-raised-button
+          type="button"
+          (click)="displayCriteriaMatrix()"
+        >
+          {{ showCriteriaMatrix ? "Hide" : "Show" }} matrix of comparisons
+        </button>
       </div>
     </div>
 

@@ -26,6 +26,38 @@ export class NewDecisionComponent implements OnInit {
   initialValue = 5;
   showCriteriaMatrix = false;
 
+  formatLabel(val: number) {
+    switch (val) {
+      case 1:
+        val = 9;
+        break;
+      case 2:
+        val = 7;
+        break;
+      case 3:
+        val = 5;
+        break;
+      case 4:
+        val = 3;
+        break;
+      case 5:
+        val = 1;
+        break;
+      case 6:
+        val = 3;
+        break;
+      case 7:
+        val = 5;
+        break;
+      case 8:
+        val = 7;
+        break;
+      case 9:
+        break;
+    }
+    return val;
+  }
+
   constructor(public specsService: DecisionSpecificationsService) {}
 
   ngOnInit(): void {

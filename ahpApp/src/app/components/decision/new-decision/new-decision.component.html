@@ -43,7 +43,7 @@
             </ul>
           </div>
         </div>
-        <ng-container *ngIf="showCriteriaMatrix">
+        <ng-container *ngIf="!isCriteriaMatrixActive">
           <table class="criteria-matrix">
             <tr>
               <th></th>
@@ -58,10 +58,10 @@
           </table>
         </ng-container>
 
-        <ng-container *ngIf="showCriteriaMatrix">
+        <ng-container *ngIf="isCriteriaMatrixActive">
           <ngx-charts-bar-vertical
-            [view]="[500, 200]"
-            [results]="single"
+            [view]="[450, 200]"
+            [results]="chartData"
             [gradient]="false"
             [xAxis]="true"
             [yAxis]="true"
@@ -78,7 +78,7 @@
           type="button"
           (click)="displayCriteriaMatrix()"
         >
-          {{ showCriteriaMatrix ? "Hide" : "Show" }} matrix of comparisons
+          {{ isCriteriaMatrixActive ? "Hide" : "Show" }} criteria weights
         </button>
       </div>
     </div>

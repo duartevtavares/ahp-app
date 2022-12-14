@@ -8,57 +8,29 @@ import { MathService } from 'src/app/services/math.service';
   styleUrls: ['./new-decision.component.scss'],
 })
 export class NewDecisionComponent implements OnInit {
-  decisionCriteria: any;
-  decisionAlternatives: any;
+  decisionCriteria: string[] = [];
+  decisionAlternatives: string[] = [];
 
-  firstColumnCriteriaArray: any = [];
-  secondColumnCriteriaArray: any = [];
-  firstColumnAlternativesArray: any = [];
-  secondColumnAlternativesArray: any = [];
+  firstColumnCriteriaArray: string[] = [];
+  secondColumnCriteriaArray: string[] = [];
+  firstColumnAlternativesArray: string[] = [];
+  secondColumnAlternativesArray: string[] = [];
 
   criteriaComparisonsValues: any[] = [];
   alternativeComparisonsValues: any[] = [];
 
   realCriteriaMatrix: any[] = [];
-  realCriteriaValuesArray: any[] = [];
+  realCriteriaValuesArray: number[] = [];
   criteriaMatrixToShow: any[] = [];
-  criteriaStringArray: any[] = [];
+  criteriaStringArray: string[] = [];
 
   criteriaWeightsArray: number[] = [];
 
   initialValue = 5;
   showCriteriaMatrix = false;
 
-  single = [
-    {
-      name: 'edjdhddndnd',
-      value: 8340000,
-    },
-    {
-      name: 'gqwert',
-      value: 5900000,
-    },
-    {
-      name: 'fasdfger',
-      value: 8980000,
-    },
-    {
-      name: 'hajshsghs shsh',
-      value: 5006000,
-    },
-    {
-      name: 'dhagsgsgsgs',
-      value: 894000,
-    },
-    {
-      name: 'rjwuwye dhdyd',
-      value: 5400000,
-    },
-    {
-      name: 'France',
-      value: 7100000,
-    },
-  ];
+  chartData: { name: string; value: number }[] = [];
+  isCriteriaMatrixActive: boolean = false;
 
   formatLabel(val: number) {
     switch (val) {
@@ -109,9 +81,17 @@ export class NewDecisionComponent implements OnInit {
 
     this.createArraysInitialValues();
     this.createEmptyMatrix();
+
+    this.changeInputValuesToMatrixValues(this.criteriaComparisonsValues);
+    this.createMatrix(this.realCriteriaValuesArray, this.criteriaStringArray);
+    this.criteriaWeightsArray = this.mathService.weightCalculation(
+      this.realCriteriaMatrix,
+      this.decisionCriteria.length
+    );
+    this.createCriteriaChartData();
   }
 
-  createDecisionComparisonColumns(namesToBeCompared: [], step: string) {
+  createDecisionComparisonColumns(namesToBeCompared: string[], step: string) {
     for (let i = 0; i < namesToBeCompared.length - 1; i++) {
       for (let j = 0; j < namesToBeCompared.length - i - 1; j++) {
         if (step === 'criteria') {
@@ -121,8 +101,6 @@ export class NewDecisionComponent implements OnInit {
           this.firstColumnAlternativesArray.push(namesToBeCompared[i]);
         }
       }
-    }
-    for (let i = 0; i < namesToBeCompared.length - 1; i++) {
       for (let j = 1 + i; j < namesToBeCompared.length; j++) {
         if (step === 'criteria') {
           this.secondColumnCriteriaArray.push(namesToBeCompared[j]);
@@ -137,8 +115,6 @@ export class NewDecisionComponent implements OnInit {
   createArraysInitialValues() {
     for (let i = 0; i < this.decisionCriteria.length; i++) {
       this.alternativeComparisonsValues.push([]);
-    }
-    for (let i = 0; i < this.decisionCriteria.length; i++) {
       for (let j = 0; j < this.firstColumnAlternativesArray.length; j++) {
         this.alternativeComparisonsValues[i][j] = this.initialValue;
       }
@@ -149,6 +125,7 @@ export class NewDecisionComponent implements OnInit {
   }
 
   changeCriteriaValue(event: any, index: number) {
+    this.isCriteriaMatrixActive = false;
     this.criteriaComparisonsValues[index] = event.value;
 
     this.changeInputValuesToMatrixValues(this.criteriaComparisonsValues);
@@ -157,6 +134,7 @@ export class NewDecisionComponent implements OnInit {
       this.realCriteriaMatrix,
       this.decisionCriteria.length
     );
+    this.createCriteriaChartData();
   }
 
   changeAlternativeValue(event: any, index: number, otherIndex: number) {
@@ -167,8 +145,6 @@ export class NewDecisionComponent implements OnInit {
     for (let i = 0; i < this.decisionCriteria.length; i++) {
       this.realCriteriaMatrix.push([]);
       this.criteriaMatrixToShow.push([]);
-    }
-    for (let i = 0; i < this.decisionCriteria.length; i++) {
       for (let j = 0; j < this.decisionCriteria.length; j++) {
         this.realCriteriaMatrix[i][j] = 1;
         this.criteriaMatrixToShow[i][j] = '1';
@@ -249,15 +225,22 @@ export class NewDecisionComponent implements OnInit {
           break;
       }
     }
-    // console.log(this.realCriteriaValuesArray);
-    // console.log(this.criteriaStringArray);
+  }
+
+  createCriteriaChartData() {
+    for (let i = 0; i < this.decisionCriteria.length; i++) {
+      this.chartData[i] = {
+        name: this.decisionCriteria[i],
+        value: this.criteriaWeightsArray[i],
+      };
+    }
   }
 
   displayCriteriaMatrix() {
-    if (this.showCriteriaMatrix === false) {
-      this.showCriteriaMatrix = true;
+    if (this.isCriteriaMatrixActive === false) {
+      this.isCriteriaMatrixActive = true;
     } else {
-      this.showCriteriaMatrix = false;
+      this.isCriteriaMatrixActive = false;
     }
   }
 }

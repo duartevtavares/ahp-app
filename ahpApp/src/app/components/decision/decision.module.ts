@@ -5,6 +5,7 @@ import { DecisionComponent } from './decision.component';
 import { NewDecisionComponent } from './new-decision/new-decision.component';
 import { ParticipantsDialogComponent } from './participants-dialog/participants-dialog.component';
 import { ParticipantsTableComponent } from './participants-table/participants-table.component';
+import { NewDecisionAlternativesComponent } from './new-decision-alternatives/new-decision-alternatives/new-decision-alternatives.component';
 
 @NgModule({
   declarations: [
@@ -13,6 +14,7 @@ import { ParticipantsTableComponent } from './participants-table/participants-ta
     ParticipantsDialogComponent,
     NewDecisionComponent,
     DecisionSpecificationsFormComponent,
+    NewDecisionAlternativesComponent,
   ],
   imports: [CommonModule],
 })

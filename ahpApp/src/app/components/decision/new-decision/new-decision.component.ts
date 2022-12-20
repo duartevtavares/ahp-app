@@ -39,6 +39,8 @@ export class NewDecisionComponent implements OnInit {
   chartData: { name: string; value: number }[] = [];
   isCriteriaMatrixActive: boolean = false;
 
+  consistencyRatio: number = 0;
+
   formatLabel(val: number) {
     switch (val) {
       case 1:
@@ -168,10 +170,17 @@ export class NewDecisionComponent implements OnInit {
       this.criteriaStringArray,
       'criteria'
     );
+
     this.criteriaWeightsArray = this.mathService.weightCalculation(
       this.realCriteriaMatrix,
       this.decisionCriteria.length
     );
+
+    this.consistencyRatio = this.createConsistencyRatios(
+      this.realCriteriaMatrix,
+      this.criteriaWeightsArray
+    );
+    console.log(this.consistencyRatio);
     this.createCriteriaChartData();
   }
 
@@ -188,9 +197,6 @@ export class NewDecisionComponent implements OnInit {
       this.alternativesStringArray,
       'alternatives'
     );
-
-    console.log(this.alternativesMatrixToShow);
-    console.log(this.realAlternativesMatrix);
   }
 
   createEmptyMatrix() {
@@ -228,8 +234,8 @@ export class NewDecisionComponent implements OnInit {
       let m = 0;
       for (let i = 0; i < this.decisionCriteria.length; i++) {
         for (let j = 1 + i; j < this.decisionCriteria.length; j++) {
-          this.realCriteriaMatrix[i][j] = realValuesVector[m].toFixed(2);
-          this.realCriteriaMatrix[j][i] = (1 / realValuesVector[m]).toFixed(2);
+          this.realCriteriaMatrix[i][j] = realValuesVector[m];
+          this.realCriteriaMatrix[j][i] = 1 / realValuesVector[m];
           this.criteriaMatrixToShow[i][j] = valuesToShowVector[m];
           this.criteriaMatrixToShow[j][i] =
             valuesToShowVector[m + valuesToShowVector.length / 2];
@@ -418,5 +424,9 @@ export class NewDecisionComponent implements OnInit {
     } else {
       this.isCriteriaMatrixActive = false;
     }
+  }
+
+  createConsistencyRatios(matrix: any[], vector: number[]) {
+    return this.mathService.computeConsistencyRatio(matrix, vector);
   }
 }

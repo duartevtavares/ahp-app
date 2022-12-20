@@ -43,6 +43,12 @@
             </ul>
           </div>
         </div>
+        <h4>
+          Consistency Ratio:
+          <span [style.color]="consistencyRatio > 0.1 ? 'red' : null">{{
+            consistencyRatio | number : "1.0-4"
+          }}</span>
+        </h4>
         <ng-container *ngIf="!isCriteriaMatrixActive">
           <table class="criteria-matrix">
             <tr>

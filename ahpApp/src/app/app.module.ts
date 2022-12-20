@@ -27,6 +27,7 @@ import { AlertComponent } from './components/shared/alert-component/alert-compon
 import { ApiService } from './services/api.service';
 import { DecisionSpecificationsService } from './services/decision-specifications.service';
 import { MathService } from './services/math.service';
+import { NewDecisionAlternativesComponent } from './components/decision/new-decision-alternatives/new-decision-alternatives/new-decision-alternatives.component';
 
 @NgModule({
   declarations: [
@@ -37,6 +38,7 @@ import { MathService } from './services/math.service';
     ParticipantsDialogComponent,
     NewDecisionComponent,
     DecisionSpecificationsFormComponent,
+    NewDecisionAlternativesComponent,
     AlertComponent,
   ],
   imports: [

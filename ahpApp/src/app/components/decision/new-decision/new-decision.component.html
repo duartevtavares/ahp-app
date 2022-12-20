@@ -87,50 +87,73 @@
       <h2 class="alternative-values-title">
         Now, let's proceed and give values to each alternative:
       </h2>
+
       <div *ngFor="let criteria of decisionCriteria; let i = index">
         <div class="alternatives-by-criteria-comparison">
           <h5>Regarding {{ criteria }}, compare the alternatives</h5>
         </div>
-        <div class="alternative-classification">
-          <div class="first-column">
-            <div
-              class="first-column-alternative"
-              *ngFor="
-                let firstAlternative of firstColumnAlternativesArray;
-                let j = index
-              "
-            >
-              <ul>
+        <div class="alternatives-wrapper">
+          <div class="alternative-classification">
+            <div class="first-column">
+              <div
+                class="first-column-alternative"
+                *ngFor="
+                  let firstAlternative of firstColumnAlternativesArray;
+                  let j = index
+                "
+              >
+                <ul>
+                  {{
+                    firstAlternative
+                  }}
+                </ul>
+
+                <mat-slider
+                  class="alternative-mat-slider"
+                  [attr.id]="j"
+                  thumbLabel
+                  [displayWith]="formatLabel"
+                  tickInterval="1"
+                  step="1"
+                  min="1"
+                  max="9"
+                  value="5"
+                  (input)="changeAlternativeValue($event, i, j)"
+                ></mat-slider>
+                <br />
+              </div>
+            </div>
+            <div class="second-column-alternative">
+              <ul
+                *ngFor="let secondAlternative of secondColumnAlternativesArray"
+              >
                 {{
-                  firstAlternative
+                  secondAlternative
                 }}
               </ul>
-
-              <mat-slider
-                class="alternative-mat-slider"
-                [attr.id]="j"
-                thumbLabel
-                [displayWith]="formatLabel"
-                tickInterval="1"
-                step="1"
-                min="1"
-                max="9"
-                value="5"
-                (input)="changeAlternativeValue($event, i, j)"
-              ></mat-slider>
-              <br />
             </div>
           </div>
-          <div class="second-column-alternative">
-            <ul *ngFor="let secondAlternative of secondColumnAlternativesArray">
-              {{
-                secondAlternative
-              }}
-            </ul>
-          </div>
+
+          <table class="alternatives-matrix">
+            <tr>
+              <th></th>
+              <th *ngFor="let alternative of decisionAlternatives">
+                {{ alternative }}
+              </th>
+            </tr>
+            <tr *ngFor="let alternative of decisionAlternatives; let j = index">
+              <th>{{ alternative }}</th>
+              <td
+                *ngFor="let alternative of decisionAlternatives; let k = index"
+              >
+                {{ alternativesMatrixToShow[i][j][k] }}
+              </td>
+            </tr>
+          </table>
         </div>
       </div>
     </div>
+
     <br /><br />
     <pre>{{ criteriaComparisonsValues | json }}</pre>
     <pre>{{ alternativeComparisonsValues | json }}</pre>

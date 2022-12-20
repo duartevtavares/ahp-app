@@ -24,10 +24,17 @@ export class NewDecisionComponent implements OnInit {
   criteriaMatrixToShow: any[] = [];
   criteriaStringArray: string[] = [];
 
+  realAlternativesMatrix: any[] = [];
+  realAlternativesValuesArray: any[] = [];
+  alternativesMatrixToShow: any[] = [];
+  alternativesStringArray: any[] = [];
+
   criteriaWeightsArray: number[] = [];
+  alternativesWeightsArray: number[] = [];
 
   initialValue = 5;
   showCriteriaMatrix = false;
+  showAlternativesMatrix = false;
 
   chartData: { name: string; value: number }[] = [];
   isCriteriaMatrixActive: boolean = false;
@@ -80,10 +87,34 @@ export class NewDecisionComponent implements OnInit {
     );
 
     this.createArraysInitialValues();
-    this.createEmptyMatrix();
 
-    this.changeInputValuesToMatrixValues(this.criteriaComparisonsValues);
-    this.createMatrix(this.realCriteriaValuesArray, this.criteriaStringArray);
+    this.createEmptyMatrix();
+    this.createAlternativesEmptyMatrix();
+
+    this.changeInputValuesToMatrixValues(
+      this.criteriaComparisonsValues,
+      'criteria'
+    );
+    for (let i = 0; i < this.decisionCriteria.length; i++) {
+      this.changeInputValuesToMatrixValues(
+        this.alternativeComparisonsValues,
+        'alternatives'
+      );
+    }
+    // console.log(this.realAlternativesValuesArray);
+
+    this.createMatrix(
+      this.realCriteriaValuesArray,
+      this.criteriaStringArray,
+      'criteria'
+    );
+    this.createMatrix(
+      this.realAlternativesValuesArray,
+      this.alternativesStringArray,
+      'alternatives'
+    );
+    // console.log(this.realAlternativesMatrix);
+
     this.criteriaWeightsArray = this.mathService.weightCalculation(
       this.realCriteriaMatrix,
       this.decisionCriteria.length
@@ -128,8 +159,15 @@ export class NewDecisionComponent implements OnInit {
     this.isCriteriaMatrixActive = false;
     this.criteriaComparisonsValues[index] = event.value;
 
-    this.changeInputValuesToMatrixValues(this.criteriaComparisonsValues);
-    this.createMatrix(this.realCriteriaValuesArray, this.criteriaStringArray);
+    this.changeInputValuesToMatrixValues(
+      this.criteriaComparisonsValues,
+      'criteria'
+    );
+    this.createMatrix(
+      this.realCriteriaValuesArray,
+      this.criteriaStringArray,
+      'criteria'
+    );
     this.criteriaWeightsArray = this.mathService.weightCalculation(
       this.realCriteriaMatrix,
       this.decisionCriteria.length
@@ -139,6 +177,20 @@ export class NewDecisionComponent implements OnInit {
 
   changeAlternativeValue(event: any, index: number, otherIndex: number) {
     this.alternativeComparisonsValues[index][otherIndex] = event.value;
+    // console.log(this.alternativeComparisonsValues);
+    this.changeInputValuesToMatrixValues(
+      this.alternativeComparisonsValues,
+      'alternatives'
+    );
+
+    this.createMatrix(
+      this.realAlternativesValuesArray,
+      this.alternativesStringArray,
+      'alternatives'
+    );
+
+    console.log(this.alternativesMatrixToShow);
+    console.log(this.realAlternativesMatrix);
   }
 
   createEmptyMatrix() {
@@ -152,77 +204,201 @@ export class NewDecisionComponent implements OnInit {
     }
   }
 
-  createMatrix(realValuesVector: number[], valuesToShowVector: string[]) {
-    let k = 0;
+  createAlternativesEmptyMatrix() {
     for (let i = 0; i < this.decisionCriteria.length; i++) {
-      for (let j = 1 + i; j < this.decisionCriteria.length; j++) {
-        this.realCriteriaMatrix[i][j] = realValuesVector[k].toFixed(2);
-        this.realCriteriaMatrix[j][i] = (1 / realValuesVector[k]).toFixed(2);
-        this.criteriaMatrixToShow[i][j] = valuesToShowVector[k];
-        this.criteriaMatrixToShow[j][i] =
-          valuesToShowVector[k + valuesToShowVector.length / 2];
-        k++;
+      this.realAlternativesMatrix.push([]);
+      this.alternativesMatrixToShow.push([]);
+      for (let j = 0; j < this.decisionAlternatives.length; j++) {
+        this.realAlternativesMatrix[i][j] = [];
+        this.alternativesMatrixToShow[i][j] = [];
+        for (let k = 0; k < this.decisionAlternatives.length; k++) {
+          this.realAlternativesMatrix[i][j][k] = 1;
+          this.alternativesMatrixToShow[i][j][k] = '1';
+        }
       }
     }
   }
 
-  changeInputValuesToMatrixValues(valuesArray: number[]) {
-    for (let i = 0; i < valuesArray.length; i++) {
-      switch (valuesArray[i]) {
-        case 1:
-          this.realCriteriaValuesArray[i] = 1 / 9;
-          this.criteriaStringArray[i] = '1/9';
-          this.criteriaStringArray[i + this.firstColumnCriteriaArray.length] =
-            '9';
-          break;
-        case 2:
-          this.realCriteriaValuesArray[i] = 1 / 7;
-          this.criteriaStringArray[i] = '1/7';
-          this.criteriaStringArray[i + this.firstColumnCriteriaArray.length] =
-            '7';
-          break;
-        case 3:
-          this.realCriteriaValuesArray[i] = 1 / 5;
-          this.criteriaStringArray[i] = '1/5';
-          this.criteriaStringArray[i + this.firstColumnCriteriaArray.length] =
-            '5';
-          break;
-        case 4:
-          this.realCriteriaValuesArray[i] = 1 / 3;
-          this.criteriaStringArray[i] = '1/3';
-          this.criteriaStringArray[i + this.firstColumnCriteriaArray.length] =
-            '3';
-          break;
-        case 5:
-          this.realCriteriaValuesArray[i] = 1;
-          this.criteriaStringArray[i] = '1';
-          this.criteriaStringArray[i + this.firstColumnCriteriaArray.length] =
-            '1';
-          break;
-        case 6:
-          this.realCriteriaValuesArray[i] = 3;
-          this.criteriaStringArray[i] = '3';
-          this.criteriaStringArray[i + this.firstColumnCriteriaArray.length] =
-            '1/3';
-          break;
-        case 7:
-          this.realCriteriaValuesArray[i] = 5;
-          this.criteriaStringArray[i] = '5';
-          this.criteriaStringArray[i + this.firstColumnCriteriaArray.length] =
-            '1/5';
-          break;
-        case 8:
-          this.realCriteriaValuesArray[i] = 7;
-          this.criteriaStringArray[i] = '7';
-          this.criteriaStringArray[i + this.firstColumnCriteriaArray.length] =
-            '1/7';
-          break;
-        case 9:
-          this.realCriteriaValuesArray[i] = 9;
-          this.criteriaStringArray[i] = '9';
-          this.criteriaStringArray[i + this.firstColumnCriteriaArray.length] =
-            '1/9';
-          break;
+  createMatrix(
+    realValuesVector: any[],
+    valuesToShowVector: string[],
+    parameter: string
+  ) {
+    if (parameter === 'criteria') {
+      let m = 0;
+      for (let i = 0; i < this.decisionCriteria.length; i++) {
+        for (let j = 1 + i; j < this.decisionCriteria.length; j++) {
+          this.realCriteriaMatrix[i][j] = realValuesVector[m].toFixed(2);
+          this.realCriteriaMatrix[j][i] = (1 / realValuesVector[m]).toFixed(2);
+          this.criteriaMatrixToShow[i][j] = valuesToShowVector[m];
+          this.criteriaMatrixToShow[j][i] =
+            valuesToShowVector[m + valuesToShowVector.length / 2];
+          m++;
+        }
+      }
+    }
+    if (parameter === 'alternatives') {
+      let m = 0;
+      let n = 0;
+
+      // console.log(realValuesVector);
+      // console.log(valuesToShowVector);
+      for (let i = 0; i < this.decisionCriteria.length; i++) {
+        for (let j = 0; j < this.decisionAlternatives.length; j++) {
+          for (let k = 1 + j; k < this.decisionAlternatives.length; k++) {
+            this.realAlternativesMatrix[i][j][k] =
+              realValuesVector[m][n].toFixed(2);
+            this.realAlternativesMatrix[i][k][j] = (
+              1 / realValuesVector[m][n]
+            ).toFixed(2);
+            this.alternativesMatrixToShow[i][j][k] = valuesToShowVector[m][n];
+            this.alternativesMatrixToShow[i][k][j] =
+              valuesToShowVector[m][n + valuesToShowVector[m].length / 2];
+            n++;
+          }
+        }
+        n = 0;
+        m++;
+      }
+    }
+  }
+
+  changeInputValuesToMatrixValues(valuesArray: any[], parameter: string) {
+    if (parameter === 'criteria') {
+      for (let i = 0; i < valuesArray.length; i++) {
+        switch (valuesArray[i]) {
+          case 1:
+            this.realCriteriaValuesArray[i] = 1 / 9;
+            this.criteriaStringArray[i] = '1/9';
+            this.criteriaStringArray[i + this.firstColumnCriteriaArray.length] =
+              '9';
+            break;
+          case 2:
+            this.realCriteriaValuesArray[i] = 1 / 7;
+            this.criteriaStringArray[i] = '1/7';
+            this.criteriaStringArray[i + this.firstColumnCriteriaArray.length] =
+              '7';
+            break;
+          case 3:
+            this.realCriteriaValuesArray[i] = 1 / 5;
+            this.criteriaStringArray[i] = '1/5';
+            this.criteriaStringArray[i + this.firstColumnCriteriaArray.length] =
+              '5';
+            break;
+          case 4:
+            this.realCriteriaValuesArray[i] = 1 / 3;
+            this.criteriaStringArray[i] = '1/3';
+            this.criteriaStringArray[i + this.firstColumnCriteriaArray.length] =
+              '3';
+            break;
+          case 5:
+            this.realCriteriaValuesArray[i] = 1;
+            this.criteriaStringArray[i] = '1';
+            this.criteriaStringArray[i + this.firstColumnCriteriaArray.length] =
+              '1';
+            break;
+          case 6:
+            this.realCriteriaValuesArray[i] = 3;
+            this.criteriaStringArray[i] = '3';
+            this.criteriaStringArray[i + this.firstColumnCriteriaArray.length] =
+              '1/3';
+            break;
+          case 7:
+            this.realCriteriaValuesArray[i] = 5;
+            this.criteriaStringArray[i] = '5';
+            this.criteriaStringArray[i + this.firstColumnCriteriaArray.length] =
+              '1/5';
+            break;
+          case 8:
+            this.realCriteriaValuesArray[i] = 7;
+            this.criteriaStringArray[i] = '7';
+            this.criteriaStringArray[i + this.firstColumnCriteriaArray.length] =
+              '1/7';
+            break;
+          case 9:
+            this.realCriteriaValuesArray[i] = 9;
+            this.criteriaStringArray[i] = '9';
+            this.criteriaStringArray[i + this.firstColumnCriteriaArray.length] =
+              '1/9';
+            break;
+        }
+      }
+    }
+
+    if (parameter === 'alternatives') {
+      for (let i = 0; i < valuesArray.length; i++) {
+        this.realAlternativesValuesArray[i] = [];
+        this.alternativesStringArray[i] = [];
+      }
+
+      for (let i = 0; i < valuesArray.length; i++) {
+        for (let j = 0; j < valuesArray[i].length; j++) {
+          switch (valuesArray[i][j]) {
+            case 1:
+              this.realAlternativesValuesArray[i][j] = 1 / 9;
+              this.alternativesStringArray[i][j] = '1/9';
+              this.alternativesStringArray[i][
+                j + this.firstColumnAlternativesArray.length
+              ] = '9';
+              break;
+            case 2:
+              this.realAlternativesValuesArray[i][j] = 1 / 7;
+              this.alternativesStringArray[i][j] = '1/7';
+              this.alternativesStringArray[i][
+                j + this.firstColumnAlternativesArray.length
+              ] = '7';
+              break;
+            case 3:
+              this.realAlternativesValuesArray[i][j] = 1 / 5;
+              this.alternativesStringArray[i][j] = '1/5';
+              this.alternativesStringArray[i][
+                j + this.firstColumnAlternativesArray.length
+              ] = '5';
+              break;
+            case 4:
+              this.realAlternativesValuesArray[i][j] = 1 / 3;
+              this.alternativesStringArray[i][j] = '1/3';
+              this.alternativesStringArray[i][
+                j + this.firstColumnAlternativesArray.length
+              ] = '3';
+              break;
+            case 5:
+              this.realAlternativesValuesArray[i][j] = 1;
+              this.alternativesStringArray[i][j] = '1';
+              this.alternativesStringArray[i][
+                j + this.firstColumnAlternativesArray.length
+              ] = '1';
+              break;
+            case 6:
+              this.realAlternativesValuesArray[i][j] = 3;
+              this.alternativesStringArray[i][j] = '3';
+              this.alternativesStringArray[i][
+                j + this.firstColumnAlternativesArray.length
+              ] = '1/3';
+              break;
+            case 7:
+              this.realAlternativesValuesArray[i][j] = 5;
+              this.alternativesStringArray[i][j] = '5';
+              this.alternativesStringArray[i][
+                j + this.firstColumnAlternativesArray.length
+              ] = '1/5';
+              break;
+            case 8:
+              this.realAlternativesValuesArray[i][j] = 7;
+              this.alternativesStringArray[i][j] = '7';
+              this.alternativesStringArray[i][
+                j + this.firstColumnAlternativesArray.length
+              ] = '1/7';
+              break;
+            case 9:
+              this.realAlternativesValuesArray[i][j] = 9;
+              this.alternativesStringArray[i][j] = '9';
+              this.alternativesStringArray[i][
+                j + this.firstColumnAlternativesArray.length
+              ] = '1/9';
+              break;
+          }
+        }
       }
     }
   }

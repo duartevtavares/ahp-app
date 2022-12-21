@@ -43,12 +43,14 @@
             </ul>
           </div>
         </div>
-        <h4>
-          Consistency Ratio:
-          <span [style.color]="consistencyRatio > 0.1 ? 'red' : null">{{
-            consistencyRatio | number : "1.0-4"
-          }}</span>
-        </h4>
+        <ng-container *ngIf="decisionCriteria.length > 2">
+          <h4>
+            Consistency Ratio:
+            <span [style.color]="consistencyRatio > 0.1 ? 'red' : null">{{
+              consistencyRatio | number : "1.0-4"
+            }}</span>
+          </h4>
+        </ng-container>
         <ng-container *ngIf="!isCriteriaMatrixActive">
           <table class="criteria-matrix">
             <tr>
@@ -96,7 +98,10 @@
 
       <div *ngFor="let criteria of decisionCriteria; let i = index">
         <div class="alternatives-by-criteria-comparison">
-          <h5>Regarding {{ criteria }}, compare the alternatives</h5>
+          <h4>
+            Regarding the criteria <strong>{{ criteria }}</strong
+            >, compare the alternatives
+          </h4>
         </div>
         <div class="alternatives-wrapper">
           <div class="alternative-classification">

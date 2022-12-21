@@ -41,19 +41,19 @@ export class NewDecisionComponent implements OnInit {
 
   consistencyRatio: number = 0;
 
-  formatLabel(val: number) {
+  formatLabel(val: any): string {
     switch (val) {
       case 1:
-        val = 9;
+        val = '1/9';
         break;
       case 2:
-        val = 7;
+        val = '1/7';
         break;
       case 3:
-        val = 5;
+        val = '1/5';
         break;
       case 4:
-        val = 3;
+        val = '1/3';
         break;
       case 5:
         val = 1;

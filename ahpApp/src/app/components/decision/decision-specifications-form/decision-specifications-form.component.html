@@ -52,13 +52,18 @@
         >
           Add another alternative
         </button>
-        <h5 style="color: rgb(255, 80, 80)">
-          Please add 2 or more alternatives
-        </h5>
+        <div
+          class="alternativesNumberControl"
+          *ngIf="alternatives.value.length < 2"
+        >
+          <h5 style="color: rgb(255, 80, 80)">
+            Please add 2 or more alternatives
+          </h5>
+        </div>
       </div>
 
       <div formArrayName="criteria" class="problem-criteria">
-        <h2>Finally, choose the criteria to evaluate the parameters:</h2>
+        <h2>Finally, choose the criteria to evaluate the alternatives:</h2>
         <div
           class="new-criteria-wrapper"
           *ngFor="let criteria of criteria.controls; let i = index"

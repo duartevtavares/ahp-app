@@ -30,7 +30,7 @@ export class NewDecisionComponent implements OnInit {
   alternativesStringArray: any[] = [];
 
   criteriaWeightsArray: number[] = [];
-  alternativesWeightsArray: number[] = [];
+  alternativesWeightsArray: any[] = [];
 
   initialValue = 5;
   showCriteriaMatrix = false;
@@ -39,7 +39,8 @@ export class NewDecisionComponent implements OnInit {
   chartData: { name: string; value: number }[] = [];
   isCriteriaMatrixActive: boolean = false;
 
-  consistencyRatio: number = 0;
+  criteriaConsistencyRatio: number = 0;
+  alternativesConsistencyRatio: number[] = [];
 
   formatLabel(val: any): string {
     switch (val) {
@@ -103,7 +104,6 @@ export class NewDecisionComponent implements OnInit {
         'alternatives'
       );
     }
-    // console.log(this.realAlternativesValuesArray);
 
     this.createMatrix(
       this.realCriteriaValuesArray,
@@ -115,13 +115,10 @@ export class NewDecisionComponent implements OnInit {
       this.alternativesStringArray,
       'alternatives'
     );
-    // console.log(this.realAlternativesMatrix);
 
-    this.criteriaWeightsArray = this.mathService.weightCalculation(
-      this.realCriteriaMatrix,
-      this.decisionCriteria.length
-    );
-    this.createCriteriaChartData();
+    for (let i = 0; i < this.decisionCriteria.length; i++) {
+      this.alternativesConsistencyRatio[i] = 0;
+    }
   }
 
   createDecisionComparisonColumns(namesToBeCompared: string[], step: string) {
@@ -176,17 +173,16 @@ export class NewDecisionComponent implements OnInit {
       this.decisionCriteria.length
     );
 
-    this.consistencyRatio = this.createConsistencyRatios(
+    this.criteriaConsistencyRatio = this.createConsistencyRatios(
       this.realCriteriaMatrix,
       this.criteriaWeightsArray
     );
-    console.log(this.consistencyRatio);
+    console.log(this.criteriaConsistencyRatio);
     this.createCriteriaChartData();
   }
 
   changeAlternativeValue(event: any, index: number, otherIndex: number) {
     this.alternativeComparisonsValues[index][otherIndex] = event.value;
-    // console.log(this.alternativeComparisonsValues);
     this.changeInputValuesToMatrixValues(
       this.alternativeComparisonsValues,
       'alternatives'
@@ -197,6 +193,23 @@ export class NewDecisionComponent implements OnInit {
       this.alternativesStringArray,
       'alternatives'
     );
+
+    for (let i = 0; i < this.decisionCriteria.length; i++) {
+      this.alternativesWeightsArray[i] = this.createWeightsArray(
+        this.realAlternativesMatrix[i],
+        this.decisionAlternatives.length
+      );
+    }
+
+    console.log(this.alternativesWeightsArray);
+
+    for (let i = 0; i < this.decisionCriteria.length; i++) {
+      this.alternativesConsistencyRatio[i] = this.createConsistencyRatios(
+        this.realAlternativesMatrix[i],
+        this.alternativesWeightsArray[i]
+      );
+    }
+    console.log(this.alternativesConsistencyRatio);
   }
 
   createEmptyMatrix() {
@@ -252,11 +265,8 @@ export class NewDecisionComponent implements OnInit {
       for (let i = 0; i < this.decisionCriteria.length; i++) {
         for (let j = 0; j < this.decisionAlternatives.length; j++) {
           for (let k = 1 + j; k < this.decisionAlternatives.length; k++) {
-            this.realAlternativesMatrix[i][j][k] =
-              realValuesVector[m][n].toFixed(2);
-            this.realAlternativesMatrix[i][k][j] = (
-              1 / realValuesVector[m][n]
-            ).toFixed(2);
+            this.realAlternativesMatrix[i][j][k] = realValuesVector[m][n];
+            this.realAlternativesMatrix[i][k][j] = 1 / realValuesVector[m][n];
             this.alternativesMatrixToShow[i][j][k] = valuesToShowVector[m][n];
             this.alternativesMatrixToShow[i][k][j] =
               valuesToShowVector[m][n + valuesToShowVector[m].length / 2];
@@ -424,6 +434,10 @@ export class NewDecisionComponent implements OnInit {
     } else {
       this.isCriteriaMatrixActive = false;
     }
+  }
+
+  createWeightsArray(matrix: any[], vectorLength: number): number[] {
+    return this.mathService.weightCalculation(matrix, vectorLength);
   }
 
   createConsistencyRatios(matrix: any[], vector: number[]) {

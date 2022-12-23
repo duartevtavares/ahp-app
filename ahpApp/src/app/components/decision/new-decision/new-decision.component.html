@@ -44,12 +44,15 @@
           </div>
         </div>
         <ng-container *ngIf="decisionCriteria.length > 2">
-          <h4>
-            Consistency Ratio:
-            <span [style.color]="consistencyRatio > 0.1 ? 'red' : null">{{
-              consistencyRatio | number : "1.0-4"
-            }}</span>
-          </h4>
+          <div class="criteriaConsistencyRatio">
+            <h4>
+              Consistency Ratio:
+              <span
+                [style.color]="criteriaConsistencyRatio > 0.1 ? 'red' : null"
+                >{{ criteriaConsistencyRatio | number : "1.0-4" }}</span
+              >
+            </h4>
+          </div>
         </ng-container>
         <ng-container *ngIf="!isCriteriaMatrixActive">
           <table class="criteria-matrix">
@@ -145,6 +148,22 @@
             </div>
           </div>
 
+          <ng-container>
+            <div class="alternativesConsistencyRatio">
+              <h4>
+                Consistency Ratio:
+                <span
+                  [style.color]="
+                    alternativesConsistencyRatio[i] > 0.1 ? 'red' : null
+                  "
+                  >{{
+                    alternativesConsistencyRatio[i] | number : "1.0-4"
+                  }}</span
+                >
+              </h4>
+            </div>
+          </ng-container>
+
           <table class="alternatives-matrix">
             <tr>
               <th></th>
@@ -165,8 +184,6 @@
       </div>
     </div>
 
-    <br /><br />
-    <pre>{{ criteriaComparisonsValues | json }}</pre>
-    <pre>{{ alternativeComparisonsValues | json }}</pre>
+    <div class="final-results"></div>
   </mat-card>
 </div>

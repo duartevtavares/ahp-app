@@ -116,6 +116,24 @@ export class MathService {
     }
     return result;
   }
+
+  computeFinalWeights(
+    alternativesWeights: any[],
+    criteriaWeights: number[]
+  ): number[] {
+    let resultValue: number = 0;
+    let resultsArray: number[] = [];
+    console.log(alternativesWeights);
+    console.log(criteriaWeights);
+    for (let i = 0; i < alternativesWeights[0].length; i++) {
+      resultValue = 0;
+      for (let j = 0; j < criteriaWeights.length; j++) {
+        resultValue += alternativesWeights[j][i] * criteriaWeights[j];
+      }
+      resultsArray[i] = resultValue;
+    }
+    return resultsArray;
+  }
 }
 
 // import { Injectable } from '@angular/core';

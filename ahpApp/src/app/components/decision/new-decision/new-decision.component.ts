@@ -31,16 +31,20 @@ export class NewDecisionComponent implements OnInit {
 
   criteriaWeightsArray: number[] = [];
   alternativesWeightsArray: any[] = [];
+  finalWeightsArray: number[] = [];
 
   initialValue = 5;
   showCriteriaMatrix = false;
   showAlternativesMatrix = false;
 
   chartData: { name: string; value: number }[] = [];
+  finalResultsChartData: { name: string; value: number }[] = [];
   isCriteriaMatrixActive: boolean = false;
 
   criteriaConsistencyRatio: number = 0;
   alternativesConsistencyRatio: number[] = [];
+
+  formIsSubmited: boolean = false;
 
   formatLabel(val: any): string {
     switch (val) {
@@ -116,6 +120,24 @@ export class NewDecisionComponent implements OnInit {
       'alternatives'
     );
 
+    this.criteriaWeightsArray = this.mathService.weightCalculation(
+      this.realCriteriaMatrix,
+      this.decisionCriteria.length
+    );
+
+    for (let i = 0; i < this.decisionCriteria.length; i++) {
+      this.alternativesWeightsArray[i] = this.createWeightsArray(
+        this.realAlternativesMatrix[i],
+        this.decisionAlternatives.length
+      );
+    }
+
+    this.finalWeightsArray = this.computeFinalWeights(
+      this.alternativesWeightsArray,
+      this.criteriaWeightsArray
+    );
+    this.createFinalResultschartData();
+
     for (let i = 0; i < this.decisionCriteria.length; i++) {
       this.alternativesConsistencyRatio[i] = 0;
     }
@@ -179,6 +201,12 @@ export class NewDecisionComponent implements OnInit {
     );
     console.log(this.criteriaConsistencyRatio);
     this.createCriteriaChartData();
+
+    this.finalWeightsArray = this.computeFinalWeights(
+      this.alternativesWeightsArray,
+      this.criteriaWeightsArray
+    );
+    this.createFinalResultschartData();
   }
 
   changeAlternativeValue(event: any, index: number, otherIndex: number) {
@@ -210,6 +238,12 @@ export class NewDecisionComponent implements OnInit {
       );
     }
     console.log(this.alternativesConsistencyRatio);
+
+    this.finalWeightsArray = this.computeFinalWeights(
+      this.alternativesWeightsArray,
+      this.criteriaWeightsArray
+    );
+    this.createFinalResultschartData();
   }
 
   createEmptyMatrix() {
@@ -428,6 +462,15 @@ export class NewDecisionComponent implements OnInit {
     }
   }
 
+  createFinalResultschartData() {
+    for (let i = 0; i < this.decisionAlternatives.length; i++) {
+      this.finalResultsChartData[i] = {
+        name: this.decisionAlternatives[i],
+        value: this.finalWeightsArray[i],
+      };
+    }
+  }
+
   displayCriteriaMatrix() {
     if (this.isCriteriaMatrixActive === false) {
       this.isCriteriaMatrixActive = true;
@@ -442,5 +485,19 @@ export class NewDecisionComponent implements OnInit {
 
   createConsistencyRatios(matrix: any[], vector: number[]) {
     return this.mathService.computeConsistencyRatio(matrix, vector);
+  }
+
+  computeFinalWeights(
+    alternativesWeights: any[],
+    criteriaWeights: number[]
+  ): number[] {
+    return this.mathService.computeFinalWeights(
+      alternativesWeights,
+      criteriaWeights
+    );
+  }
+
+  onSubmit() {
+    this.formIsSubmited = true;
   }
 }

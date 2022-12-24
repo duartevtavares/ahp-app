@@ -184,6 +184,24 @@
       </div>
     </div>
 
-    <div class="final-results"></div>
+    <div class="form-buttons">
+      <button mat-raised-button class="submit-button" (click)="onSubmit()">
+        Submit
+      </button>
+    </div>
+    <div class="final-results">
+      <ng-container *ngIf="formIsSubmited">
+        <ngx-charts-bar-vertical
+          [results]="finalResultsChartData"
+          [gradient]="false"
+          [xAxis]="true"
+          [yAxis]="true"
+          [legend]="false"
+          [showXAxisLabel]="true"
+          [showYAxisLabel]="true"
+        >
+        </ngx-charts-bar-vertical>
+      </ng-container>
+    </div>
   </mat-card>
 </div>

@@ -15,19 +15,21 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
+import { MatSelectModule } from '@angular/material/select';
 import { MatSliderModule } from '@angular/material/slider';
 import { MatTableModule } from '@angular/material/table';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { DecisionSpecificationsFormComponent } from './components/decision/decision-specifications-form/decision-specifications-form.component';
+import { NewDecisionAlternativesComponent } from './components/decision/new-decision-alternatives/new-decision-alternatives/new-decision-alternatives.component';
 import { NewDecisionComponent } from './components/decision/new-decision/new-decision.component';
 import { ParticipantsDialogComponent } from './components/decision/participants-dialog/participants-dialog.component';
 import { ParticipantsTableComponent } from './components/decision/participants-table/participants-table.component';
 import { AlertComponent } from './components/shared/alert-component/alert-component.component';
+import { WelcomePageComponent } from './components/welcome-page/welcome-page/welcome-page.component';
 import { ApiService } from './services/api.service';
 import { DecisionSpecificationsService } from './services/decision-specifications.service';
 import { MathService } from './services/math.service';
-import { NewDecisionAlternativesComponent } from './components/decision/new-decision-alternatives/new-decision-alternatives/new-decision-alternatives.component';
 
 @NgModule({
   declarations: [
@@ -40,6 +42,7 @@ import { NewDecisionAlternativesComponent } from './components/decision/new-deci
     DecisionSpecificationsFormComponent,
     NewDecisionAlternativesComponent,
     AlertComponent,
+    WelcomePageComponent,
   ],
   imports: [
     BrowserModule,
@@ -56,6 +59,7 @@ import { NewDecisionAlternativesComponent } from './components/decision/new-deci
     MatTableModule,
     MatIconModule,
     MatDialogModule,
+    MatSelectModule,
     NgxChartsModule,
     HttpClientModule,
   ],

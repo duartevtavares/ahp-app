@@ -80,7 +80,7 @@ export async function addUser(name, username, password) {
 // const participants = await getParticipants();
 // console.log("todos os participantes: ", participants);
 
-// const result = await addUser("Maria Horta Serra", "mhs", "password");
+// const result = await addUser("Paula Fernandes Gonçalves", "pfg", "password");
 // console.log(result);
 
 const users = await getUsers();

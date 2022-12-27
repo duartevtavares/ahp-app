@@ -1,0 +1,25 @@
+<div class="wecolme-page-wrapper">
+  <h1>Welcome!</h1>
+
+  <div class="buttons">
+    <button
+      class="criteria-matrix-btn"
+      mat-raised-button
+      type="button"
+      (click)="isAdmin(true)"
+      routerLink="/decision-component"
+    >
+      Admin
+    </button>
+
+    <button
+      class="criteria-matrix-btn"
+      mat-raised-button
+      type="button"
+      (click)="isAdmin(false)"
+      routerLink="/decision-specifications-form"
+    >
+      User
+    </button>
+  </div>
+</div>

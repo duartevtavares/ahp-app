@@ -5,4 +5,5 @@ import { Injectable } from '@angular/core';
 })
 export class DecisionSpecificationsService {
   decisionSpecs: any;
+  participants: any;
 }

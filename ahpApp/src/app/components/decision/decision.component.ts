@@ -18,10 +18,4 @@ export interface DialogData {
 export class DecisionComponent {
   constructor(public dialog: MatDialog) {}
   name!: string;
-
-  openDialog() {
-    this.dialog.open(ParticipantsDialogComponent, {
-      data: { name: this.name },
-    });
-  }
 }

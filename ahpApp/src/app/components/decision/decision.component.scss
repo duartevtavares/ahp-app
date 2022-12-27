@@ -1,34 +1,4 @@
 .participants {
   margin: 20px;
   margin-top: 60px;
-
-  .participants-form {
-    min-width: 150px;
-    max-width: 500px;
-    width: 100%;
-  }
-
-  .participants-full-width {
-    width: 100%;
-  }
-
-  .add-participants-span {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-  }
-
-  .new-decision-button {
-    width: 100%;
-    display: flex;
-    justify-content: center;
-
-    button {
-      margin-bottom: 50px;
-      width: 200px;
-      height: 60px;
-      background-color: rgb(50, 47, 43);
-      color: white;
-    }
-  }
 }

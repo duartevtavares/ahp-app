@@ -1,22 +1,23 @@
 <div mat-dialog-content class="mat-dialog">
   <p class="title">Insert a participant from your organization:</p>
+
   <mat-form-field class="participants-full-width" appearance="fill">
-    <mat-label>Available participants</mat-label>
-    <input
-      type="text"
-      matInput
-      [formControl]="myControl"
-      [matAutocomplete]="auto"
-      #input
-    />
-    <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn">
-      <mat-option
-        *ngFor="let option of filteredOptions | async"
-        [value]="option"
-      >
-        {{ option.name }}
-      </mat-option>
-    </mat-autocomplete>
+    <mat-label>Participants</mat-label>
+    <mat-select [formControl]="myControl" multiple>
+      <mat-select-trigger>
+        {{myControl.value?.[0] || ''}}
+        <span
+          *ngIf="(myControl.value?.length || 0) > 1"
+          class="example-additional-selection"
+        >
+          (+{{ (myControl.value?.length || 0) - 1 }}
+          {{ myControl.value?.length === 2 ? "other" : "others" }})
+        </span>
+      </mat-select-trigger>
+      <mat-option *ngFor="let option of options" [value]="option.name">{{
+        option.name
+      }}</mat-option>
+    </mat-select>
   </mat-form-field>
 </div>
 
@@ -31,7 +32,7 @@
       mat-raised-button
       [mat-dialog-close]="data.name"
       cdkFocusInitial
-      (click)="postParticipant(input.value)"
+      (click)="postParticipant()"
     >
       Ok
     </button>

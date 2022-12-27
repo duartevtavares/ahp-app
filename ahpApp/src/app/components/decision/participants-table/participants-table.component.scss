@@ -1,3 +1,9 @@
+.add-participants-span {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
 .participants-table {
   margin: 30px;
 
@@ -14,5 +20,38 @@
 
   tr {
     text-align: center;
+  }
+}
+
+.buttons {
+  display: flex;
+  flex-direction: row;
+  gap: 16px;
+  justify-content: center;
+
+  .new-decision-button {
+    display: flex;
+    justify-content: center;
+
+    button {
+      margin-bottom: 50px;
+      width: 200px;
+      height: 60px;
+      background-color: rgb(50, 47, 43);
+      color: white;
+    }
+  }
+
+  .edit-participants-button {
+    display: flex;
+    justify-content: center;
+
+    button {
+      margin-bottom: 50px;
+      width: 200px;
+      height: 60px;
+      background-color: white;
+      color: rgb(50, 47, 43);
+    }
   }
 }

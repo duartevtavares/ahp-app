@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { MatDialogRef } from '@angular/material/dialog';
+import { MatDialog } from '@angular/material/dialog';
+import { MatTableDataSource } from '@angular/material/table';
 import { ApiService } from 'src/app/services/api.service';
+import { DecisionSpecificationsService } from 'src/app/services/decision-specifications.service';
 import { ParticipantsDialogComponent } from '../participants-dialog/participants-dialog.component';
 
 @Component({
@@ -10,22 +12,43 @@ import { ParticipantsDialogComponent } from '../participants-dialog/participants
 })
 export class ParticipantsTableComponent implements OnInit {
   displayedColumns: string[] = ['name'];
-  participantName = [];
+  participantNames!: MatTableDataSource<any>;
+  name!: string;
 
-  constructor(private service: ApiService) {}
+  constructor(
+    public dialog: MatDialog,
+    private apiService: ApiService,
+    private participantsService: DecisionSpecificationsService
+  ) {}
 
   ngOnInit() {
     this.getParticipants();
   }
 
   getParticipants() {
-    this.service.getParticipants().subscribe(
-      (response) => {
-        this.participantName = response;
-      },
-      (error) => {
-        console.log('erro', error);
-      }
+    this.participantNames = new MatTableDataSource(
+      this.participantsService.participants
     );
+    console.log(this.participantNames);
+
+    // this.service.getParticipants().subscribe(
+    //   (response) => {
+    //     this.participantName = response;
+    //   },
+    //   (error) => {
+    //     console.log('erro', error);
+    //   }
+    // );
+  }
+
+  openDialog() {
+    this.dialog
+      .open(ParticipantsDialogComponent, {
+        data: { name: this.name },
+      })
+      .afterClosed()
+      .subscribe((val) => {
+        this.getParticipants();
+      });
   }
 }

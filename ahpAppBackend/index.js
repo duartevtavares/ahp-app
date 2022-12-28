@@ -6,6 +6,13 @@ import {
   addUser,
   getUsers,
   getUser,
+  getCriteria,
+  getDecision,
+  getDecisions,
+  addDecision,
+  getDecisionParticipants,
+  getDecisionCriteria as getDecisionCriteria,
+  getDecisionAlternatives,
 } from "./db.js";
 
 const app = express();
@@ -61,6 +68,64 @@ app.post("/users", async (req, res) => {
   const user = await addUser(name, username, password);
   res.status(201).send(user);
 });
+
+//Criteria
+
+app.get("/criteria", async (req, res) => {
+  const criteria = await getCriteria();
+  res.send(criteria);
+});
+
+//Decision
+
+app.get("/decision", async (req, res) => {
+  const decision = await getDecisions();
+  res.send(decision);
+});
+
+app.get("/decision/:id", async (req, res) => {
+  const id = req.params.id;
+  const decision = await getDecision(id);
+  res.status(201).send(decision);
+});
+
+app.post("/decision", async (req, res) => {
+  const name = req.body.name;
+  const goal = req.body.goal;
+  const decision = await addDecision(name, goal);
+  res.status(201).send(decision);
+});
+
+//Participants of a specific decision
+
+app.get("/decision_participants/:id", async (req, res) => {
+  const id = req.params.id;
+  const decisionParticipants = await getDecisionParticipants(id);
+  res.status(201).send(decisionParticipants);
+});
+
+//Criteria of a specific decision
+
+app.get("/decision_criteria/:id", async (req, res) => {
+  const id = req.params.id;
+  const decisionCriteria = await getDecisionCriteria(id);
+  res.status(201).send(decisionCriteria);
+});
+
+//Alternatives of a specific decision
+
+app.get("/decision_alternatives/:id", async (req, res) => {
+  const id = req.params.id;
+  const decisionAlternatives = await getDecisionAlternatives(id);
+  res.status(201).send(decisionAlternatives);
+});
+
+/////////////////
+////////////////////////////////////
+///////////////////
+/////////////////
+/////////////////////////
+//Needed
 
 app.use((err, req, res, next) => {
   console.error(err.stack);

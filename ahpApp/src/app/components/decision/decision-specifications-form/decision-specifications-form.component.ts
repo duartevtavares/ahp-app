@@ -59,6 +59,7 @@ export class DecisionSpecificationsFormComponent {
     this.specsService.decisionSpecs = this.decisionSpecifications;
 
     console.log(this.decisionSpecifications);
+    console.log(this.specsService.participants);
 
     // let data = this.decisionSpecificationsForm.value;
     // return this.http

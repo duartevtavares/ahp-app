@@ -36,7 +36,7 @@ export async function addParticipant(name) {
     [name]
   );
   const id = result.insertId;
-  return getParticipant(id);
+  // return getParticipant(id);
 }
 
 //Users
@@ -68,7 +68,86 @@ export async function addUser(name, username, password) {
     [name, username, password]
   );
   const id = result.insertId;
-  //return getParticipant(id);
+}
+
+//Criteria
+
+export async function getCriteria() {
+  const [rows] = await pool.query("SELECT * FROM criteria");
+  return rows;
+}
+
+//Decision
+
+export async function getDecision(id) {
+  const [rows] = await pool.query(
+    `
+     SELECT * 
+    FROM decision
+    WHERE id = ?
+    `,
+    [id]
+  );
+  return rows[0];
+}
+
+export async function getDecisions() {
+  const [rows] = await pool.query("SELECT * FROM decision");
+  return rows;
+}
+
+export async function addDecision(name, goal) {
+  const [result] = await pool.query(
+    `
+    INSERT INTO 
+      decision (name, goal)
+      VALUES (?, ?)
+      `,
+    [name, goal]
+  );
+  const id = result.insertId;
+}
+
+//Participants of a specific decision
+
+export async function getDecisionParticipants(id) {
+  const [rows] = await pool.query(
+    `
+     SELECT * 
+    FROM decision_participant
+    WHERE participants_id = ?
+    `,
+    [id]
+  );
+  return rows;
+}
+
+//Criteria of a specific decision
+
+export async function getDecisionCriteria(id) {
+  const [rows] = await pool.query(
+    `
+     SELECT * 
+    FROM decision_criteria
+    WHERE decision_id = ?
+    `,
+    [id]
+  );
+  return rows;
+}
+
+//Alternatives of a specific decision
+
+export async function getDecisionAlternatives(id) {
+  const [rows] = await pool.query(
+    `
+     SELECT * 
+    FROM decision_alternatives
+    WHERE decision_id = ?
+    `,
+    [id]
+  );
+  return rows;
 }
 
 // const participant = await getParticipant(1);
@@ -84,4 +163,13 @@ export async function addUser(name, username, password) {
 // console.log(result);
 
 const users = await getUsers();
-console.log("todos os users: ", users);
+const criteria = await getCriteria();
+
+const decision = await getDecisions();
+const decision1 = await getDecision(1);
+const participantsDecision1 = await getDecisionParticipants(1);
+
+console.log("todos os participantes: ", participantsDecision1);
+console.log("todos os criterios: ", criteria);
+console.log("todos os decisions: ", decision);
+console.log("decision 1: ", decision1);

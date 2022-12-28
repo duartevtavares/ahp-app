@@ -109,17 +109,18 @@
           Cancel
         </button>
 
-        <a [routerLink]="'/new-decision-component'" routerLinkActive="active">
-          <button
-            *ngIf="!disabledAddButton"
-            mat-raised-button
-            [disabled]="!decisionSpecificationsForm.valid"
-            class="submit-button"
-            (click)="onSubmit()"
-          >
-            Submit
-          </button></a
+        <!-- <a [routerLink]="'/new-decision-component'" routerLinkActive="active"> -->
+        <button
+          *ngIf="!disabledAddButton"
+          mat-raised-button
+          [disabled]="!decisionSpecificationsForm.valid"
+          class="submit-button"
+          (click)="onSubmit()"
         >
+          Submit
+        </button>
+        <!-- </a
+        > -->
 
         <button
           *ngIf="disabledAddButton"

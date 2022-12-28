@@ -1,1 +1,7 @@
 <p>Welcome User!</p>
+
+<ng-container *ngFor="let decisionToShow of decisionsToShow">
+  <div>
+    {{ decisionToShow.name }}
+  </div>
+</ng-container>

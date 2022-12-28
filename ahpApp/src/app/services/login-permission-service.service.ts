@@ -5,4 +5,5 @@ import { Injectable } from '@angular/core';
 })
 export class LoginPermissionServiceService {
   isAdmin: boolean = false;
+  userId!: number;
 }

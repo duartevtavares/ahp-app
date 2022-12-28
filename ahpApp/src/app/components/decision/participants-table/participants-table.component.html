@@ -1,4 +1,4 @@
-<ng-container *ngIf="participantNames.data.length === 0">
+<ng-container *ngIf="!participantsSelected">
   <span class="add-participants-span">
     <h3>Select the names of the participants in the decision:</h3>
     <button class="add-button" mat-raised-button (click)="openDialog()">

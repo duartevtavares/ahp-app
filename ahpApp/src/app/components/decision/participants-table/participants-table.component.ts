@@ -14,6 +14,7 @@ export class ParticipantsTableComponent implements OnInit {
   displayedColumns: string[] = ['name'];
   participantNames!: MatTableDataSource<any>;
   name!: string;
+  participantsSelected: boolean = false;
 
   constructor(
     public dialog: MatDialog,
@@ -22,7 +23,24 @@ export class ParticipantsTableComponent implements OnInit {
   ) {}
 
   ngOnInit() {
+    this.participantsSelected = false;
     this.getParticipants();
+
+    // this.apiService
+    //   .getSpecificDecisionAlternatives(1)
+    //   .subscribe((result) => console.log(result));
+
+    // this.apiService
+    //   .getSpecificDecisionCriteria(1)
+    //   .subscribe((result) => console.log(result));
+
+    // this.apiService
+    //   .getSpecificDecisionParticipants(1)
+    //   .subscribe((result) => console.log(result));
+
+    // this.apiService
+    //   .getSpecificDecision(1)
+    //   .subscribe((result) => console.log(result));
   }
 
   getParticipants() {
@@ -49,6 +67,7 @@ export class ParticipantsTableComponent implements OnInit {
       .afterClosed()
       .subscribe((val) => {
         this.getParticipants();
+        this.participantsSelected = true;
       });
   }
 }

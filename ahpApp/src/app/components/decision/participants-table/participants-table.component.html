@@ -8,6 +8,7 @@
 </ng-container>
 
 <ng-container *ngIf="participantNames.data.length > 0">
+  <h2>The following users will participate in this decision:</h2>
   <div class="participants-table">
     <table mat-table [dataSource]="participantNames" class="mat-elevation-z8">
       <!--- Note that these columns can be defined in any order.
@@ -34,7 +35,7 @@
       <a
         [routerLink]="'/decision-specifications-form'"
         routerLinkActive="active"
-        ><button mat-raised-button>Start new decision</button></a
+        ><button mat-raised-button>Continue</button></a
       >
     </div>
   </div>

@@ -109,15 +109,18 @@
           Cancel
         </button>
 
-        <button
-          *ngIf="!disabledAddButton"
-          mat-raised-button
-          [disabled]="!decisionSpecificationsForm.valid"
-          class="submit-button"
-          (click)="onSubmit()"
+        <a [routerLink]="'/new-decision-component'" routerLinkActive="active">
+          <button
+            *ngIf="!disabledAddButton"
+            mat-raised-button
+            [disabled]="!decisionSpecificationsForm.valid"
+            class="submit-button"
+            (click)="onSubmit()"
+          >
+            Submit
+          </button></a
         >
-          Submit
-        </button>
+
         <button
           *ngIf="disabledAddButton"
           mat-raised-button
@@ -130,7 +133,3 @@
     </form>
   </mat-card>
 </div>
-
-<ng-container *ngIf="formSubmited">
-  <new-decision-component></new-decision-component>
-</ng-container>

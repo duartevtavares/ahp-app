@@ -30,6 +30,8 @@ import { WelcomePageComponent } from './components/welcome-page/welcome-page/wel
 import { ApiService } from './services/api.service';
 import { DecisionSpecificationsService } from './services/decision-specifications.service';
 import { MathService } from './services/math.service';
+import { AdminHomePageComponent } from './components/welcome-page/admin-home-page/admin-home-page.component';
+import { UserHomePageComponent } from './components/welcome-page/user-home-page/user-home-page.component';
 
 @NgModule({
   declarations: [
@@ -43,6 +45,8 @@ import { MathService } from './services/math.service';
     NewDecisionAlternativesComponent,
     AlertComponent,
     WelcomePageComponent,
+    AdminHomePageComponent,
+    UserHomePageComponent,
   ],
   imports: [
     BrowserModule,

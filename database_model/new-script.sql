@@ -111,6 +111,7 @@ CREATE TABLE IF NOT EXISTS `thesis`.`decision_participant` (
   `decision_id` INT NOT NULL,
   `participants_id` INT NOT NULL,
   `decision_participant` INT NULL,
+  `done` BIT NOT NULL
   PRIMARY KEY (`decision_id`, `participants_id`),
   INDEX `fk_decision_has_participants_participants1_idx` (`participants_id` ASC),
   INDEX `fk_decision_has_participants_decision1_idx` (`decision_id` ASC),

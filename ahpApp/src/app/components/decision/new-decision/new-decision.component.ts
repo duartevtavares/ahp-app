@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Subject } from 'rxjs';
 import { DecisionSpecificationsService } from 'src/app/services/decision-specifications.service';
 import { MathService } from 'src/app/services/math.service';
 
@@ -39,6 +40,8 @@ export class NewDecisionComponent implements OnInit {
 
   chartData: { name: string; value: number }[] = [];
   finalResultsChartData: { name: string; value: number }[] = [];
+  update$: Subject<any> = new Subject();
+
   isCriteriaMatrixActive: boolean = false;
 
   criteriaConsistencyRatio: number = 0;
@@ -177,8 +180,8 @@ export class NewDecisionComponent implements OnInit {
   }
 
   changeCriteriaValue(event: any, index: number) {
-    this.isCriteriaMatrixActive = false;
     this.criteriaComparisonsValues[index] = event.value;
+    this.isCriteriaMatrixActive = true;
 
     this.changeInputValuesToMatrixValues(
       this.criteriaComparisonsValues,
@@ -318,25 +321,25 @@ export class NewDecisionComponent implements OnInit {
       for (let i = 0; i < valuesArray.length; i++) {
         switch (valuesArray[i]) {
           case 1:
-            this.realCriteriaValuesArray[i] = 1 / 9;
+            this.realCriteriaValuesArray[i] = 9;
             this.criteriaStringArray[i] = '1/9';
             this.criteriaStringArray[i + this.firstColumnCriteriaArray.length] =
               '9';
             break;
           case 2:
-            this.realCriteriaValuesArray[i] = 1 / 7;
+            this.realCriteriaValuesArray[i] = 7;
             this.criteriaStringArray[i] = '1/7';
             this.criteriaStringArray[i + this.firstColumnCriteriaArray.length] =
               '7';
             break;
           case 3:
-            this.realCriteriaValuesArray[i] = 1 / 5;
+            this.realCriteriaValuesArray[i] = 5;
             this.criteriaStringArray[i] = '1/5';
             this.criteriaStringArray[i + this.firstColumnCriteriaArray.length] =
               '5';
             break;
           case 4:
-            this.realCriteriaValuesArray[i] = 1 / 3;
+            this.realCriteriaValuesArray[i] = 3;
             this.criteriaStringArray[i] = '1/3';
             this.criteriaStringArray[i + this.firstColumnCriteriaArray.length] =
               '3';
@@ -348,25 +351,25 @@ export class NewDecisionComponent implements OnInit {
               '1';
             break;
           case 6:
-            this.realCriteriaValuesArray[i] = 3;
+            this.realCriteriaValuesArray[i] = 1 / 3;
             this.criteriaStringArray[i] = '3';
             this.criteriaStringArray[i + this.firstColumnCriteriaArray.length] =
               '1/3';
             break;
           case 7:
-            this.realCriteriaValuesArray[i] = 5;
+            this.realCriteriaValuesArray[i] = 1 / 5;
             this.criteriaStringArray[i] = '5';
             this.criteriaStringArray[i + this.firstColumnCriteriaArray.length] =
               '1/5';
             break;
           case 8:
-            this.realCriteriaValuesArray[i] = 7;
+            this.realCriteriaValuesArray[i] = 1 / 7;
             this.criteriaStringArray[i] = '7';
             this.criteriaStringArray[i + this.firstColumnCriteriaArray.length] =
               '1/7';
             break;
           case 9:
-            this.realCriteriaValuesArray[i] = 9;
+            this.realCriteriaValuesArray[i] = 1 / 9;
             this.criteriaStringArray[i] = '9';
             this.criteriaStringArray[i + this.firstColumnCriteriaArray.length] =
               '1/9';
@@ -385,28 +388,28 @@ export class NewDecisionComponent implements OnInit {
         for (let j = 0; j < valuesArray[i].length; j++) {
           switch (valuesArray[i][j]) {
             case 1:
-              this.realAlternativesValuesArray[i][j] = 1 / 9;
+              this.realAlternativesValuesArray[i][j] = 9;
               this.alternativesStringArray[i][j] = '1/9';
               this.alternativesStringArray[i][
                 j + this.firstColumnAlternativesArray.length
               ] = '9';
               break;
             case 2:
-              this.realAlternativesValuesArray[i][j] = 1 / 7;
+              this.realAlternativesValuesArray[i][j] = 7;
               this.alternativesStringArray[i][j] = '1/7';
               this.alternativesStringArray[i][
                 j + this.firstColumnAlternativesArray.length
               ] = '7';
               break;
             case 3:
-              this.realAlternativesValuesArray[i][j] = 1 / 5;
+              this.realAlternativesValuesArray[i][j] = 5;
               this.alternativesStringArray[i][j] = '1/5';
               this.alternativesStringArray[i][
                 j + this.firstColumnAlternativesArray.length
               ] = '5';
               break;
             case 4:
-              this.realAlternativesValuesArray[i][j] = 1 / 3;
+              this.realAlternativesValuesArray[i][j] = 3;
               this.alternativesStringArray[i][j] = '1/3';
               this.alternativesStringArray[i][
                 j + this.firstColumnAlternativesArray.length
@@ -420,28 +423,28 @@ export class NewDecisionComponent implements OnInit {
               ] = '1';
               break;
             case 6:
-              this.realAlternativesValuesArray[i][j] = 3;
+              this.realAlternativesValuesArray[i][j] = 1 / 3;
               this.alternativesStringArray[i][j] = '3';
               this.alternativesStringArray[i][
                 j + this.firstColumnAlternativesArray.length
               ] = '1/3';
               break;
             case 7:
-              this.realAlternativesValuesArray[i][j] = 5;
+              this.realAlternativesValuesArray[i][j] = 1 / 5;
               this.alternativesStringArray[i][j] = '5';
               this.alternativesStringArray[i][
                 j + this.firstColumnAlternativesArray.length
               ] = '1/5';
               break;
             case 8:
-              this.realAlternativesValuesArray[i][j] = 7;
+              this.realAlternativesValuesArray[i][j] = 1 / 7;
               this.alternativesStringArray[i][j] = '7';
               this.alternativesStringArray[i][
                 j + this.firstColumnAlternativesArray.length
               ] = '1/7';
               break;
             case 9:
-              this.realAlternativesValuesArray[i][j] = 9;
+              this.realAlternativesValuesArray[i][j] = 1 / 9;
               this.alternativesStringArray[i][j] = '9';
               this.alternativesStringArray[i][
                 j + this.firstColumnAlternativesArray.length
@@ -460,6 +463,8 @@ export class NewDecisionComponent implements OnInit {
         value: this.criteriaWeightsArray[i],
       };
     }
+    this.chartData = [...this.chartData];
+    this.update$.next(true);
   }
 
   createFinalResultschartData() {

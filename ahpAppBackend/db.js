@@ -122,6 +122,22 @@ export async function getDecisionParticipants(id) {
   return rows;
 }
 
+//post
+export async function addDecisionParticipants(
+  decisionId,
+  participantsId,
+  participantWeight
+) {
+  const [result] = await pool.query(
+    `
+    INSERT INTO 
+      decision_participant (decision_id, participants_id, participant_weight)
+      VALUES (?, ?, ?)
+      `,
+    [decisionId, participantsId, participantWeight]
+  );
+}
+
 //Criteria of a specific decision
 
 export async function getDecisionCriteria(id) {
@@ -169,7 +185,8 @@ const decision = await getDecisions();
 const decision1 = await getDecision(1);
 const participantsDecision1 = await getDecisionParticipants(1);
 
-console.log("todos os participantes: ", participantsDecision1);
+// const participantsDecision2 = await addDecisionParticipants(1, 4, 20);
+
 console.log("todos os criterios: ", criteria);
 console.log("todos os decisions: ", decision);
 console.log("decision 1: ", decision1);

@@ -22,10 +22,11 @@ export class WelcomePageComponent implements OnInit {
     });
   }
 
-  isAdmin(role: boolean, id: number) {
+  isAdmin(role: boolean, user: any) {
     this.permissionService.isAdmin = role;
-    this.permissionService.userId = id;
-    console.log(role);
-    console.log(id);
+    this.permissionService.userId = user.id;
+    this.permissionService.user = user;
+    console.log('user', user);
+    console.log(user.name);
   }
 }

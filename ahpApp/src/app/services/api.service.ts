@@ -62,8 +62,12 @@ export class ApiService {
     return this.http.get<any>(`${decisionParticipantsUrl}/${data}`);
   }
 
-  getSpecificDecisionParticipantsByParticipantId(data: number) {
-    return this.http.get<any>(`${decisionParticipantsUrl}/${data}`);
+  postSpecificDecisionParticipantsByParticipantId(data: {
+    decisionId: number;
+    participantsId: number;
+    participantWeight: number;
+  }) {
+    return this.http.post<any>(decisionParticipantsUrl, data).subscribe();
   }
 
   //DecisionCriteria

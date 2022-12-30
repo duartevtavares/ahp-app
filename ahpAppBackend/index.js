@@ -1,18 +1,19 @@
 import express from "express";
 import {
-  getParticipant,
-  getParticipants,
+  addDecision,
+  addDecisionParticipants,
   addParticipant,
   addUser,
-  getUsers,
-  getUser,
   getCriteria,
   getDecision,
-  getDecisions,
-  addDecision,
-  getDecisionParticipants,
-  getDecisionCriteria as getDecisionCriteria,
   getDecisionAlternatives,
+  getDecisionCriteria,
+  getDecisionParticipants,
+  getDecisions,
+  getParticipant,
+  getParticipants,
+  getUser,
+  getUsers,
 } from "./db.js";
 
 const app = express();
@@ -101,6 +102,19 @@ app.post("/decision", async (req, res) => {
 app.get("/decision_participants/:id", async (req, res) => {
   const id = req.params.id;
   const decisionParticipants = await getDecisionParticipants(id);
+  res.status(201).send(decisionParticipants);
+});
+
+app.post("/decision_participants", async (req, res) => {
+  console.log(req.body);
+  const decisionId = req.body.decisionId;
+  const participantsId = req.body.participantsId;
+  const participantWeight = req.body.participantWeight;
+  const decisionParticipants = await addDecisionParticipants(
+    decisionId,
+    participantsId,
+    participantWeight
+  );
   res.status(201).send(decisionParticipants);
 });
 

@@ -8,6 +8,7 @@ import {
   Validators,
 } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
+import { ApiService } from 'src/app/services/api.service';
 import { DecisionSpecificationsService } from 'src/app/services/decision-specifications.service';
 import { AlertComponent } from '../../shared/alert-component/alert-component.component';
 
@@ -29,8 +30,8 @@ export class DecisionSpecificationsFormComponent {
   constructor(
     private fb: FormBuilder,
     public dialog: MatDialog,
-    private http: HttpClient,
-    public specsService: DecisionSpecificationsService
+    public specsService: DecisionSpecificationsService,
+    private apiService: ApiService
   ) {}
 
   @ViewChild('autosize') autosize!: CdkTextareaAutosize;
@@ -61,14 +62,11 @@ export class DecisionSpecificationsFormComponent {
     console.log(this.decisionSpecifications);
     console.log(this.specsService.participants);
 
-    // let data = this.decisionSpecificationsForm.value;
-    // return this.http
-    //   .post<any>('http://localhost:3000/availableParticipants', data)
-    //   .pipe(
-    //     map((res: any) => {
-    //       return res;
-    //     })
-    //   );
+    // this.apiService.postSpecificDecisionParticipantsByParticipantId({
+    //   decisionId: 1,
+    //   participantsId: 2,
+    //   participantWeight: 99,
+    // });
   }
 
   get criteria() {

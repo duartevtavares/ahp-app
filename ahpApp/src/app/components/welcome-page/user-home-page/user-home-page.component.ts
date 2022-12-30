@@ -25,10 +25,10 @@ export class UserHomePageComponent implements OnInit {
     //   .subscribe((result) => console.log(result));
 
     this.apiService
-      .getSpecificDecisionParticipantsByParticipantId(this.userId)
+      .getSpecificDecisionParticipantsByDecisionId(this.userId)
       .subscribe((result) => {
         this.userDecisions = result;
-        console.log(this.userDecisions);
+        console.log('as decisões deste user: ', this.userDecisions);
 
         this.getparticipantDecisions(this.userDecisions);
       });
@@ -42,6 +42,6 @@ export class UserHomePageComponent implements OnInit {
           this.decisionsToShow.push(result);
         });
     }
-    console.log(this.decisionsToShow);
+    console.log('para mostrar: ', this.decisionsToShow);
   }
 }

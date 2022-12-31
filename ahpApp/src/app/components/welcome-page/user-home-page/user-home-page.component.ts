@@ -20,7 +20,7 @@ export class UserHomePageComponent implements OnInit {
     this.userId = this.permissionService.userId;
     console.log(this.userId);
 
-    this.apiService;
+    // this.apiService;
     //   .getSpecificDecisionParticipants(1)
     //   .subscribe((result) => console.log(result));
 

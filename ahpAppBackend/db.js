@@ -106,6 +106,8 @@ export async function addDecision(name, goal) {
     [name, goal]
   );
   const id = result.insertId;
+  console.log(id);
+  return getDecision(id);
 }
 
 //Participants of a specific decision
@@ -136,6 +138,7 @@ export async function addDecisionParticipants(
       `,
     [decisionId, participantsId, participantWeight]
   );
+  return result;
 }
 
 //Criteria of a specific decision
@@ -152,6 +155,23 @@ export async function getDecisionCriteria(id) {
   return rows;
 }
 
+//post
+export async function addDecisionCriteria(
+  decisionId,
+  criteriaId,
+  criterionvalue
+) {
+  const [result] = await pool.query(
+    `
+    INSERT INTO 
+      decision_participant (decision_id, criteria_id, criterion_value)
+      VALUES (?, ?, ?)
+      `,
+    [decisionId, criteriaId, criterionvalue]
+  );
+  return result;
+}
+
 //Alternatives of a specific decision
 
 export async function getDecisionAlternatives(id) {
@@ -164,6 +184,23 @@ export async function getDecisionAlternatives(id) {
     [id]
   );
   return rows;
+}
+
+//post
+export async function addDecisionAlternative(
+  decisionId,
+  alternativesId,
+  alternativeValue
+) {
+  const [result] = await pool.query(
+    `
+    INSERT INTO 
+      decision_participant (decision_id, alternatives_id, alternative_value)
+      VALUES (?, ?, ?)
+      `,
+    [decisionId, alternativesId, alternativeValue]
+  );
+  return result;
 }
 
 // const participant = await getParticipant(1);
@@ -182,11 +219,10 @@ const users = await getUsers();
 const criteria = await getCriteria();
 
 const decision = await getDecisions();
-const decision1 = await getDecision(1);
+// const decision1 = await addDecision("name", "goal");
 const participantsDecision1 = await getDecisionParticipants(1);
 
-// const participantsDecision2 = await addDecisionParticipants(1, 4, 20);
+//const participantsDecision2 = await addDecisionParticipants(1, 4, 20);
 
 console.log("todos os criterios: ", criteria);
 console.log("todos os decisions: ", decision);
-console.log("decision 1: ", decision1);

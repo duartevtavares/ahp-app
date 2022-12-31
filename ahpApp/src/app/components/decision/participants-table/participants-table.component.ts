@@ -19,7 +19,7 @@ export class ParticipantsTableComponent implements OnInit {
   constructor(
     public dialog: MatDialog,
     private apiService: ApiService,
-    private participantsService: DecisionSpecificationsService
+    private specsService: DecisionSpecificationsService
   ) {}
 
   ngOnInit() {
@@ -45,7 +45,7 @@ export class ParticipantsTableComponent implements OnInit {
 
   getParticipants() {
     this.participantNames = new MatTableDataSource(
-      this.participantsService.participants
+      this.specsService.participantsNames
     );
     console.log(this.participantNames);
 

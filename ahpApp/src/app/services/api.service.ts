@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { DecisionSpecificationsService } from './decision-specifications.service';
 
 const participantsUrl = 'http://localhost:8080/participants';
 const usersUrl = 'http://localhost:8080/users';
@@ -13,12 +14,15 @@ const decisionAlternativesUrl = 'http://localhost:8080/decision_alternatives';
   providedIn: 'root',
 })
 export class ApiService {
-  constructor(private http: HttpClient) {}
+  constructor(
+    private http: HttpClient,
+    private specsService: DecisionSpecificationsService
+  ) {}
 
   //Participants
 
   postParticipant(data: string) {
-    return this.http.post<any>(participantsUrl, data);
+    return this.http.post<any>(participantsUrl, data).subscribe();
   }
 
   getParticipants() {
@@ -43,11 +47,13 @@ export class ApiService {
 
   //Decision
 
-  postDecision(data: string) {
-    return this.http.post<any>(decisionUrl, data);
+  postDecision(data: { name: string; goal: string }): any {
+    this.http.post<any>(decisionUrl, data).subscribe((result) => {
+      this.specsService.decisionId = result.id;
+    });
   }
 
-  getDecision() {
+  getDecisions() {
     return this.http.get<any>(decisionUrl);
   }
 
@@ -62,8 +68,8 @@ export class ApiService {
     return this.http.get<any>(`${decisionParticipantsUrl}/${data}`);
   }
 
-  postSpecificDecisionParticipantsByParticipantId(data: {
-    decisionId: number;
+  postSpecificDecisionParticipants(data: {
+    decisionId: any;
     participantsId: number;
     participantWeight: number;
   }) {
@@ -72,11 +78,27 @@ export class ApiService {
 
   //DecisionCriteria
   getSpecificDecisionCriteria(data: number) {
-    return this.http.get<any>(`${decisionParticipantsUrl}/${data}`);
+    return this.http.get<any>(`${decisionCriteriaUrl}/${data}`);
+  }
+
+  postSpecificDecisionCriteria(data: {
+    decisionId: number;
+    criteriaId: number;
+    criteriaValue: number;
+  }) {
+    return this.http.post<any>(decisionCriteriaUrl, data).subscribe();
   }
 
   //DecisionAlternatives
   getSpecificDecisionAlternatives(data: number) {
-    return this.http.get<any>(`${decisionParticipantsUrl}/${data}`);
+    return this.http.get<any>(`${decisionAlternativesUrl}/${data}`);
+  }
+
+  postSpecificDecisionAlternative(data: {
+    decisionId: number;
+    alternativesId: number;
+    alternativeValue: number;
+  }) {
+    return this.http.post<any>(decisionAlternativesUrl, data).subscribe();
   }
 }

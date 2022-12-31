@@ -62,9 +62,32 @@ export class DecisionSpecificationsFormComponent {
     console.log(this.decisionSpecifications);
     console.log(this.specsService.participants);
 
-    // this.apiService.postSpecificDecisionParticipantsByParticipantId({
-    //   decisionId: 1,
-    //   participantsId: 2,
+    let decision = this.apiService.postDecision({
+      name: this.decisionSpecifications.problemGoal,
+      goal: this.decisionSpecifications.problemGoal,
+    });
+    this.apiService.getDecisions().subscribe((res) => {
+      let decisionId = res.length + 1;
+      for (let i = 0; i < this.specsService.participants.length; i++) {
+        this.apiService.postSpecificDecisionParticipants({
+          decisionId: decisionId,
+          participantsId: this.specsService.participants[0].id,
+          participantWeight: 99,
+        });
+      }
+    });
+
+    // let decision_id = this.apiService.postSpecificDecisionParticipants({
+    //   name: this.decisionSpecifications.problemGoal,
+    //   goal: this.decisionSpecifications.problemGoal,
+    // });
+
+    for (let i = 0; i < this.specsService.participants.length; i++) {
+      console.log(this.specsService.participants[0].id);
+    }
+    // this.apiService.postSpecificDecisionParticipants({
+    //   decisionId: decision_id,
+    //   participantsId: this.specsService.participants[0].id,
     //   participantWeight: 99,
     // });
   }

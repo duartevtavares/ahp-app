@@ -5,16 +5,11 @@
     <mat-label>Participants</mat-label>
     <mat-select [formControl]="myControl" multiple>
       <mat-select-trigger>
-        {{myControl.value?.[0] || ''}}
-        <span
-          *ngIf="(myControl.value?.length || 0) > 1"
-          class="example-additional-selection"
-        >
-          (+{{ (myControl.value?.length || 0) - 1 }}
-          {{ myControl.value?.length === 2 ? "other" : "others" }})
-        </span>
+        {{ myControl.value?.length || 0 }}
+        {{ myControl.value?.length === 1 ? "participant" : "participants" }}
+        selected
       </mat-select-trigger>
-      <mat-option *ngFor="let option of options" [value]="option.name">{{
+      <mat-option *ngFor="let option of options" [value]="option">{{
         option.name
       }}</mat-option>
     </mat-select>

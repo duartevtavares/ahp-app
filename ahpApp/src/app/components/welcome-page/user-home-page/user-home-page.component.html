@@ -1,12 +1,14 @@
+<h3 class="undoneDecisions">Por fazer:</h3>
 <ng-container *ngFor="let decisionToShow of decisionsToShow; let i = index">
-  <div class="undoneDecisions" *ngIf="userDecisions[i].done.data[0] === 0">
-    <h3>Por fazer:</h3>
+  <div *ngIf="userDecisions[i].done.data[0] === 0">
     {{ decisionToShow.name }}
     <!-- <pre>{{ userDecisions[i].done | json }}</pre> -->
   </div>
+</ng-container>
 
-  <div class="doneDecisions" *ngIf="userDecisions[i].done.data[0] === 1">
-    <h3>Já feitas:</h3>
+<h3 class="doneDecisions">Já feitas:</h3>
+<ng-container *ngFor="let decisionToShow of decisionsToShow; let i = index">
+  <div *ngIf="userDecisions[i].done.data[0] === 1">
     {{ decisionToShow.name }}
   </div>
 </ng-container>

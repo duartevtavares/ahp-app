@@ -1,6 +1,8 @@
 import express from "express";
 import {
   addDecision,
+  addDecisionAlternative,
+  addDecisionCriteria,
   addDecisionParticipants,
   addParticipant,
   addUser,
@@ -126,12 +128,38 @@ app.get("/decision_criteria/:id", async (req, res) => {
   res.status(201).send(decisionCriteria);
 });
 
+app.post("/decision_criteria", async (req, res) => {
+  console.log(req.body);
+  const decisionId = req.body.decisionId;
+  const criteriaId = req.body.criteriaId;
+  const criterionValue = req.body.criterionValue;
+  const decisionCriteria = await addDecisionCriteria(
+    decisionId,
+    criteriaId,
+    criterionValue
+  );
+  res.status(201).send(decisionCriteria);
+});
+
 //Alternatives of a specific decision
 
 app.get("/decision_alternatives/:id", async (req, res) => {
   const id = req.params.id;
   const decisionAlternatives = await getDecisionAlternatives(id);
   res.status(201).send(decisionAlternatives);
+});
+
+app.post("/decision_alternatives", async (req, res) => {
+  console.log(req.body);
+  const decisionId = req.body.decisionId;
+  const alternativesId = req.body.alternativesId;
+  const alternativeValue = req.body.alternativeValue;
+  const decisionAlternative = await addDecisionAlternative(
+    decisionId,
+    alternativesId,
+    alternativeValue
+  );
+  res.status(201).send(decisionAlternative);
 });
 
 /////////////////

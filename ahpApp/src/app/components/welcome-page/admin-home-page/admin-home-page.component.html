@@ -2,4 +2,8 @@
   <a [routerLink]="'/decision-component'" routerLinkActive="active"
     ><button mat-raised-button>Start new decision</button></a
   >
+  <h3>All decisions:</h3>
+  <div *ngFor="let decisions of allDecisions; let i = index">
+    {{ allDecisions[i].name }}
+  </div>
 </div>

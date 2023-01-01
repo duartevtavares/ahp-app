@@ -71,7 +71,7 @@ export class DecisionSpecificationsFormComponent {
       for (let i = 0; i < this.specsService.participants.length; i++) {
         this.apiService.postSpecificDecisionParticipants({
           decisionId: decisionId,
-          participantsId: this.specsService.participants[0].id,
+          participantsId: this.specsService.participants[i].id,
           participantWeight: 99,
         });
       }
@@ -83,7 +83,7 @@ export class DecisionSpecificationsFormComponent {
     // });
 
     for (let i = 0; i < this.specsService.participants.length; i++) {
-      console.log(this.specsService.participants[0].id);
+      console.log(this.specsService.participants[i].id);
     }
     // this.apiService.postSpecificDecisionParticipants({
     //   decisionId: decision_id,

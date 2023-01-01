@@ -45,6 +45,12 @@ export class ApiService {
     return this.http.get<any>(criteriaUrl);
   }
 
+  // postCriteria(data: { decisionId: number; criteriaId: number }): any {
+  //   this.http.post<any>(criteriaUrl, data).subscribe((result) => {
+  //     this.specsService.decisionId = result.id;
+  //   });
+  // }
+
   //Decision
 
   postDecision(data: { name: string; goal: string }): any {

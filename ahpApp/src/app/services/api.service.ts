@@ -54,9 +54,7 @@ export class ApiService {
   //Decision
 
   postDecision(data: { name: string; goal: string }): any {
-    this.http.post<any>(decisionUrl, data).subscribe((result) => {
-      this.specsService.decisionId = result.id;
-    });
+    return this.http.post<any>(decisionUrl, data);
   }
 
   getDecisions() {

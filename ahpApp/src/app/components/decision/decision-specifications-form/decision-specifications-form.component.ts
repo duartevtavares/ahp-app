@@ -82,26 +82,30 @@ export class DecisionSpecificationsFormComponent implements OnInit {
 
     //post decision specifications
 
-    let decision = this.apiService.postDecision({
-      name: this.decisionSpecifications.problemGoal,
-      goal: this.decisionSpecifications.problemGoal,
-    });
-    this.apiService.getDecisions().subscribe((res) => {
-      let decisionId = res.length + 1;
-      for (let i = 0; i < this.specsService.participants.length; i++) {
-        this.apiService.postSpecificDecisionParticipants({
-          decisionId: decisionId,
-          participantsId: this.specsService.participants[i].id,
-          participantWeight: 99, //TODO: change this to a received value
+    this.apiService
+      .postDecision({
+        name: this.decisionSpecifications.problemGoal,
+        goal: this.decisionSpecifications.problemGoal,
+      })
+      .subscribe(() => {
+        this.apiService.getDecisions().subscribe((res) => {
+          let decisionId = res[res.length - 1].id;
+          console.log(decisionId);
+          for (let i = 0; i < this.specsService.participants.length; i++) {
+            this.apiService.postSpecificDecisionParticipants({
+              decisionId: decisionId,
+              participantsId: this.specsService.participants[i].id,
+              participantWeight: 99, //TODO: change this to a received value
+            });
+          }
+          for (let i = 0; i < this.specsService.decisionCriteria.length; i++) {
+            this.apiService.postSpecificDecisionCriteria({
+              decisionId: decisionId,
+              criteriaId: this.specsService.decisionCriteria[i].id,
+            });
+          }
         });
-      }
-      for (let i = 0; i < this.specsService.decisionCriteria.length; i++) {
-        this.apiService.postSpecificDecisionCriteria({
-          decisionId: decisionId,
-          criteriaId: this.specsService.decisionCriteria[i].id,
-        });
-      }
-    });
+      });
 
     for (let i = 0; i < this.specsService.participants.length; i++) {
       console.log(this.specsService.participants[i].id);

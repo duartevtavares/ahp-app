@@ -87,7 +87,9 @@ export class NewDecisionComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.decisionCriteria = this.specsService.decisionSpecs.criteria;
+    for (let i = 0; i < this.specsService.decisionCriteria.length; i++) {
+      this.decisionCriteria.push(this.specsService.decisionCriteria[i].name);
+    } //TODO need to change to see which decision it is
     this.decisionAlternatives = this.specsService.decisionSpecs.alternatives;
 
     this.createDecisionComparisonColumns(this.decisionCriteria, 'criteria');

@@ -62,13 +62,13 @@
         </div>
       </div>
 
-      <div formArrayName="criteria" class="problem-criteria">
+      <!-- <div formArrayName="criteria" class="problem-criteria">
         <h2>Finally, choose the criteria to evaluate the alternatives:</h2>
         <div
           class="new-criteria-wrapper"
           *ngFor="let criteria of criteria.controls; let i = index"
         >
-          <!-- The repeated criteria template -->
+          
           <mat-form-field class="criteria-form-field" appearance="fill">
             <input
               matInput
@@ -95,7 +95,23 @@
         >
           Add another criteria
         </button>
-      </div>
+      </div> -->
+
+      <mat-form-field class="criteria-full-width" appearance="fill">
+        <mat-label>Criteria</mat-label>
+        <mat-select [formControl]="myCriteriaControl" multiple>
+          <mat-select-trigger>
+            {{ myCriteriaControl.value?.length || 0 }}
+            {{
+              myCriteriaControl.value?.length === 1 ? "criterion" : "Criteria"
+            }}
+            selected
+          </mat-select-trigger>
+          <mat-option *ngFor="let option of criteriaOptions" [value]="option">{{
+            option.name
+          }}</mat-option>
+        </mat-select>
+      </mat-form-field>
 
       <div class="form-buttons">
         <button

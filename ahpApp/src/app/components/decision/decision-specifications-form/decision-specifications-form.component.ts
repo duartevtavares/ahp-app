@@ -1,6 +1,6 @@
 import { CdkTextareaAutosize } from '@angular/cdk/text-field';
 import { HttpClient } from '@angular/common/http';
-import { Component, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import {
   FormArray,
   FormBuilder,
@@ -8,6 +8,7 @@ import {
   Validators,
 } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
+import { Observable } from 'rxjs';
 import { ApiService } from 'src/app/services/api.service';
 import { DecisionSpecificationsService } from 'src/app/services/decision-specifications.service';
 import { AlertComponent } from '../../shared/alert-component/alert-component.component';
@@ -17,11 +18,10 @@ import { AlertComponent } from '../../shared/alert-component/alert-component.com
   templateUrl: './decision-specifications-form.component.html',
   styleUrls: ['./decision-specifications-form.component.scss'],
 })
-export class DecisionSpecificationsFormComponent {
+export class DecisionSpecificationsFormComponent implements OnInit {
   decisionSpecificationsForm = this.fb.group({
     problemGoal: new FormControl('', Validators.required),
     alternatives: this.fb.array([this.fb.control('', Validators.required)]),
-    criteria: this.fb.array([this.fb.control('', Validators.required)]),
   });
 
   decisionSpecifications: any;
@@ -34,7 +34,23 @@ export class DecisionSpecificationsFormComponent {
     private apiService: ApiService
   ) {}
 
+  myCriteriaControl = new FormControl('');
+  criteriaOptions: any = [];
+  criteriaOptionsNames: string[] = [];
+  filteredOptions?: Observable<any>;
+
   @ViewChild('autosize') autosize!: CdkTextareaAutosize;
+
+  ngOnInit() {
+    this.apiService.getCriteria().subscribe(
+      (response) => {
+        this.criteriaOptions = response;
+      },
+      (error) => {
+        console.log('erro', error);
+      }
+    );
+  }
 
   openDialog() {
     this.dialog.open(AlertComponent);
@@ -50,17 +66,21 @@ export class DecisionSpecificationsFormComponent {
     if (this.alternatives.value[this.alternatives.value.length - 1] === '') {
       this.alternatives.removeAt(this.alternatives.value.length - 1);
     }
-    if (this.criteria.value[this.criteria.value.length - 1] === '') {
-      this.criteria.removeAt(this.criteria.value.length - 1);
-    }
+    // if (this.criteria.value[this.criteria.value.length - 1] === '') {
+    //   this.criteria.removeAt(this.criteria.value.length - 1);
+    // }
     this.decisionSpecificationsForm.disable();
     this.disabledAddButton = true;
     this.formSubmited = true;
     this.decisionSpecifications = this.decisionSpecificationsForm.value;
     this.specsService.decisionSpecs = this.decisionSpecifications;
+    this.specsService.decisionCriteria = this.myCriteriaControl.value;
 
     console.log(this.decisionSpecifications);
     console.log(this.specsService.participants);
+    console.log('criteria: ', this.specsService.decisionCriteria);
+
+    //post decision specifications
 
     let decision = this.apiService.postDecision({
       name: this.decisionSpecifications.problemGoal,
@@ -72,28 +92,22 @@ export class DecisionSpecificationsFormComponent {
         this.apiService.postSpecificDecisionParticipants({
           decisionId: decisionId,
           participantsId: this.specsService.participants[i].id,
-          participantWeight: 99,
+          participantWeight: 99, //TODO: change this to a received value
+        });
+      }
+      for (let i = 0; i < this.specsService.decisionCriteria.length; i++) {
+        this.apiService.postSpecificDecisionCriteria({
+          decisionId: decisionId,
+          criteriaId: this.specsService.decisionCriteria[i].id,
         });
       }
     });
 
-    // let decision_id = this.apiService.postSpecificDecisionParticipants({
-    //   name: this.decisionSpecifications.problemGoal,
-    //   goal: this.decisionSpecifications.problemGoal,
-    // });
-
     for (let i = 0; i < this.specsService.participants.length; i++) {
       console.log(this.specsService.participants[i].id);
     }
-    // this.apiService.postSpecificDecisionParticipants({
-    //   decisionId: decision_id,
-    //   participantsId: this.specsService.participants[0].id,
-    //   participantWeight: 99,
-    // });
-  }
 
-  get criteria() {
-    return this.decisionSpecificationsForm.get('criteria') as FormArray;
+    console.log(this.specsService.decisionSpecs.alternatives);
   }
 
   get alternatives() {
@@ -108,19 +122,19 @@ export class DecisionSpecificationsFormComponent {
     }
   }
 
-  addCriteria(index: number) {
-    if (this.criteria.value[index - 1] != '') {
-      this.criteria.push(this.fb.control(''));
-    } else {
-      console.log('First preenche o primeiro');
-    }
-  }
+  // addCriteria(index: number) {
+  //   if (this.criteria.value[index - 1] != '') {
+  //     this.criteria.push(this.fb.control(''));
+  //   } else {
+  //     console.log('First preenche o primeiro');
+  //   }
+  // }
 
   deleteAlternative(index: number) {
     this.alternatives.removeAt(index);
   }
 
-  deleteCriteria(index: number) {
-    this.criteria.removeAt(index);
-  }
+  // deleteCriteria(index: number) {
+  //   this.criteria.removeAt(index);
+  // }
 }

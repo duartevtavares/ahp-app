@@ -19,7 +19,7 @@ export class ParticipantsDialogComponent implements OnInit {
     private specsService: DecisionSpecificationsService
   ) {}
 
-  myControl = new FormControl('');
+  participantsControl = new FormControl('');
   options: any = [];
   optionsNames: string[] = [];
   filteredOptions?: Observable<any>;
@@ -37,15 +37,13 @@ export class ParticipantsDialogComponent implements OnInit {
   }
 
   postParticipant() {
-    console.log(this.myControl.value);
-    this.specsService.participants = this.myControl.value;
+    this.specsService.participants = this.participantsControl.value;
 
     for (let i = 0; i < this.specsService.participants.length; i++) {
       this.specsService.participantsNames[i] =
         this.specsService.participants[i].name;
     }
     console.log(this.specsService.participantsNames);
-    this.apiService.getParticipants().subscribe();
   }
 
   onCancel(): void {

@@ -27,6 +27,5 @@ export class WelcomePageComponent implements OnInit {
     this.permissionService.userId = user.id;
     this.permissionService.user = user;
     console.log('user', user);
-    console.log(user.name);
   }
 }

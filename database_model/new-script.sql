@@ -8,19 +8,19 @@ SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION';
 
 -- -----------------------------------------------------
--- Schema thesis
+-- Schema finalThesis
 -- -----------------------------------------------------
 
 -- -----------------------------------------------------
--- Schema thesis
+-- Schema finalThesis
 -- -----------------------------------------------------
-CREATE SCHEMA IF NOT EXISTS `thesis` DEFAULT CHARACTER SET utf8 ;
-USE `thesis` ;
+CREATE SCHEMA IF NOT EXISTS `finalThesis` DEFAULT CHARACTER SET utf8 ;
+USE `finalThesis` ;
 
 -- -----------------------------------------------------
--- Table `thesis`.`decision`
+-- Table `finalThesis`.`decision`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `thesis`.`decision` (
+CREATE TABLE IF NOT EXISTS `finalThesis`.`decision` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(45) NULL,
   `goal` TEXT NULL,
@@ -29,9 +29,9 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `thesis`.`criteria`
+-- Table `finalThesis`.`criteria`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `thesis`.`criteria` (
+CREATE TABLE IF NOT EXISTS `finalThesis`.`criteria` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(45) NULL,
   PRIMARY KEY (`id`))
@@ -39,29 +39,29 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `thesis`.`alternatives`
+-- Table `finalThesis`.`alternatives`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `thesis`.`alternatives` (
+CREATE TABLE IF NOT EXISTS `finalThesis`.`alternatives` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(45) NULL,
   PRIMARY KEY (`id`))
 ENGINE = InnoDB;
 
 
--- -----------------------------------------------------
--- Table `thesis`.`participants`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `thesis`.`participants` (
-  `id` INT NOT NULL AUTO_INCREMENT,
-  `name` VARCHAR(45) NULL,
-  PRIMARY KEY (`id`))
-ENGINE = InnoDB;
+-- -- -----------------------------------------------------
+-- -- Table `finalThesis`.`participants`
+-- -- -----------------------------------------------------
+-- CREATE TABLE IF NOT EXISTS `finalThesis`.`participants` (
+--   `id` INT NOT NULL AUTO_INCREMENT,
+--   `name` VARCHAR(45) NULL,
+--   PRIMARY KEY (`id`))
+-- ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `thesis`.`decision_criteria`
+-- Table `finalThesis`.`decision_criteria`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `thesis`.`decision_criteria` (
+CREATE TABLE IF NOT EXISTS `finalThesis`.`decision_criteria` (
   `decision_id` INT NOT NULL,
   `criteria_id` INT NOT NULL,
   `criterion_value` INT NULL,
@@ -70,21 +70,21 @@ CREATE TABLE IF NOT EXISTS `thesis`.`decision_criteria` (
   INDEX `fk_decision_has_criteria_decision_idx` (`decision_id` ASC),
   CONSTRAINT `fk_decision_has_criteria_decision`
     FOREIGN KEY (`decision_id`)
-    REFERENCES `thesis`.`decision` (`id`)
+    REFERENCES `finalThesis`.`decision` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_decision_has_criteria_criteria1`
     FOREIGN KEY (`criteria_id`)
-    REFERENCES `thesis`.`criteria` (`id`)
+    REFERENCES `finalThesis`.`criteria` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `thesis`.`decision_alternatives`
+-- Table `finalThesis`.`decision_alternatives`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `thesis`.`decision_alternatives` (
+CREATE TABLE IF NOT EXISTS `finalThesis`.`decision_alternatives` (
   `decision_id` INT NOT NULL,
   `alternatives_id` INT NOT NULL,
   `alternative_value` INT NULL,
@@ -93,45 +93,62 @@ CREATE TABLE IF NOT EXISTS `thesis`.`decision_alternatives` (
   INDEX `fk_decision_has_alternatives_decision1_idx` (`decision_id` ASC),
   CONSTRAINT `fk_decision_has_alternatives_decision1`
     FOREIGN KEY (`decision_id`)
-    REFERENCES `thesis`.`decision` (`id`)
+    REFERENCES `finalThesis`.`decision` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_decision_has_alternatives_alternatives1`
     FOREIGN KEY (`alternatives_id`)
-    REFERENCES `thesis`.`alternatives` (`id`)
+    REFERENCES `finalThesis`.`alternatives` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `thesis`.`decision_participant`
+-- Table `finalThesis`.`decision_participant`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `thesis`.`decision_participant` (
+CREATE TABLE IF NOT EXISTS `finalThesis`.`decision_participant` (
   `decision_id` INT NOT NULL,
-  `participants_id` INT NOT NULL,
-  `decision_participant` INT NULL,
+  `user_id` INT NOT NULL,
+  `participant_weight` INT NULL,
   `done` BIT NOT NULL
-  PRIMARY KEY (`decision_id`, `participants_id`),
-  INDEX `fk_decision_has_participants_participants1_idx` (`participants_id` ASC),
+  PRIMARY KEY (`decision_id`, `user_id`),
+  INDEX `fk_decision_has_users_users1_idx` (`user_id` ASC),
   INDEX `fk_decision_has_participants_decision1_idx` (`decision_id` ASC),
   CONSTRAINT `fk_decision_has_participants_decision1`
     FOREIGN KEY (`decision_id`)
-    REFERENCES `thesis`.`decision` (`id`)
+    REFERENCES `finalThesis`.`decision` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
-  CONSTRAINT `fk_decision_has_participants_participants1`
-    FOREIGN KEY (`participants_id`)
-    REFERENCES `thesis`.`participants` (`id`)
+  CONSTRAINT `fk_decision_has_users_users1`
+    FOREIGN KEY (`user_id`)
+    REFERENCES `finalThesis`.`users` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
+-- -----------------------------------------------------
+-- Table `finalThesis`.`comparisons`
+-- -----------------------------------------------------
+
+CREATE TABLE Comparisons (
+    id INTEGER PRIMARY KEY,
+    decision_id INTEGER NOT NULL,
+    user_id INTEGER NOT NULL,
+    criterion_1_id INTEGER NOT NULL,
+    criterion_2_id INTEGER NOT NULL,
+    value INTEGER NOT NULL,
+    FOREIGN KEY (decision_id) REFERENCES `finalThesis`.`decision` (`id`),
+    FOREIGN KEY (user_id) REFERENCES `finalThesis`.`users` (`id`),
+    FOREIGN KEY (criterion_1_id) REFERENCES `finalThesis`.`criteria` (`id`),
+    FOREIGN KEY (criterion_2_id) REFERENCES `finalThesis`.`criteria` (`id`)
+);
+
 
 -- -----------------------------------------------------
--- Table `thesis`.`users`
+-- Table `finalThesis`.`users`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `thesis`.`users` (
+CREATE TABLE IF NOT EXISTS `finalThesis`.`users` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(45) NULL,
   `username` VARCHAR(45) NULL,

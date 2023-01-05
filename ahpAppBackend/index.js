@@ -4,16 +4,14 @@ import {
   addDecisionAlternative,
   addDecisionCriteria,
   addDecisionParticipants,
-  addParticipant,
   addUser,
   getCriteria,
   getDecision,
   getDecisionAlternatives,
   getDecisionCriteria,
-  getDecisionParticipants,
+  getDecisionParticipantsByDecisionId,
+  getDecisionParticipantsByUserId,
   getDecisions,
-  getParticipant,
-  getParticipants,
   getUser,
   getUsers,
 } from "./db.js";
@@ -34,22 +32,22 @@ app.use(function (req, res, next) {
   next();
 });
 
-app.get("/participants", async (req, res) => {
-  const participants = await getParticipants();
-  res.send(participants);
-});
+// app.get("/participants", async (req, res) => {
+//   const participants = await getParticipants();
+//   res.send(participants);
+// });
 
-app.get("/participants/:id", async (req, res) => {
-  const id = req.params.id;
-  const participant = await getParticipant(id);
-  res.status(201).send(participant);
-});
+// app.get("/participants/:id", async (req, res) => {
+//   const id = req.params.id;
+//   const participant = await getParticipant(id);
+//   res.status(201).send(participant);
+// });
 
-app.post("/participants", async (req, res) => {
-  const name = req.body;
-  const participant = await addParticipant(name);
-  res.status(201).send(participant);
-});
+// app.post("/participants", async (req, res) => {
+//   const name = req.body;
+//   const participant = await addParticipant(name);
+//   res.status(201).send(participant);
+// });
 
 //User
 
@@ -101,9 +99,14 @@ app.post("/decision", async (req, res) => {
 
 //Participants of a specific decision
 
-app.get("/decision_participants/:id", async (req, res) => {
+app.get("/decision_participants/participant/:id", async (req, res) => {
   const id = req.params.id;
-  const decisionParticipants = await getDecisionParticipants(id);
+  const decisionParticipants = await getDecisionParticipantsByUserId(id);
+  res.status(201).send(decisionParticipants);
+});
+app.get("/decision_participants/decision/:id", async (req, res) => {
+  const id = req.params.id;
+  const decisionParticipants = await getDecisionParticipantsByDecisionId(id);
   res.status(201).send(decisionParticipants);
 });
 
@@ -132,12 +135,7 @@ app.post("/decision_criteria", async (req, res) => {
   console.log(req.body);
   const decisionId = req.body.decisionId;
   const criteriaId = req.body.criteriaId;
-  const criterionValue = req.body.criterionValue;
-  const decisionCriteria = await addDecisionCriteria(
-    decisionId,
-    criteriaId,
-    criterionValue
-  );
+  const decisionCriteria = await addDecisionCriteria(decisionId, criteriaId);
   res.status(201).send(decisionCriteria);
 });
 

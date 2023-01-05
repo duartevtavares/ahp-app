@@ -21,17 +21,17 @@ export class ApiService {
 
   //Participants
 
-  postParticipant(data: string) {
-    return this.http.post<any>(participantsUrl, data).subscribe();
-  }
+  // postParticipant(data: string) {
+  //   return this.http.post<any>(participantsUrl, data).subscribe();
+  // }
 
-  getParticipants() {
-    return this.http.get<any>(participantsUrl);
-  }
+  // getParticipants() {
+  //   return this.http.get<any>(participantsUrl);
+  // }
 
-  getSpecificParticipant(data: number) {
-    return this.http.get<any>(`${participantsUrl}/${data}`);
-  }
+  // getSpecificParticipant(data: number) {
+  //   return this.http.get<any>(`${participantsUrl}/${data}`);
+  // }
 
   //Users
 
@@ -71,7 +71,11 @@ export class ApiService {
 
   //DecisionParticipants
   getSpecificDecisionParticipantsByDecisionId(data: number) {
-    return this.http.get<any>(`${decisionParticipantsUrl}/${data}`);
+    return this.http.get<any>(`${decisionParticipantsUrl}/decision/${data}`);
+  }
+
+  getSpecificDecisionParticipantsByUserId(data: number) {
+    return this.http.get<any>(`${decisionParticipantsUrl}/participant/${data}`);
   }
 
   postSpecificDecisionParticipants(data: {
@@ -90,7 +94,6 @@ export class ApiService {
   postSpecificDecisionCriteria(data: {
     decisionId: number;
     criteriaId: number;
-    criteriaValue: number;
   }) {
     return this.http.post<any>(decisionCriteriaUrl, data).subscribe();
   }

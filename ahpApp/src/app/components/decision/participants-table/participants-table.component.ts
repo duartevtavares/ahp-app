@@ -15,6 +15,7 @@ export class ParticipantsTableComponent implements OnInit {
   participantNames!: MatTableDataSource<any>;
   name!: string;
   participantsSelected: boolean = false;
+  // participantWeights: any;
 
   constructor(
     public dialog: MatDialog,
@@ -47,7 +48,7 @@ export class ParticipantsTableComponent implements OnInit {
     this.participantNames = new MatTableDataSource(
       this.specsService.participantsNames
     );
-    console.log(this.participantNames);
+    console.log(this.participantNames.data);
 
     // this.service.getParticipants().subscribe(
     //   (response) => {

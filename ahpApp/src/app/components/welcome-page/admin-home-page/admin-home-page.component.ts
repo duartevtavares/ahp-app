@@ -18,9 +18,20 @@ export class AdminHomePageComponent implements OnInit {
   ngOnInit(): void {
     this.apiService.getDecisions().subscribe((result) => {
       this.allDecisions = result;
-      this.allDecisionsName = result.name;
       console.log(this.allDecisions);
-      console.log(this.allDecisions.name);
     });
+  }
+  showDecision(decision: any) {
+    console.log(decision);
+    this.apiService
+      .getSpecificDecisionParticipantsByDecisionId(decision.id)
+      .subscribe((result) => {
+        console.log(result);
+      });
+    this.apiService
+      .getSpecificDecisionCriteria(decision.id)
+      .subscribe((result) => {
+        console.log(result);
+      });
   }
 }

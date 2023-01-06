@@ -33,5 +33,10 @@ export class AdminHomePageComponent implements OnInit {
       .subscribe((result) => {
         console.log(result);
       });
+    this.apiService
+      .getSpecificDecisionAlternatives(decision.id)
+      .subscribe((result) => {
+        console.log(result);
+      });
   }
 }

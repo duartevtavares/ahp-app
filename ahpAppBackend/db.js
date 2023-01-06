@@ -297,6 +297,15 @@ export async function getCriteria() {
   return rows;
 }
 
+export async function getCriterion(id) {
+  const [rows] = await pool.query(
+    `SELECT * FROM criteria WHERE id = ?
+  `,
+    [id]
+  );
+  return rows;
+}
+
 //Decision
 
 export async function getDecision(id) {
@@ -326,7 +335,6 @@ export async function addDecision(name, goal) {
     [name, goal]
   );
   const id = result.insertId;
-  console.log(id);
   return getDecision(id);
 }
 
@@ -417,16 +425,16 @@ export async function getDecisionAlternatives(id) {
 //post
 export async function addDecisionAlternative(
   decisionId,
-  alternativesId,
-  alternativeValue
+  alternativeValue,
+  alternativeName
 ) {
   const [result] = await pool.query(
     `
     INSERT INTO 
-      decision_participant (decision_id, alternatives_id, alternative_value)
-      VALUES (?, ?, ?)
+      decision_alternatives(decision_id, alternative_value, alternative_name)
+      VALUES ( ?, ?, ?)
       `,
-    [decisionId, alternativesId, alternativeValue]
+    [decisionId, alternativeValue, alternativeName]
   );
   return result;
 }
@@ -434,4 +442,4 @@ export async function addDecisionAlternative(
 // const result = await addUser("Ricardo Paiva Gorjão", "rpg", "password");
 // console.log(result);
 
-console.log(await getCriteria());
+// console.log(await getCriteria());

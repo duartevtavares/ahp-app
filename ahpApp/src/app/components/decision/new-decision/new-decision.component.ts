@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Subject } from 'rxjs';
 import { DecisionSpecificationsService } from 'src/app/services/decision-specifications.service';
 import { MathService } from 'src/app/services/math.service';
+import { NewDecisionService } from 'src/app/services/new-decision-service.service';
 
 @Component({
   selector: 'new-decision-component',
@@ -83,14 +84,20 @@ export class NewDecisionComponent implements OnInit {
 
   constructor(
     public specsService: DecisionSpecificationsService,
-    public mathService: MathService
+    public mathService: MathService,
+    public newDecisionService: NewDecisionService
   ) {}
 
   ngOnInit(): void {
-    for (let i = 0; i < this.specsService.decisionCriteria.length; i++) {
-      this.decisionCriteria.push(this.specsService.decisionCriteria[i].name);
-    } //TODO need to change to see which decision it is
-    this.decisionAlternatives = this.specsService.decisionSpecs.alternatives;
+    this.decisionCriteria = [...this.newDecisionService.decisionCriteria];
+    this.decisionAlternatives = [
+      ...this.newDecisionService.decisionAlternatives,
+    ];
+
+    // for (let i = 0; i < this.specsService.decisionCriteria.length; i++) {
+    //   this.decisionCriteria.push(this.specsService.decisionCriteria[i].name);
+    // } //TODO need to change to see which decision it is
+    //this.decisionAlternatives = this.specsService.decisionSpecs.alternatives;
 
     this.createDecisionComparisonColumns(this.decisionCriteria, 'criteria');
     this.createDecisionComparisonColumns(

@@ -6,6 +6,7 @@ import {
   addDecisionParticipants,
   addUser,
   getCriteria,
+  getCriterion,
   getDecision,
   getDecisionAlternatives,
   getDecisionCriteria,
@@ -75,6 +76,12 @@ app.post("/users", async (req, res) => {
 app.get("/criteria", async (req, res) => {
   const criteria = await getCriteria();
   res.send(criteria);
+});
+
+app.get("/criteria/:id", async (req, res) => {
+  const id = req.params.id;
+  const criteria = await getCriterion(id);
+  res.status(201).send(criteria);
 });
 
 //Decision
@@ -150,12 +157,12 @@ app.get("/decision_alternatives/:id", async (req, res) => {
 app.post("/decision_alternatives", async (req, res) => {
   console.log(req.body);
   const decisionId = req.body.decisionId;
-  const alternativesId = req.body.alternativesId;
   const alternativeValue = req.body.alternativeValue;
+  const alternativeName = req.body.alternativeName;
   const decisionAlternative = await addDecisionAlternative(
     decisionId,
-    alternativesId,
-    alternativeValue
+    alternativeValue,
+    alternativeName
   );
   res.status(201).send(decisionAlternative);
 });

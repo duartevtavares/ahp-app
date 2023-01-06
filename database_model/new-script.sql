@@ -85,20 +85,14 @@ ENGINE = InnoDB;
 -- Table `finalThesis`.`decision_alternatives`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `finalThesis`.`decision_alternatives` (
+  `id` INT NOT NULL,
   `decision_id` INT NOT NULL,
-  `alternatives_id` INT NOT NULL,
   `alternative_value` INT NULL,
   PRIMARY KEY (`decision_id`, `alternatives_id`),
-  INDEX `fk_decision_has_alternatives_alternatives1_idx` (`alternatives_id` ASC),
   INDEX `fk_decision_has_alternatives_decision1_idx` (`decision_id` ASC),
   CONSTRAINT `fk_decision_has_alternatives_decision1`
     FOREIGN KEY (`decision_id`)
     REFERENCES `finalThesis`.`decision` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
-  CONSTRAINT `fk_decision_has_alternatives_alternatives1`
-    FOREIGN KEY (`alternatives_id`)
-    REFERENCES `finalThesis`.`alternatives` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;

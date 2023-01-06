@@ -45,11 +45,9 @@ export class ApiService {
     return this.http.get<any>(criteriaUrl);
   }
 
-  // postCriteria(data: { decisionId: number; criteriaId: number }): any {
-  //   this.http.post<any>(criteriaUrl, data).subscribe((result) => {
-  //     this.specsService.decisionId = result.id;
-  //   });
-  // }
+  getSpecificCriterion(data: number) {
+    return this.http.get<any>(`${criteriaUrl}/${data}`);
+  }
 
   //Decision
 
@@ -103,8 +101,8 @@ export class ApiService {
 
   postSpecificDecisionAlternative(data: {
     decisionId: number;
-    alternativesId: number;
     alternativeValue: number;
+    alternativeName: string;
   }) {
     return this.http.post<any>(decisionAlternativesUrl, data).subscribe();
   }

@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ApiService } from 'src/app/services/api.service';
 import { LoginPermissionServiceService } from 'src/app/services/login-permission-service.service';
+import { NewDecisionService } from 'src/app/services/new-decision-service.service';
 
 @Component({
   selector: 'user-home-page-component',
@@ -13,7 +14,8 @@ export class UserHomePageComponent implements OnInit {
   decisionsToShow: any[] = [];
   constructor(
     private permissionService: LoginPermissionServiceService,
-    private apiService: ApiService
+    private apiService: ApiService,
+    private newDecisionService: NewDecisionService
   ) {}
 
   ngOnInit(): void {
@@ -47,5 +49,40 @@ export class UserHomePageComponent implements OnInit {
 
   goToDecision(decisionId: any) {
     console.log(decisionId);
+    let criteriaArray: any = [];
+    let alternativesArray: any = [];
+
+    this.apiService.getSpecificDecision(decisionId).subscribe((res) => {
+      this.newDecisionService.decisionIntro = res;
+      console.log('decision', this.newDecisionService.decisionIntro);
+    });
+
+    this.apiService
+      .getSpecificDecisionCriteria(decisionId)
+      .subscribe((response) => {
+        for (let res of response) {
+          console.log(res);
+          this.apiService
+            .getSpecificCriterion(res.criteria_id)
+            .subscribe((secondResponse) => {
+              for (let secondRes of secondResponse) {
+                criteriaArray.push(secondRes.name);
+              }
+              this.newDecisionService.decisionCriteria = [...criteriaArray];
+              console.log('criteria', criteriaArray);
+              console.log(this.newDecisionService.decisionCriteria);
+            });
+        }
+      });
+
+    this.apiService
+      .getSpecificDecisionAlternatives(decisionId)
+      .subscribe((response) => {
+        for (let res of response) {
+          alternativesArray.push(res.alternative_name);
+        }
+        console.log('alternative', alternativesArray);
+        this.newDecisionService.decisionAlternatives = [...alternativesArray];
+      });
   }
 }

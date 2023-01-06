@@ -75,10 +75,13 @@ export class DecisionSpecificationsFormComponent implements OnInit {
     this.decisionSpecifications = this.decisionSpecificationsForm.value;
     this.specsService.decisionSpecs = this.decisionSpecifications;
     this.specsService.decisionCriteria = this.myCriteriaControl.value;
+    this.specsService.decisionAlternativesNames =
+      this.specsService.decisionSpecs.alternatives;
 
     console.log(this.decisionSpecifications);
     console.log(this.specsService.participants);
     console.log('criteria: ', this.specsService.decisionCriteria);
+    console.log('alternatives: ', this.specsService.decisionAlternativesNames);
 
     //post decision specifications
 
@@ -102,6 +105,17 @@ export class DecisionSpecificationsFormComponent implements OnInit {
             this.apiService.postSpecificDecisionCriteria({
               decisionId: decisionId,
               criteriaId: this.specsService.decisionCriteria[i].id,
+            });
+          }
+          for (
+            let i = 0;
+            i < this.specsService.decisionAlternativesNames.length;
+            i++
+          ) {
+            this.apiService.postSpecificDecisionAlternative({
+              decisionId: decisionId,
+              alternativeValue: 1,
+              alternativeName: this.specsService.decisionAlternativesNames[i],
             });
           }
         });

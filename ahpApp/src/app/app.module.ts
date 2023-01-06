@@ -32,6 +32,7 @@ import { DecisionSpecificationsService } from './services/decision-specification
 import { MathService } from './services/math.service';
 import { AdminHomePageComponent } from './components/welcome-page/admin-home-page/admin-home-page.component';
 import { UserHomePageComponent } from './components/welcome-page/user-home-page/user-home-page.component';
+import { NewDecisionService } from './services/new-decision-service.service';
 
 @NgModule({
   declarations: [
@@ -67,7 +68,12 @@ import { UserHomePageComponent } from './components/welcome-page/user-home-page/
     NgxChartsModule,
     HttpClientModule,
   ],
-  providers: [ApiService, DecisionSpecificationsService, MathService],
+  providers: [
+    ApiService,
+    DecisionSpecificationsService,
+    MathService,
+    NewDecisionService,
+  ],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

@@ -475,7 +475,7 @@ export async function getSpecificParticipantDecisionCriteriaComparison(
   const [rows] = await pool.query(
     `
      SELECT * 
-    FROM comparisons
+    FROM criteria_comparisons
     WHERE decision_id = ? 
     AND user_id = ?
     `,
@@ -494,7 +494,7 @@ export async function addSpecificParticipantDecisionCriteriaComparison(
   const [result] = await pool.query(
     `
     INSERT INTO 
-      comparisons (decision_id, user_id, criterion_1_id, criterion_2_id, pairwise_value)
+      criteria_comparisons (decision_id, user_id, criterion_1_id, criterion_2_id, pairwise_value)
       VALUES (?, ?, ?, ?, ?)
       `,
     [decisionId, userId, criterion1Id, criterion2Id, pairwiseValue]
@@ -502,7 +502,35 @@ export async function addSpecificParticipantDecisionCriteriaComparison(
   return result;
 }
 
-// const result = await addUser("Ricardo Paiva Gorjão", "rpg", "password");
+//Alternatives parwise comparisons of a specific decision from a specific participant
+
+export async function addSpecificParticipantDecisionAlternativesComparison(
+  decisionId,
+  userId,
+  criterionId,
+  alternative1Id,
+  alternative2Id,
+  pairwiseValue
+) {
+  const [result] = await pool.query(
+    `
+    INSERT INTO 
+      alternatives_comparisons (decision_id, user_id, criterion_id, alternative_1_id, alternative_2_id, pairwise_value)
+      VALUES (?, ?, ?, ?, ?, ?)
+      `,
+    [
+      decisionId,
+      userId,
+      criterionId,
+      alternative1Id,
+      alternative2Id,
+      pairwiseValue,
+    ]
+  );
+  return result;
+}
+
+// const result = await addUser("Paula Dias Costa", "pdc", "password");
 // console.log(result);
 
 // const result = await updateDecisionParticipantsDone(1, 1);

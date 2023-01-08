@@ -11,6 +11,8 @@ const decisionCriteriaUrl = 'http://localhost:8080/decision_criteria';
 const decisionAlternativesUrl = 'http://localhost:8080/decision_alternatives';
 const decisionCriteriaPairwiseUrl =
   'http://localhost:8080/decision_criteria_pairwise';
+const decisionAlternativesPairwiseUrl =
+  'http://localhost:8080/decision_alternatives_pairwise';
 
 @Injectable({
   providedIn: 'root',
@@ -139,5 +141,20 @@ export class ApiService {
     pairwiseValue: number;
   }) {
     return this.http.post<any>(decisionCriteriaPairwiseUrl, data).subscribe();
+  }
+
+  //Alternatives parwise comparisons of a specific decision from a specific participant
+
+  postSpecificParticipantDecisionAlternativesComparison(data: {
+    decisionId: number;
+    userId: number;
+    criterionId: number;
+    alternative1Id: number;
+    alternative2Id: number;
+    pairwiseValue: number;
+  }) {
+    return this.http
+      .post<any>(decisionAlternativesPairwiseUrl, data)
+      .subscribe();
   }
 }

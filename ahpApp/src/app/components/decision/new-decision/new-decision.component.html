@@ -185,9 +185,11 @@
     </div>
 
     <div class="form-buttons">
-      <button mat-raised-button class="submit-button" (click)="onSubmit()">
-        Submit
-      </button>
+      <a [routerLink]="'/home'" routerLinkActive="active">
+        <button mat-raised-button class="submit-button" (click)="onSubmit()">
+          Submit
+        </button>
+      </a>
     </div>
     <div class="final-results">
       <ng-container *ngIf="formIsSubmited">

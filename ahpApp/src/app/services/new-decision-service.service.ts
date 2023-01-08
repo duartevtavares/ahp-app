@@ -8,5 +8,6 @@ export class NewDecisionService {
   decisionCriteria: any;
   decisionCriteriaId: any = [];
   decisionAlternatives: any;
+  decisionAlternativesId: any = [];
   decisionIntro: any;
 }

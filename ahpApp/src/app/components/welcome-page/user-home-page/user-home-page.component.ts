@@ -52,6 +52,7 @@ export class UserHomePageComponent implements OnInit {
     let criteriaArray: any = [];
     let criteriaIdArray: any = [];
     let alternativesArray: any = [];
+    let alternativesIdArray: any = [];
 
     this.apiService.getSpecificDecision(decisionId).subscribe((res) => {
       this.newDecisionService.decisionIntro = res;
@@ -86,8 +87,16 @@ export class UserHomePageComponent implements OnInit {
       .getSpecificDecisionAlternatives(decisionId)
       .subscribe((response) => {
         for (let res of response) {
+          alternativesIdArray.push(res.id);
           alternativesArray.push(res.alternative_name);
+          this.newDecisionService.decisionAlternativesId = [
+            ...alternativesIdArray,
+          ];
         }
+        console.log(
+          'ids das alternativas',
+          this.newDecisionService.decisionAlternativesId
+        );
         console.log('alternative', alternativesArray);
         this.newDecisionService.decisionAlternatives = [...alternativesArray];
       });

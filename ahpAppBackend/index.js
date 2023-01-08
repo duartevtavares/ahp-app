@@ -19,6 +19,7 @@ import {
   getSpecificParticipantDecisionCriteriaComparison,
   updateDecisionParticipantsDone,
   updateDecisionDone,
+  addSpecificParticipantDecisionAlternativesComparison,
 } from "./db.js";
 
 const app = express();
@@ -219,6 +220,37 @@ app.post("/decision_criteria_pairwise", async (req, res) => {
       pairwiseValue
     );
   res.status(201).send(participantDecisionCriterionComparison);
+});
+
+//Alternatives parwise comparisons of a specific decision from a specific participant
+
+// app.get("/decision_alternatives_pairwise/:decisionId/:userId", async (req, res) => {
+//   const decisionId = req.params.decisionId;
+//   const userId = req.params.userId;
+//   const participantDecisionAlternativeComparison =
+//     await getSpecificParticipantDecisionAlternativesComparison(decisionId, userId);
+//   res.status(201).send(participantDecisionAlternativeComparison);
+// });
+
+//post
+
+app.post("/decision_alternatives_pairwise", async (req, res) => {
+  const decisionId = req.body.decisionId;
+  const userId = req.body.userId;
+  const criterionId = req.body.criterionId;
+  const alternative1Id = req.body.alternative1Id;
+  const alternative2Id = req.body.alternative2Id;
+  const pairwiseValue = req.body.pairwiseValue;
+  const participantDecisionAlternativeComparison =
+    await addSpecificParticipantDecisionAlternativesComparison(
+      decisionId,
+      userId,
+      criterionId,
+      alternative1Id,
+      alternative2Id,
+      pairwiseValue
+    );
+  res.status(201).send(participantDecisionAlternativeComparison);
 });
 
 /////////////////

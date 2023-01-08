@@ -176,6 +176,9 @@ export class NewDecisionComponent implements OnInit {
         }
         if (step === 'alternatives') {
           this.firstColumnAlternativesArray.push(namesToBeCompared[i]);
+          this.firstColumnAlternativesIdArray.push(
+            this.newDecisionService.decisionAlternativesId[i]
+          );
         }
       }
       for (let j = 1 + i; j < namesToBeCompared.length; j++) {
@@ -187,6 +190,9 @@ export class NewDecisionComponent implements OnInit {
         }
         if (step === 'alternatives') {
           this.secondColumnAlternativesArray.push(namesToBeCompared[j]);
+          this.secondColumnAlternativesIdArray.push(
+            this.newDecisionService.decisionAlternativesId[j]
+          );
         }
       }
     }
@@ -546,6 +552,19 @@ export class NewDecisionComponent implements OnInit {
         criterion2Id: this.secondColumnCriteriaIdArray[i],
         pairwiseValue: this.criteriaComparisonsValues[i],
       });
+    }
+
+    for (let i = 0; i < this.firstColumnCriteriaIdArray.length; i++) {
+      for (let j = 0; j < this.firstColumnAlternativesIdArray.length; j++) {
+        this.apiService.postSpecificParticipantDecisionAlternativesComparison({
+          decisionId: this.newDecisionService.decisionIntro.id,
+          userId: userId,
+          criterionId: this.newDecisionService.decisionCriteriaId[i],
+          alternative1Id: this.firstColumnAlternativesIdArray[j],
+          alternative2Id: this.secondColumnAlternativesIdArray[j],
+          pairwiseValue: this.alternativeComparisonsValues[i][j],
+        });
+      }
     }
 
     await new Promise((f) => setTimeout(f, 1000));

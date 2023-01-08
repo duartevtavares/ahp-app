@@ -122,20 +122,39 @@ CREATE TABLE IF NOT EXISTS `finalThesis`.`decision_participant` (
 ENGINE = InnoDB;
 
 -- -----------------------------------------------------
--- Table `finalThesis`.`comparisons`
+-- Table `finalThesis`.`criteria_comparisons`
 -- -----------------------------------------------------
 
-CREATE TABLE Comparisons (
+CREATE TABLE criteria_comparisons (
     id INTEGER PRIMARY KEY,
     decision_id INTEGER NOT NULL,
     user_id INTEGER NOT NULL,
     criterion_1_id INTEGER NOT NULL,
     criterion_2_id INTEGER NOT NULL,
-    value INTEGER NOT NULL,
+    pairwise_value INTEGER NOT NULL,
     FOREIGN KEY (decision_id) REFERENCES `finalThesis`.`decision` (`id`),
     FOREIGN KEY (user_id) REFERENCES `finalThesis`.`users` (`id`),
     FOREIGN KEY (criterion_1_id) REFERENCES `finalThesis`.`criteria` (`id`),
     FOREIGN KEY (criterion_2_id) REFERENCES `finalThesis`.`criteria` (`id`)
+);
+
+-- -----------------------------------------------------
+-- Table `finalThesis`.`alternatives_comparisons`
+-- -----------------------------------------------------
+
+CREATE TABLE alternatives_comparisons (
+    id INTEGER PRIMARY KEY,
+    decision_id INTEGER NOT NULL,
+    user_id INTEGER NOT NULL,
+    criterion_id INTEGER NOT NULL,
+    alternative_1_id INTEGER NOT NULL,
+    alternative_2_id INTEGER NOT NULL,
+    pairwise_value INTEGER NOT NULL,
+    FOREIGN KEY (decision_id) REFERENCES `finalThesis`.`decision` (`id`),
+    FOREIGN KEY (user_id) REFERENCES `finalThesis`.`users` (`id`),
+    FOREIGN KEY (criterion_id) REFERENCES `finalThesis`.`criteria` (`id`),
+    FOREIGN KEY (alternative_1_id) REFERENCES `finalThesis`.`decision_alternatives` (`id`),
+     FOREIGN KEY (alternative_2_id) REFERENCES `finalThesis`.`decision_alternatives` (`id`)
 );
 
 

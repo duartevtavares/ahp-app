@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Subject } from 'rxjs';
+import { ApiService } from 'src/app/services/api.service';
 import { DecisionSpecificationsService } from 'src/app/services/decision-specifications.service';
+import { LoginPermissionServiceService } from 'src/app/services/login-permission-service.service';
 import { MathService } from 'src/app/services/math.service';
 import { NewDecisionService } from 'src/app/services/new-decision-service.service';
 
@@ -12,6 +14,11 @@ import { NewDecisionService } from 'src/app/services/new-decision-service.servic
 export class NewDecisionComponent implements OnInit {
   decisionCriteria: string[] = [];
   decisionAlternatives: string[] = [];
+
+  firstColumnCriteriaIdArray: number[] = [];
+  secondColumnCriteriaIdArray: number[] = [];
+  firstColumnAlternativesIdArray: number[] = [];
+  secondColumnAlternativesIdArray: number[] = [];
 
   firstColumnCriteriaArray: string[] = [];
   secondColumnCriteriaArray: string[] = [];
@@ -85,7 +92,9 @@ export class NewDecisionComponent implements OnInit {
   constructor(
     public specsService: DecisionSpecificationsService,
     public mathService: MathService,
-    public newDecisionService: NewDecisionService
+    public newDecisionService: NewDecisionService,
+    public apiService: ApiService,
+    private permissionService: LoginPermissionServiceService
   ) {}
 
   ngOnInit(): void {
@@ -93,6 +102,7 @@ export class NewDecisionComponent implements OnInit {
     this.decisionAlternatives = [
       ...this.newDecisionService.decisionAlternatives,
     ];
+    console.log(this.decisionCriteria);
 
     // for (let i = 0; i < this.specsService.decisionCriteria.length; i++) {
     //   this.decisionCriteria.push(this.specsService.decisionCriteria[i].name);
@@ -160,6 +170,9 @@ export class NewDecisionComponent implements OnInit {
       for (let j = 0; j < namesToBeCompared.length - i - 1; j++) {
         if (step === 'criteria') {
           this.firstColumnCriteriaArray.push(namesToBeCompared[i]);
+          this.firstColumnCriteriaIdArray.push(
+            this.newDecisionService.decisionCriteriaId[i]
+          );
         }
         if (step === 'alternatives') {
           this.firstColumnAlternativesArray.push(namesToBeCompared[i]);
@@ -168,6 +181,9 @@ export class NewDecisionComponent implements OnInit {
       for (let j = 1 + i; j < namesToBeCompared.length; j++) {
         if (step === 'criteria') {
           this.secondColumnCriteriaArray.push(namesToBeCompared[j]);
+          this.secondColumnCriteriaIdArray.push(
+            this.newDecisionService.decisionCriteriaId[j]
+          );
         }
         if (step === 'alternatives') {
           this.secondColumnAlternativesArray.push(namesToBeCompared[j]);
@@ -211,7 +227,7 @@ export class NewDecisionComponent implements OnInit {
       this.realCriteriaMatrix,
       this.criteriaWeightsArray
     );
-    console.log(this.criteriaConsistencyRatio);
+    // console.log(this.criteriaConsistencyRatio);
     this.createCriteriaChartData();
 
     this.finalWeightsArray = this.computeFinalWeights(
@@ -219,6 +235,9 @@ export class NewDecisionComponent implements OnInit {
       this.criteriaWeightsArray
     );
     this.createFinalResultschartData();
+
+    console.log(this.criteriaComparisonsValues);
+    console.log(this.realCriteriaValuesArray);
   }
 
   changeAlternativeValue(event: any, index: number, otherIndex: number) {
@@ -241,7 +260,7 @@ export class NewDecisionComponent implements OnInit {
       );
     }
 
-    console.log(this.alternativesWeightsArray);
+    console.log('peso das alternativas: ', this.alternativesWeightsArray);
 
     for (let i = 0; i < this.decisionCriteria.length; i++) {
       this.alternativesConsistencyRatio[i] = this.createConsistencyRatios(
@@ -249,7 +268,10 @@ export class NewDecisionComponent implements OnInit {
         this.alternativesWeightsArray[i]
       );
     }
-    console.log(this.alternativesConsistencyRatio);
+    console.log(
+      'racio de consistencia das alternativas: ',
+      this.alternativesConsistencyRatio
+    );
 
     this.finalWeightsArray = this.computeFinalWeights(
       this.alternativesWeightsArray,
@@ -511,7 +533,35 @@ export class NewDecisionComponent implements OnInit {
     );
   }
 
-  onSubmit() {
+  async onSubmit() {
     this.formIsSubmited = true;
+
+    let userId = this.permissionService.userId;
+
+    for (let i = 0; i < this.firstColumnCriteriaIdArray.length; i++) {
+      this.apiService.postSpecificParticipantDecisionCriteriaComparison({
+        decisionId: this.newDecisionService.decisionIntro.id,
+        userId: userId,
+        criterion1Id: this.firstColumnCriteriaIdArray[i],
+        criterion2Id: this.secondColumnCriteriaIdArray[i],
+        pairwiseValue: this.criteriaComparisonsValues[i],
+      });
+    }
+
+    await new Promise((f) => setTimeout(f, 1000));
+
+    this.apiService
+      .getSpecificParticipantDecisionCriteriaComparison({
+        decisionId: this.newDecisionService.decisionIntro.id,
+        userId: userId,
+      })
+      .subscribe((response) => {
+        console.log(response);
+      });
+
+    this.apiService.updateSpecificDecisionParticipantsDone({
+      decisionId: this.newDecisionService.decisionIntro.id,
+      participantsId: userId,
+    });
   }
 }

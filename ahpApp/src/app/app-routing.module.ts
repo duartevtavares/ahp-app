@@ -28,7 +28,6 @@ const routes: Routes = [
   {
     path: 'admin-home-page-component',
     component: AdminHomePageComponent,
-    canActivate: [AuthorizedGuard],
   },
   {
     path: 'user-home-page-component',

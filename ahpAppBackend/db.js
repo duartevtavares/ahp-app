@@ -338,6 +338,18 @@ export async function addDecision(name, goal) {
   return getDecision(id);
 }
 
+export async function updateDecisionDone(id) {
+  const [result] = await pool.query(
+    ` 
+    UPDATE decision
+      SET done = 1
+      WHERE id = ?
+      `,
+    [id]
+  );
+  return result;
+}
+
 //Participants of a specific decision
 
 export async function getDecisionParticipantsByDecisionId(id) {
@@ -377,6 +389,21 @@ export async function addDecisionParticipants(
       VALUES (?, ?, ?)
       `,
     [decisionId, participantsId, participantWeight]
+  );
+  return result;
+}
+
+//update
+export async function updateDecisionParticipantsDone(
+  decisionId,
+  participantsId
+) {
+  const [result] = await pool.query(
+    ` UPDATE decision_participant
+      SET done = 1
+      WHERE decision_id = ? AND user_id = ?;
+      `,
+    [decisionId, participantsId]
   );
   return result;
 }
@@ -439,7 +466,45 @@ export async function addDecisionAlternative(
   return result;
 }
 
+//Criteria parwise comparisons of a specific decision from a specific participant
+
+export async function getSpecificParticipantDecisionCriteriaComparison(
+  decisionId,
+  userId
+) {
+  const [rows] = await pool.query(
+    `
+     SELECT * 
+    FROM comparisons
+    WHERE decision_id = ? 
+    AND user_id = ?
+    `,
+    [decisionId, userId]
+  );
+  return rows;
+}
+
+export async function addSpecificParticipantDecisionCriteriaComparison(
+  decisionId,
+  userId,
+  criterion1Id,
+  criterion2Id,
+  pairwiseValue
+) {
+  const [result] = await pool.query(
+    `
+    INSERT INTO 
+      comparisons (decision_id, user_id, criterion_1_id, criterion_2_id, pairwise_value)
+      VALUES (?, ?, ?, ?, ?)
+      `,
+    [decisionId, userId, criterion1Id, criterion2Id, pairwiseValue]
+  );
+  return result;
+}
+
 // const result = await addUser("Ricardo Paiva Gorjão", "rpg", "password");
 // console.log(result);
 
+// const result = await updateDecisionParticipantsDone(1, 1);
+// console.log(result);
 // console.log(await getCriteria());

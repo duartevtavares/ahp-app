@@ -4,7 +4,9 @@ import { Injectable } from '@angular/core';
   providedIn: 'root',
 })
 export class NewDecisionService {
+  userId: any;
   decisionCriteria: any;
+  decisionCriteriaId: any = [];
   decisionAlternatives: any;
   decisionIntro: any;
 }

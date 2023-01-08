@@ -1,5 +1,4 @@
 import { CdkTextareaAutosize } from '@angular/cdk/text-field';
-import { HttpClient } from '@angular/common/http';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import {
   FormArray,
@@ -31,7 +30,7 @@ export class DecisionSpecificationsFormComponent implements OnInit {
     private fb: FormBuilder,
     public dialog: MatDialog,
     public specsService: DecisionSpecificationsService,
-    private apiService: ApiService
+    public apiService: ApiService
   ) {}
 
   myCriteriaControl = new FormControl('');
@@ -84,7 +83,6 @@ export class DecisionSpecificationsFormComponent implements OnInit {
     console.log('alternatives: ', this.specsService.decisionAlternativesNames);
 
     //post decision specifications
-
     this.apiService
       .postDecision({
         name: this.decisionSpecifications.problemGoal,

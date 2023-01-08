@@ -9,6 +9,8 @@ import { DecisionSpecificationsService } from 'src/app/services/decision-specifi
 })
 export class AdminHomePageComponent implements OnInit {
   allDecisions: any;
+  incompleteDecisions: any;
+  completeDecisions: any;
   allDecisionsName: any;
   constructor(
     private specsService: DecisionSpecificationsService,
@@ -16,11 +18,39 @@ export class AdminHomePageComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.incompleteDecisions = [];
+    this.completeDecisions = [];
+
     this.apiService.getDecisions().subscribe((result) => {
       this.allDecisions = result;
-      console.log(this.allDecisions);
+      for (let res of result) {
+        if (res.done.data[0] === 0) {
+          let isDone = true;
+          this.apiService
+            .getSpecificDecisionParticipantsByDecisionId(res.id)
+            .subscribe((secondResult) => {
+              for (let secondRes of secondResult) {
+                if (secondRes.done.data[0] === 0) {
+                  isDone = false;
+                }
+              }
+              if (isDone === true) {
+                this.completeDecisions.push(res);
+                const decisionId = res.id;
+                this.apiService
+                  .updateSpecificDecisionDone({ decisionId: decisionId })
+                  .subscribe();
+              } else {
+                this.incompleteDecisions.push(res);
+              }
+            });
+        } else {
+          this.completeDecisions.push(res);
+        }
+      }
     });
   }
+
   showDecision(decision: any) {
     console.log(decision);
     this.apiService

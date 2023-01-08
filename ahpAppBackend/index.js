@@ -15,6 +15,10 @@ import {
   getDecisions,
   getUser,
   getUsers,
+  addSpecificParticipantDecisionCriteriaComparison,
+  getSpecificParticipantDecisionCriteriaComparison,
+  updateDecisionParticipantsDone,
+  updateDecisionDone,
 } from "./db.js";
 
 const app = express();
@@ -104,6 +108,13 @@ app.post("/decision", async (req, res) => {
   res.status(201).send(decision);
 });
 
+app.put("/decision", async (req, res) => {
+  console.log(req.body.decisionId);
+  const decisionId = req.body.decisionId;
+  const decisionDone = await updateDecisionDone(decisionId);
+  res.status(201).send(decisionDone);
+});
+
 //Participants of a specific decision
 
 app.get("/decision_participants/participant/:id", async (req, res) => {
@@ -118,7 +129,6 @@ app.get("/decision_participants/decision/:id", async (req, res) => {
 });
 
 app.post("/decision_participants", async (req, res) => {
-  console.log(req.body);
   const decisionId = req.body.decisionId;
   const participantsId = req.body.participantsId;
   const participantWeight = req.body.participantWeight;
@@ -128,6 +138,16 @@ app.post("/decision_participants", async (req, res) => {
     participantWeight
   );
   res.status(201).send(decisionParticipants);
+});
+
+app.put("/decision_participants", async (req, res) => {
+  const decisionId = req.body.decisionId;
+  const participantsId = req.body.participantsId;
+  const decisionParticipantsDone = await updateDecisionParticipantsDone(
+    decisionId,
+    participantsId
+  );
+  res.status(201).send(decisionParticipantsDone);
 });
 
 //Criteria of a specific decision
@@ -165,6 +185,40 @@ app.post("/decision_alternatives", async (req, res) => {
     alternativeName
   );
   res.status(201).send(decisionAlternative);
+});
+
+//Criteria parwise comparisons of a specific decision from a specific participant
+
+// app.get("/decision_criteria_pairwise", async (req, res) => {
+//   const participantDecisionCriterionComparisons = await getDecisions();
+//   res.send(participantDecisionCriterionComparisons);
+// });
+
+app.get("/decision_criteria_pairwise/:decisionId/:userId", async (req, res) => {
+  const decisionId = req.params.decisionId;
+  const userId = req.params.userId;
+  const participantDecisionCriterionComparison =
+    await getSpecificParticipantDecisionCriteriaComparison(decisionId, userId);
+  res.status(201).send(participantDecisionCriterionComparison);
+});
+
+//post
+
+app.post("/decision_criteria_pairwise", async (req, res) => {
+  const decisionId = req.body.decisionId;
+  const userId = req.body.userId;
+  const criterion1Id = req.body.criterion1Id;
+  const criterion2Id = req.body.criterion2Id;
+  const pairwiseValue = req.body.pairwiseValue;
+  const participantDecisionCriterionComparison =
+    await addSpecificParticipantDecisionCriteriaComparison(
+      decisionId,
+      userId,
+      criterion1Id,
+      criterion2Id,
+      pairwiseValue
+    );
+  res.status(201).send(participantDecisionCriterionComparison);
 });
 
 /////////////////

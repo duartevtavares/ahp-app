@@ -9,6 +9,8 @@ const decisionUrl = 'http://localhost:8080/decision';
 const decisionParticipantsUrl = 'http://localhost:8080/decision_participants';
 const decisionCriteriaUrl = 'http://localhost:8080/decision_criteria';
 const decisionAlternativesUrl = 'http://localhost:8080/decision_alternatives';
+const decisionCriteriaPairwiseUrl =
+  'http://localhost:8080/decision_criteria_pairwise';
 
 @Injectable({
   providedIn: 'root',
@@ -63,6 +65,10 @@ export class ApiService {
     return this.http.get<any>(`${decisionUrl}/${data}`);
   }
 
+  updateSpecificDecisionDone(data: { decisionId: number }): any {
+    return this.http.put<any>(decisionUrl, data);
+  }
+
   ///////////////////////////////////////////////
 
   //DecisionParticipants
@@ -80,6 +86,13 @@ export class ApiService {
     participantWeight: number;
   }) {
     return this.http.post<any>(decisionParticipantsUrl, data).subscribe();
+  }
+
+  updateSpecificDecisionParticipantsDone(data: {
+    decisionId: number;
+    participantsId: number;
+  }) {
+    return this.http.put<any>(decisionParticipantsUrl, data).subscribe();
   }
 
   //DecisionCriteria
@@ -105,5 +118,26 @@ export class ApiService {
     alternativeName: string;
   }) {
     return this.http.post<any>(decisionAlternativesUrl, data).subscribe();
+  }
+
+  //Criteria parwise comparisons of a specific decision from a specific participant
+
+  getSpecificParticipantDecisionCriteriaComparison(data: {
+    decisionId: number;
+    userId: number;
+  }) {
+    return this.http.get<any>(
+      `${decisionCriteriaPairwiseUrl}/${data.decisionId}/${data.userId}`
+    );
+  }
+
+  postSpecificParticipantDecisionCriteriaComparison(data: {
+    decisionId: number;
+    userId: number;
+    criterion1Id: number;
+    criterion2Id: number;
+    pairwiseValue: number;
+  }) {
+    return this.http.post<any>(decisionCriteriaPairwiseUrl, data).subscribe();
   }
 }

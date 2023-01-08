@@ -8,4 +8,10 @@
       {{ allDecisions[i].name }}
     </div>
   </div>
+
+  <h3>complete</h3>
+  <pre>{{ completeDecisions | json }}</pre>
+
+  <h3>incomplete</h3>
+  <pre>{{ incompleteDecisions | json }}</pre>
 </div>

@@ -50,6 +50,7 @@ export class UserHomePageComponent implements OnInit {
   goToDecision(decisionId: any) {
     console.log(decisionId);
     let criteriaArray: any = [];
+    let criteriaIdArray: any = [];
     let alternativesArray: any = [];
 
     this.apiService.getSpecificDecision(decisionId).subscribe((res) => {
@@ -61,6 +62,12 @@ export class UserHomePageComponent implements OnInit {
       .getSpecificDecisionCriteria(decisionId)
       .subscribe((response) => {
         for (let res of response) {
+          criteriaIdArray.push(res.criteria_id);
+          this.newDecisionService.decisionCriteriaId = [...criteriaIdArray];
+          console.log(
+            'ids dos criterios',
+            this.newDecisionService.decisionCriteriaId
+          );
           console.log(res);
           this.apiService
             .getSpecificCriterion(res.criteria_id)
@@ -69,7 +76,7 @@ export class UserHomePageComponent implements OnInit {
                 criteriaArray.push(secondRes.name);
               }
               this.newDecisionService.decisionCriteria = [...criteriaArray];
-              console.log('criteria', criteriaArray);
+              // console.log('criteria', criteriaArray);
               console.log(this.newDecisionService.decisionCriteria);
             });
         }

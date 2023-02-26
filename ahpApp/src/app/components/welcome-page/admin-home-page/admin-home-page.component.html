@@ -1,17 +1,52 @@
-<div class="new-decision-button">
-  <a [routerLink]="'/decision-component'" routerLinkActive="active"
-    ><button mat-raised-button>Start new decision</button></a
-  >
-  <h3>All decisions:</h3>
-  <div *ngFor="let decisions of allDecisions; let i = index">
-    <div (click)="showDecision(allDecisions[i])">
-      {{ allDecisions[i].name }}
+<div class="admin-page-wrapper">
+  <mat-card class="all-decisions-card">
+    <div class="new-decision-button">
+      <a [routerLink]="'/decision-component'" routerLinkActive="active"
+        ><button mat-raised-button>Start new decision</button></a
+      >
     </div>
-  </div>
 
-  <h3>complete</h3>
-  <pre>{{ completeDecisions | json }}</pre>
+    <h1>All decisions:</h1>
 
-  <h3>incomplete</h3>
-  <pre>{{ incompleteDecisions | json }}</pre>
+    <div class="mat-expansion-wrapper">
+      <mat-accordion>
+        <mat-expansion-panel
+          *ngFor="let decision of allDecisions; let i = index"
+        >
+          <mat-expansion-panel-header>
+            <mat-panel-title
+              ><strong>{{ decision.name }}</strong></mat-panel-title
+            >
+            <!-- <mat-panel-description> {{Currently I am}} </mat-panel-description> -->
+          </mat-expansion-panel-header>
+          <div class="mat-expansion-body">
+            <div class="participants">
+              <h5><strong>Participants:</strong></h5>
+              <p *ngFor="let participant of decisionsParticipants[i]">
+                {{ participant }}
+              </p>
+            </div>
+
+            <div class="participants">
+              <h5><strong>Criteria:</strong></h5>
+              <p *ngFor="let criteria of decisionsCriteria[i]">
+                {{ criteria }}
+              </p>
+            </div>
+
+            <div class="participants">
+              <h5><strong>Alternatives:</strong></h5>
+              <p *ngFor="let alternative of decisionsAlternatives[i]">
+                {{ alternative }}
+              </p>
+            </div>
+            <div class="participants">
+              <h5><strong>Done:</strong></h5>
+              <p>{{ decision.done.data[0] }}</p>
+            </div>
+          </div>
+        </mat-expansion-panel>
+      </mat-accordion>
+    </div>
+  </mat-card>
 </div>

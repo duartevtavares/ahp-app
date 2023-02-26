@@ -31,7 +31,6 @@ export class UserHomePageComponent implements OnInit {
       .subscribe((result) => {
         this.userDecisions = result;
         console.log('as decisões deste user: ', this.userDecisions);
-
         this.getparticipantDecisions(this.userDecisions);
       });
   }
@@ -44,7 +43,6 @@ export class UserHomePageComponent implements OnInit {
           this.decisionsToShow.push(result);
         });
     }
-    console.log('para mostrar: ', this.decisionsToShow);
   }
 
   goToDecision(decisionId: any) {
@@ -63,7 +61,7 @@ export class UserHomePageComponent implements OnInit {
       .getSpecificDecisionCriteria(decisionId)
       .subscribe((response) => {
         for (let res of response) {
-          criteriaIdArray.push(res.criteria_id);
+          criteriaIdArray.push(res.criterion_id);
           this.newDecisionService.decisionCriteriaId = [...criteriaIdArray];
           console.log(
             'ids dos criterios',
@@ -71,7 +69,7 @@ export class UserHomePageComponent implements OnInit {
           );
           console.log(res);
           this.apiService
-            .getSpecificCriterion(res.criteria_id)
+            .getSpecificCriterion(res.criterion_id)
             .subscribe((secondResponse) => {
               for (let secondRes of secondResponse) {
                 criteriaArray.push(secondRes.name);
@@ -87,18 +85,27 @@ export class UserHomePageComponent implements OnInit {
       .getSpecificDecisionAlternatives(decisionId)
       .subscribe((response) => {
         for (let res of response) {
-          alternativesIdArray.push(res.id);
-          alternativesArray.push(res.alternative_name);
+          alternativesIdArray.push(res.alternative_id);
           this.newDecisionService.decisionAlternativesId = [
             ...alternativesIdArray,
           ];
+          console.log(
+            'ids das alternativas',
+            this.newDecisionService.decisionAlternativesId
+          );
+          console.log(res);
+          this.apiService
+            .getSpecificAlternative(res.alternative_id)
+            .subscribe((secondResponse) => {
+              for (let secondRes of secondResponse) {
+                alternativesArray.push(secondRes.name);
+              }
+              this.newDecisionService.decisionAlternatives = [
+                ...alternativesArray,
+              ];
+              console.log(this.newDecisionService.decisionAlternatives);
+            });
         }
-        console.log(
-          'ids das alternativas',
-          this.newDecisionService.decisionAlternativesId
-        );
-        console.log('alternative', alternativesArray);
-        this.newDecisionService.decisionAlternatives = [...alternativesArray];
       });
   }
 }

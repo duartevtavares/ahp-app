@@ -37,13 +37,14 @@ export class ParticipantsDialogComponent implements OnInit {
   }
 
   postParticipant() {
+    let participantsNamesArray = [];
     this.specsService.participants = this.participantsControl.value;
 
     for (let i = 0; i < this.specsService.participants.length; i++) {
-      this.specsService.participantsNames[i] =
-        this.specsService.participants[i].name;
+      participantsNamesArray[i] = this.specsService.participants[i].name;
     }
     console.log(this.specsService.participantsNames);
+    this.specsService.participantsNames = [...participantsNamesArray];
   }
 
   onCancel(): void {

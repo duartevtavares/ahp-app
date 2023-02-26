@@ -3,6 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { AppComponent } from './app.component';
 import { DecisionSpecificationsFormComponent } from './components/decision/decision-specifications-form/decision-specifications-form.component';
 import { DecisionComponent } from './components/decision/decision.component';
+import { NewDecisionAlternativesComponent } from './components/decision/new-decision-alternatives/new-decision-alternatives.component';
 import { NewDecisionComponent } from './components/decision/new-decision/new-decision.component';
 import { AdminHomePageComponent } from './components/welcome-page/admin-home-page/admin-home-page.component';
 import { UserHomePageComponent } from './components/welcome-page/user-home-page/user-home-page.component';
@@ -24,6 +25,10 @@ const routes: Routes = [
   {
     path: 'new-decision-component',
     component: NewDecisionComponent,
+  },
+  {
+    path: 'new-decision-alternatives-component',
+    component: NewDecisionAlternativesComponent,
   },
   {
     path: 'admin-home-page-component',

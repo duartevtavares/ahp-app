@@ -7,7 +7,7 @@
   </span>
 </ng-container>
 
-<ng-container *ngIf="participantNames.data.length > 0">
+<ng-container *ngIf="participantNames && participantNames.data.length > 0">
   <h2>The following users will participate in this decision:</h2>
   <div class="participants-table">
     <table mat-table [dataSource]="participantNames" class="mat-elevation-z8">

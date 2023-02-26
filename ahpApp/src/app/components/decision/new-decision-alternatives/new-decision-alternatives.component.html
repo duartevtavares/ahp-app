@@ -1,100 +1,6 @@
 <div class="form-wrapper">
   <mat-card class="form-card">
-    <div class="criteria-values" *ngIf="decisionCriteria.length > 1">
-      <h2 class="criteria-values-title">
-        Now, let's proceed and give values to each criteria:
-      </h2>
-      <div class="criteria-wrapper">
-        <div class="criteria-classification">
-          <div class="first-column">
-            <div
-              class="first-column-criteria"
-              *ngFor="
-                let firstCriteria of firstColumnCriteriaArray;
-                let i = index
-              "
-            >
-              <ul>
-                {{
-                  firstCriteria
-                }}
-              </ul>
-
-              <mat-slider
-                class="criteria-mat-slider"
-                [attr.id]="i"
-                thumbLabel
-                [displayWith]="formatLabel"
-                tickInterval="1"
-                step="1"
-                min="1"
-                max="9"
-                value="5"
-                (input)="changeCriteriaValue($event, i)"
-              ></mat-slider>
-              <br />
-            </div>
-          </div>
-          <div class="second-column-criteria">
-            <ul *ngFor="let secondCriteria of secondColumnCriteriaArray">
-              {{
-                secondCriteria
-              }}
-            </ul>
-          </div>
-        </div>
-        <ng-container *ngIf="decisionCriteria.length > 2">
-          <div class="criteriaConsistencyRatio">
-            <h4>
-              Consistency Ratio:
-              <span
-                [style.color]="criteriaConsistencyRatio > 0.1 ? 'red' : null"
-                >{{ criteriaConsistencyRatio | number : "1.0-4" }}</span
-              >
-            </h4>
-          </div>
-        </ng-container>
-        <ng-container *ngIf="!isCriteriaMatrixActive">
-          <table class="criteria-matrix">
-            <tr>
-              <th></th>
-              <th *ngFor="let criteria of decisionCriteria">{{ criteria }}</th>
-            </tr>
-            <tr *ngFor="let criteria of decisionCriteria; let i = index">
-              <th>{{ decisionCriteria[i] }}</th>
-              <td *ngFor="let criteria of decisionCriteria; let j = index">
-                {{ criteriaMatrixToShow[i][j] }}
-              </td>
-            </tr>
-          </table>
-        </ng-container>
-
-        <ng-container *ngIf="isCriteriaMatrixActive">
-          <ngx-charts-bar-vertical
-            [view]="[450, 200]"
-            [results]="chartData"
-            [gradient]="false"
-            [xAxis]="true"
-            [yAxis]="true"
-            [legend]="false"
-            [showXAxisLabel]="true"
-            [showYAxisLabel]="true"
-          >
-          </ngx-charts-bar-vertical>
-        </ng-container>
-
-        <button
-          class="criteria-matrix-btn"
-          mat-raised-button
-          type="button"
-          (click)="displayCriteriaMatrix()"
-        >
-          {{ isCriteriaMatrixActive ? "Show" : "Hide" }} criteria matrix
-        </button>
-      </div>
-    </div>
-
-    <!-- <div class="alternative-values">
+    <div class="alternative-values">
       <h2 class="alternative-values-title">
         Now, let's proceed and give values to each alternative:
       </h2>
@@ -182,13 +88,10 @@
           </table>
         </div>
       </div>
-    </div> -->
+    </div>
 
     <div class="form-buttons">
-      <a
-        [routerLink]="'/new-decision-alternatives-component'"
-        routerLinkActive="active"
-      >
+      <a [routerLink]="'/home'" routerLinkActive="active">
         <button mat-raised-button class="submit-button" (click)="onSubmit()">
           Submit
         </button>

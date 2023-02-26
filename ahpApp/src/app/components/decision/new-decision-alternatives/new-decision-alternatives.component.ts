@@ -7,11 +7,11 @@ import { MathService } from 'src/app/services/math.service';
 import { NewDecisionService } from 'src/app/services/new-decision-service.service';
 
 @Component({
-  selector: 'new-decision-component',
-  templateUrl: './new-decision.component.html',
-  styleUrls: ['./new-decision.component.scss'],
+  selector: 'new-decision-alternatives-component',
+  templateUrl: './new-decision-alternatives.component.html',
+  styleUrls: ['./new-decision-alternatives.component.scss'],
 })
-export class NewDecisionComponent implements OnInit {
+export class NewDecisionAlternativesComponent implements OnInit {
   decisionCriteria: string[] = [];
   decisionAlternatives: string[] = [];
 
@@ -549,46 +549,46 @@ export class NewDecisionComponent implements OnInit {
     console.log(this.secondColumnCriteriaIdArray);
     console.log(this.criteriaComparisonsValues);
 
-    for (let i = 0; i < this.firstColumnCriteriaIdArray.length; i++) {
-      this.apiService.postSpecificParticipantDecisionCriteriaComparison({
-        decisionId: this.newDecisionService.decisionIntro.id,
-        userId: userId,
-        criterion1Id: this.firstColumnCriteriaIdArray[i],
-        criterion2Id: this.secondColumnCriteriaIdArray[i],
-        pairwiseValue: this.criteriaComparisonsValues[i],
-      });
-    }
-
-    console.log(this.newDecisionService.decisionCriteriaId);
-    console.log(this.firstColumnAlternativesIdArray);
-    console.log(this.secondColumnAlternativesIdArray);
-    console.log(this.alternativeComparisonsValues);
-
     // for (let i = 0; i < this.firstColumnCriteriaIdArray.length; i++) {
-    //   for (let j = 0; j < this.firstColumnAlternativesIdArray.length; j++) {
-    //     this.apiService.postSpecificParticipantDecisionAlternativesComparison({
-    //       decisionId: this.newDecisionService.decisionIntro.id,
-    //       userId: userId,
-    //       criterionId: this.newDecisionService.decisionCriteriaId[i],
-    //       alternative1Id: this.firstColumnAlternativesIdArray[j],
-    //       alternative2Id: this.secondColumnAlternativesIdArray[j],
-    //       pairwiseValue: this.alternativeComparisonsValues[i][j],
-    //     });
-    //   }
-    // }
-
-    // this.apiService
-    //   .getSpecificParticipantDecisionCriteriaComparison({
+    //   this.apiService.postSpecificParticipantDecisionCriteriaComparison({
     //     decisionId: this.newDecisionService.decisionIntro.id,
     //     userId: userId,
-    //   })
-    //   .subscribe((response) => {
-    //     console.log(response);
+    //     criterion1Id: this.firstColumnCriteriaIdArray[i],
+    //     criterion2Id: this.secondColumnCriteriaIdArray[i],
+    //     pairwiseValue: this.criteriaComparisonsValues[i],
     //   });
+    // }
 
-    // this.apiService.updateSpecificDecisionParticipantsDone({
-    //   decisionId: this.newDecisionService.decisionIntro.id,
-    //   participantsId: userId,
-    // });
+    // console.log(this.newDecisionService.decisionCriteriaId);
+    // console.log(this.firstColumnAlternativesIdArray);
+    // console.log(this.secondColumnAlternativesIdArray);
+    // console.log(this.alternativeComparisonsValues);
+
+    for (let i = 0; i < this.firstColumnCriteriaIdArray.length; i++) {
+      for (let j = 0; j < this.firstColumnAlternativesIdArray.length; j++) {
+        this.apiService.postSpecificParticipantDecisionAlternativesComparison({
+          decisionId: this.newDecisionService.decisionIntro.id,
+          userId: userId,
+          criterionId: this.newDecisionService.decisionCriteriaId[i],
+          alternative1Id: this.firstColumnAlternativesIdArray[j],
+          alternative2Id: this.secondColumnAlternativesIdArray[j],
+          pairwiseValue: this.alternativeComparisonsValues[i][j],
+        });
+      }
+    }
+
+    this.apiService
+      .getSpecificParticipantDecisionCriteriaComparison({
+        decisionId: this.newDecisionService.decisionIntro.id,
+        userId: userId,
+      })
+      .subscribe((response) => {
+        console.log(response);
+      });
+
+    this.apiService.updateSpecificDecisionParticipantsDone({
+      decisionId: this.newDecisionService.decisionIntro.id,
+      participantsId: userId,
+    });
   }
 }

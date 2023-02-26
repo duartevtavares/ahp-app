@@ -5,7 +5,7 @@ const pool = mysql
     host: "localhost",
     user: "root",
     password: "",
-    database: "finalthesis",
+    database: "newnew",
   })
   .promise();
 
@@ -306,6 +306,35 @@ export async function getCriterion(id) {
   return rows;
 }
 
+//Alternatives
+
+export async function getAlternatives() {
+  const [rows] = await pool.query("SELECT * FROM alternatives");
+  return rows;
+}
+
+export async function getAlternative(id) {
+  const [rows] = await pool.query(
+    `SELECT * FROM alternatives WHERE id = ?
+  `,
+    [id]
+  );
+  return rows;
+}
+
+export async function addAlternative(name) {
+  const [result] = await pool.query(
+    `
+    INSERT INTO 
+      alternatives (name)
+      VALUES (?)
+      `,
+    [name]
+  );
+  const id = result.insertId;
+  return getAlternative(id);
+}
+
 //Decision
 
 export async function getDecision(id) {
@@ -423,14 +452,14 @@ export async function getDecisionCriteria(id) {
 }
 
 //post
-export async function addDecisionCriteria(decisionId, criteriaId) {
+export async function addDecisionCriteria(decisionId, criterionId) {
   const [result] = await pool.query(
     `
     INSERT INTO 
-      decision_criteria (decision_id, criteria_id)
+      decision_criteria (decision_id, criterion_id)
       VALUES (?, ?)
       `,
-    [decisionId, criteriaId]
+    [decisionId, criterionId]
   );
   return result;
 }
@@ -450,18 +479,46 @@ export async function getDecisionAlternatives(id) {
 }
 
 //post
-export async function addDecisionAlternative(
-  decisionId,
-  alternativeValue,
-  alternativeName
-) {
+export async function addDecisionAlternative(decisionId, alternativeId) {
   const [result] = await pool.query(
     `
     INSERT INTO 
-      decision_alternatives(decision_id, alternative_value, alternative_name)
-      VALUES ( ?, ?, ?)
+      decision_alternatives(decision_id, alternative_id)
+      VALUES ( ?, ?)
       `,
-    [decisionId, alternativeValue, alternativeName]
+    [decisionId, alternativeId]
+  );
+  return result;
+}
+
+//Alternatives criterion value of a specific decision
+
+export async function getDecisionAlternativesCriterionValue(id) {
+  const [rows] = await pool.query(
+    `
+     SELECT *
+    FROM decision_alternatives_criterion_value
+    WHERE decision_id = ?
+    `,
+    [id]
+  );
+  return rows;
+}
+
+//post
+export async function addDecisionAlternativesCriterionValue(
+  decisionId,
+  alternativeId,
+  criterionId,
+  alternativeCriterionValue
+) {
+  const [result] = await pool.query(
+    `
+    INSERT INTO
+    decision_alternatives_criterion_values(decision_id, alternative_id, criterion_id, alternative_criterion_value)
+      VALUES ( ?, ?, ?, ?)
+      `,
+    [decisionId, alternativeId, criterionId, alternativeCriterionValue]
   );
   return result;
 }
@@ -530,7 +587,7 @@ export async function addSpecificParticipantDecisionAlternativesComparison(
   return result;
 }
 
-// const result = await addUser("Paula Dias Costa", "pdc", "password");
+// const result = await addUser("Pedro Santos Barros", "psb", "password");
 // console.log(result);
 
 // const result = await updateDecisionParticipantsDone(1, 1);

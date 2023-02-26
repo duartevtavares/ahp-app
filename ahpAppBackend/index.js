@@ -1,25 +1,30 @@
 import express from "express";
 import {
+  addAlternative,
   addDecision,
   addDecisionAlternative,
+  addDecisionAlternativesCriterionValue,
   addDecisionCriteria,
   addDecisionParticipants,
+  addSpecificParticipantDecisionAlternativesComparison,
+  addSpecificParticipantDecisionCriteriaComparison,
   addUser,
+  getAlternative,
+  getAlternatives,
   getCriteria,
   getCriterion,
   getDecision,
   getDecisionAlternatives,
+  getDecisionAlternativesCriterionValue,
   getDecisionCriteria,
   getDecisionParticipantsByDecisionId,
   getDecisionParticipantsByUserId,
   getDecisions,
+  getSpecificParticipantDecisionCriteriaComparison,
   getUser,
   getUsers,
-  addSpecificParticipantDecisionCriteriaComparison,
-  getSpecificParticipantDecisionCriteriaComparison,
-  updateDecisionParticipantsDone,
   updateDecisionDone,
-  addSpecificParticipantDecisionAlternativesComparison,
+  updateDecisionParticipantsDone,
 } from "./db.js";
 
 const app = express();
@@ -87,6 +92,25 @@ app.get("/criteria/:id", async (req, res) => {
   const id = req.params.id;
   const criteria = await getCriterion(id);
   res.status(201).send(criteria);
+});
+
+//Alternatives
+
+app.get("/alternatives", async (req, res) => {
+  const alternatives = await getAlternatives();
+  res.send(alternatives);
+});
+
+app.get("/alternatives/:id", async (req, res) => {
+  const id = req.params.id;
+  const alternative = await getAlternative(id);
+  res.status(201).send(alternative);
+});
+
+app.post("/alternatives", async (req, res) => {
+  const name = req.body.name;
+  const alternative = await addAlternative(name);
+  res.status(201).send(alternative);
 });
 
 //Decision
@@ -178,14 +202,37 @@ app.get("/decision_alternatives/:id", async (req, res) => {
 app.post("/decision_alternatives", async (req, res) => {
   console.log(req.body);
   const decisionId = req.body.decisionId;
-  const alternativeValue = req.body.alternativeValue;
-  const alternativeName = req.body.alternativeName;
+  const alternativeId = req.body.alternativeId;
   const decisionAlternative = await addDecisionAlternative(
     decisionId,
-    alternativeValue,
-    alternativeName
+    alternativeId
   );
   res.status(201).send(decisionAlternative);
+});
+
+//Alternatives of a specific decision   TODO
+
+app.get("/decision_alternatives_criterion_value/:id", async (req, res) => {
+  const id = req.params.id;
+  const decisionAlternativesCriterionValue =
+    await getDecisionAlternativesCriterionValue(id);
+  res.status(201).send(decisionAlternativesCriterionValue);
+});
+
+app.post("/decision_alternatives_criterion_value", async (req, res) => {
+  console.log(req.body);
+  const decisionId = req.body.decisionId;
+  const alternativeId = req.body.alternativeId;
+  const criterionId = req.body.criterionId;
+  const alternativeCriterionValue = req.body.alternativeCriterionValue;
+  const decisionAlternativesCriterionValue =
+    await addDecisionAlternativesCriterionValue(
+      decisionId,
+      alternativeId,
+      criterionId,
+      alternativeCriterionValue
+    );
+  res.status(201).send(decisionAlternativesCriterionValue);
 });
 
 //Criteria parwise comparisons of a specific decision from a specific participant

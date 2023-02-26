@@ -24,8 +24,17 @@ export class ParticipantsTableComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.participantsSelected = false;
-    this.getParticipants();
+    if (this.specsService.participantsSelected) {
+      console.log('não é o inicio');
+      if (this.participantNames) {
+        this.participantNames.data = [];
+        this.specsService.participants = [];
+        this.specsService.participantsNames = [];
+      }
+    } else {
+      console.log('é o inicio');
+      this.getParticipants();
+    }
 
     // this.apiService
     //   .getSpecificDecisionAlternatives(1)
@@ -61,14 +70,16 @@ export class ParticipantsTableComponent implements OnInit {
   }
 
   openDialog() {
+    this.specsService.participants = [];
+    this.specsService.participantsNames = [];
     this.dialog
       .open(ParticipantsDialogComponent, {
         data: { name: this.name },
       })
       .afterClosed()
-      .subscribe((val) => {
+      .subscribe(() => {
         this.getParticipants();
-        this.participantsSelected = true;
+        this.specsService.participantsSelected = true;
       });
   }
 }

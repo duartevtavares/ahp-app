@@ -23,6 +23,8 @@ export class DecisionSpecificationsFormComponent implements OnInit {
     alternatives: this.fb.array([this.fb.control('', Validators.required)]),
   });
 
+  alternativesValues = new FormArray<any>([]);
+  alternativesValuesCounter = 0;
   decisionSpecifications: any;
   disabledAddButton = false;
   formSubmited = false;
@@ -37,6 +39,7 @@ export class DecisionSpecificationsFormComponent implements OnInit {
   criteriaOptions: any = [];
   criteriaOptionsNames: string[] = [];
   filteredOptions?: Observable<any>;
+  alternativesIds: number[] = [];
 
   @ViewChild('autosize') autosize!: CdkTextareaAutosize;
 
@@ -59,9 +62,11 @@ export class DecisionSpecificationsFormComponent implements OnInit {
     this.decisionSpecificationsForm.enable();
     this.disabledAddButton = false;
     this.formSubmited = false;
+    this.removeAlternativesValues();
   }
 
   onSubmit() {
+    this.alternativesValuesCounter = 0;
     if (this.alternatives.value[this.alternatives.value.length - 1] === '') {
       this.alternatives.removeAt(this.alternatives.value.length - 1);
     }
@@ -77,12 +82,51 @@ export class DecisionSpecificationsFormComponent implements OnInit {
     this.specsService.decisionAlternativesNames =
       this.specsService.decisionSpecs.alternatives;
 
+    if (this.myCriteriaControl.value) {
+      for (let j = 0; j < this.myCriteriaControl.value.length; j++) {
+        for (let i = 0; i < this.alternatives.length; i++) {
+          this.alternativesValuesCounter++;
+          this.addAlternativesValues();
+        }
+      }
+    }
+    console.log('counter: ', this.alternativesValuesCounter);
+
     console.log(this.decisionSpecifications);
+    console.log(this.specsService.decisionSpecs);
     console.log(this.specsService.participants);
     console.log('criteria: ', this.specsService.decisionCriteria);
     console.log('alternatives: ', this.specsService.decisionAlternativesNames);
+  }
 
+  onSubmit2() {
     //post decision specifications
+    console.log(this.alternativesValues.value);
+    if (this.myCriteriaControl.value) {
+      for (let j = 0; j < this.myCriteriaControl.value.length; j++) {
+        for (let i = 0; i < this.alternatives.length; i++) {
+          console.log(
+            this.alternativesValues.value[
+              j * this.specsService.decisionAlternativesNames.length + i
+            ]
+          );
+        }
+      }
+    }
+
+    for (
+      let i = 0;
+      i < this.specsService.decisionAlternativesNames.length;
+      i++
+    ) {
+      this.apiService
+        .postAlternative({
+          name: this.specsService.decisionAlternativesNames[i],
+        })
+        .subscribe((res: any) => {
+          this.alternativesIds.push(res[0].id);
+        });
+    }
     this.apiService
       .postDecision({
         name: this.decisionSpecifications.problemGoal,
@@ -112,9 +156,25 @@ export class DecisionSpecificationsFormComponent implements OnInit {
           ) {
             this.apiService.postSpecificDecisionAlternative({
               decisionId: decisionId,
-              alternativeValue: 1,
-              alternativeName: this.specsService.decisionAlternativesNames[i],
+              alternativeId: this.alternativesIds[i],
             });
+          }
+          for (let i = 0; i < this.specsService.decisionCriteria.length; i++) {
+            for (
+              let j = 0;
+              j < this.specsService.decisionAlternativesNames.length;
+              j++
+            ) {
+              this.apiService.postSpecificDecisionAlternativesCriterionValue({
+                decisionId: decisionId,
+                alternativeId: this.alternativesIds[j],
+                criterionId: this.specsService.decisionCriteria[i].id,
+                alternativeCriterionValue:
+                  this.alternativesValues.value[
+                    i * this.specsService.decisionAlternativesNames.length + j
+                  ],
+              });
+            }
           }
         });
       });
@@ -122,8 +182,8 @@ export class DecisionSpecificationsFormComponent implements OnInit {
     for (let i = 0; i < this.specsService.participants.length; i++) {
       console.log(this.specsService.participants[i].id);
     }
-
     console.log(this.specsService.decisionSpecs.alternatives);
+    console.log(this.alternativesIds);
   }
 
   get alternatives() {
@@ -136,6 +196,14 @@ export class DecisionSpecificationsFormComponent implements OnInit {
     } else {
       console.log('First fill the first alternative');
     }
+  }
+
+  addAlternativesValues() {
+    this.alternativesValues.push(new FormControl(''));
+  }
+
+  removeAlternativesValues() {
+    this.alternativesValues.clear();
   }
 
   // addCriteria(index: number) {

@@ -5,6 +5,9 @@ import { DecisionSpecificationsService } from './decision-specifications.service
 const participantsUrl = 'http://localhost:8080/participants';
 const usersUrl = 'http://localhost:8080/users';
 const criteriaUrl = 'http://localhost:8080/criteria';
+const alternativesUrl = 'http://localhost:8080/alternatives';
+const alternativesCriterionValueUrl =
+  'http://localhost:8080/decision_alternatives_criterion_value';
 const decisionUrl = 'http://localhost:8080/decision';
 const decisionParticipantsUrl = 'http://localhost:8080/decision_participants';
 const decisionCriteriaUrl = 'http://localhost:8080/decision_criteria';
@@ -43,6 +46,10 @@ export class ApiService {
     return this.http.get<any>(usersUrl);
   }
 
+  getSpecificUser(data: number) {
+    return this.http.get<any>(`${usersUrl}/${data}`);
+  }
+
   //Criteria
 
   getCriteria() {
@@ -51,6 +58,20 @@ export class ApiService {
 
   getSpecificCriterion(data: number) {
     return this.http.get<any>(`${criteriaUrl}/${data}`);
+  }
+
+  //Alternatives
+
+  getAlternatives() {
+    return this.http.get<any>(alternativesUrl);
+  }
+
+  getSpecificAlternative(data: number) {
+    return this.http.get<any>(`${alternativesUrl}/${data}`);
+  }
+
+  postAlternative(data: { name: string }): any {
+    return this.http.post<any>(alternativesUrl, data);
   }
 
   //Decision
@@ -116,10 +137,23 @@ export class ApiService {
 
   postSpecificDecisionAlternative(data: {
     decisionId: number;
-    alternativeValue: number;
-    alternativeName: string;
+    alternativeId: number;
   }) {
     return this.http.post<any>(decisionAlternativesUrl, data).subscribe();
+  }
+
+  //DecisionAlternativesCriterionValue
+  getSpecificDecisionAlternativesCriterionValue(data: number) {
+    return this.http.get<any>(`${alternativesCriterionValueUrl}/${data}`);
+  }
+
+  postSpecificDecisionAlternativesCriterionValue(data: {
+    decisionId: number;
+    alternativeId: number;
+    criterionId: number;
+    alternativeCriterionValue: number;
+  }) {
+    return this.http.post<any>(alternativesCriterionValueUrl, data).subscribe();
   }
 
   //Criteria parwise comparisons of a specific decision from a specific participant

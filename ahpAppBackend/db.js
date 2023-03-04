@@ -587,7 +587,7 @@ export async function addSpecificParticipantDecisionAlternativesComparison(
   return result;
 }
 
-// const result = await addUser("Pedro Santos Barros", "psb", "password");
+// const result = await addUser("Joana Paiva Lima", "jpl", "password");
 // console.log(result);
 
 // const result = await updateDecisionParticipantsDone(1, 1);

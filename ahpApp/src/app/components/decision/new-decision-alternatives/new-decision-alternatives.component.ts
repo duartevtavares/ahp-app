@@ -549,22 +549,22 @@ export class NewDecisionAlternativesComponent implements OnInit {
     console.log(this.secondColumnCriteriaIdArray);
     console.log(this.criteriaComparisonsValues);
 
-    // for (let i = 0; i < this.firstColumnCriteriaIdArray.length; i++) {
-    //   this.apiService.postSpecificParticipantDecisionCriteriaComparison({
-    //     decisionId: this.newDecisionService.decisionIntro.id,
-    //     userId: userId,
-    //     criterion1Id: this.firstColumnCriteriaIdArray[i],
-    //     criterion2Id: this.secondColumnCriteriaIdArray[i],
-    //     pairwiseValue: this.criteriaComparisonsValues[i],
-    //   });
-    // }
-
-    // console.log(this.newDecisionService.decisionCriteriaId);
-    // console.log(this.firstColumnAlternativesIdArray);
-    // console.log(this.secondColumnAlternativesIdArray);
-    // console.log(this.alternativeComparisonsValues);
-
     for (let i = 0; i < this.firstColumnCriteriaIdArray.length; i++) {
+      this.apiService.postSpecificParticipantDecisionCriteriaComparison({
+        decisionId: this.newDecisionService.decisionIntro.id,
+        userId: userId,
+        criterion1Id: this.firstColumnCriteriaIdArray[i],
+        criterion2Id: this.secondColumnCriteriaIdArray[i],
+        pairwiseValue: this.criteriaComparisonsValues[i],
+      });
+    }
+
+    console.log(this.newDecisionService.decisionCriteriaId);
+    console.log(this.firstColumnAlternativesIdArray);
+    console.log(this.secondColumnAlternativesIdArray);
+    console.log(this.alternativeComparisonsValues);
+
+    for (let i = 0; i < this.decisionCriteria.length; i++) {
       for (let j = 0; j < this.firstColumnAlternativesIdArray.length; j++) {
         this.apiService.postSpecificParticipantDecisionAlternativesComparison({
           decisionId: this.newDecisionService.decisionIntro.id,

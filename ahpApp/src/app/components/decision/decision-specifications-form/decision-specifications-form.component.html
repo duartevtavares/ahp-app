@@ -196,9 +196,11 @@
           </mat-form-field>
         </div>
       </div>
-      <button mat-raised-button class="edit-button" (click)="onSubmit2()">
-        Submit
-      </button>
+      <a [routerLink]="'/home'" routerLinkActive="active">
+        <button mat-raised-button class="edit-button" (click)="onSubmit2()">
+          Submit
+        </button>
+      </a>
     </form>
   </mat-card>
 </div>

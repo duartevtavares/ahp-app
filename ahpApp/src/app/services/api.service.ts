@@ -108,7 +108,7 @@ export class ApiService {
     participantsId: number;
     participantWeight: number;
   }) {
-    return this.http.post<any>(decisionParticipantsUrl, data).subscribe();
+    return this.http.post<any>(decisionParticipantsUrl, data);
   }
 
   updateSpecificDecisionParticipantsDone(data: {
@@ -127,7 +127,7 @@ export class ApiService {
     decisionId: number;
     criteriaId: number;
   }) {
-    return this.http.post<any>(decisionCriteriaUrl, data).subscribe();
+    return this.http.post<any>(decisionCriteriaUrl, data);
   }
 
   //DecisionAlternatives
@@ -139,7 +139,7 @@ export class ApiService {
     decisionId: number;
     alternativeId: number;
   }) {
-    return this.http.post<any>(decisionAlternativesUrl, data).subscribe();
+    return this.http.post<any>(decisionAlternativesUrl, data);
   }
 
   //DecisionAlternativesCriterionValue
@@ -153,7 +153,7 @@ export class ApiService {
     criterionId: number;
     alternativeCriterionValue: number;
   }) {
-    return this.http.post<any>(alternativesCriterionValueUrl, data).subscribe();
+    return this.http.post<any>(alternativesCriterionValueUrl, data);
   }
 
   //Criteria parwise comparisons of a specific decision from a specific participant

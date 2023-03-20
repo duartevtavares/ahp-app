@@ -497,7 +497,7 @@ export async function getDecisionAlternativesCriterionValue(id) {
   const [rows] = await pool.query(
     `
      SELECT *
-    FROM decision_alternatives_criterion_value
+    FROM decision_alternatives_criterion_values
     WHERE decision_id = ?
     `,
     [id]

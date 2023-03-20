@@ -7,7 +7,7 @@ import {
   Validators,
 } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
-import { Observable } from 'rxjs';
+import { concatMap, Observable, switchMap } from 'rxjs';
 import { ApiService } from 'src/app/services/api.service';
 import { DecisionSpecificationsService } from 'src/app/services/decision-specifications.service';
 import { AlertComponent } from '../../shared/alert-component/alert-component.component';
@@ -23,6 +23,7 @@ export class DecisionSpecificationsFormComponent implements OnInit {
     alternatives: this.fb.array([this.fb.control('', Validators.required)]),
   });
 
+  decisionId: any;
   alternativesValues = new FormArray<any>([]);
   alternativesValuesCounter = 0;
   decisionSpecifications: any;
@@ -90,6 +91,12 @@ export class DecisionSpecificationsFormComponent implements OnInit {
         }
       }
     }
+
+    this.apiService.getDecisions().subscribe((res) => {
+      this.decisionId = res.length + 1;
+      console.log(res);
+    });
+
     console.log('counter: ', this.alternativesValuesCounter);
 
     console.log(this.decisionSpecifications);
@@ -114,77 +121,210 @@ export class DecisionSpecificationsFormComponent implements OnInit {
       }
     }
 
+    let alternativesObservable = this.apiService.postAlternative({
+      name: this.specsService.decisionAlternativesNames[0],
+    });
     for (
-      let i = 0;
+      let i = 1;
       i < this.specsService.decisionAlternativesNames.length;
       i++
     ) {
-      this.apiService
-        .postAlternative({
-          name: this.specsService.decisionAlternativesNames[i],
-        })
-        .subscribe((res: any) => {
-          this.alternativesIds.push(res[0].id);
-        });
+      alternativesObservable = alternativesObservable.pipe(
+        concatMap(() =>
+          this.apiService.postAlternative({
+            name: this.specsService.decisionAlternativesNames[i],
+          })
+        )
+      );
     }
+    alternativesObservable.subscribe((res: any) => {
+      console.log(res);
+      let lastId = res[0].id;
+      for (
+        let i = 1;
+        i <= this.specsService.decisionAlternativesNames.length;
+        i++
+      ) {
+        this.alternativesIds.push(
+          lastId - this.specsService.decisionAlternativesNames.length + i
+        );
+      }
+    });
+
+    // this.specsService.decisionAlternativesNames.forEach(
+    //   (alternativeName: any) => {
+    //     this.apiService
+    //       .postAlternative({
+    //         name: alternativeName,
+    //       })
+    //       .subscribe((res: any) => {
+    //         this.alternativesIds.push(res[0].id);
+    //       });
+    //   }
+    // );
+
+    //////////////////////////////////
+
     this.apiService
       .postDecision({
         name: this.decisionSpecifications.problemGoal,
         goal: this.decisionSpecifications.problemGoal,
       })
-      .subscribe(() => {
-        this.apiService.getDecisions().subscribe((res) => {
-          let decisionId = res[res.length - 1].id;
-          console.log(decisionId);
-          for (let i = 0; i < this.specsService.participants.length; i++) {
+      .subscribe();
+
+    setTimeout(() => {
+      let participantsObservable =
+        this.apiService.postSpecificDecisionParticipants({
+          decisionId: this.decisionId,
+          participantsId: this.specsService.participants[0].id,
+          participantWeight: 99, //TODO: change this to a received value
+        });
+
+      for (let i = 1; i < this.specsService.participants.length; i++) {
+        participantsObservable = participantsObservable.pipe(
+          concatMap(() =>
             this.apiService.postSpecificDecisionParticipants({
-              decisionId: decisionId,
+              decisionId: this.decisionId,
               participantsId: this.specsService.participants[i].id,
               participantWeight: 99, //TODO: change this to a received value
-            });
-          }
-          for (let i = 0; i < this.specsService.decisionCriteria.length; i++) {
-            this.apiService.postSpecificDecisionCriteria({
-              decisionId: decisionId,
-              criteriaId: this.specsService.decisionCriteria[i].id,
-            });
-          }
-          for (
-            let i = 0;
-            i < this.specsService.decisionAlternativesNames.length;
-            i++
-          ) {
-            this.apiService.postSpecificDecisionAlternative({
-              decisionId: decisionId,
-              alternativeId: this.alternativesIds[i],
-            });
-          }
-          for (let i = 0; i < this.specsService.decisionCriteria.length; i++) {
-            for (
-              let j = 0;
-              j < this.specsService.decisionAlternativesNames.length;
-              j++
-            ) {
-              this.apiService.postSpecificDecisionAlternativesCriterionValue({
-                decisionId: decisionId,
-                alternativeId: this.alternativesIds[j],
-                criterionId: this.specsService.decisionCriteria[i].id,
-                alternativeCriterionValue:
-                  this.alternativesValues.value[
-                    i * this.specsService.decisionAlternativesNames.length + j
-                  ],
-              });
-            }
-          }
-        });
+            })
+          )
+        );
+      }
+      participantsObservable.subscribe((res: any) => {
+        console.log(res);
       });
 
-    for (let i = 0; i < this.specsService.participants.length; i++) {
-      console.log(this.specsService.participants[i].id);
-    }
-    console.log(this.specsService.decisionSpecs.alternatives);
-    console.log(this.alternativesIds);
+      // for (let i = 0; i < this.specsService.decisionCriteria.length; i++) {
+      //   this.apiService.postSpecificDecisionCriteria({
+      //     decisionId: this.decisionId,
+      //     criteriaId: this.specsService.decisionCriteria[i].id,
+      //   });
+      // }
+
+      let criteriaObservable = this.apiService.postSpecificDecisionCriteria({
+        decisionId: this.decisionId,
+        criteriaId: this.specsService.decisionCriteria[0].id,
+      });
+
+      for (let i = 1; i < this.specsService.decisionCriteria.length; i++) {
+        criteriaObservable = criteriaObservable.pipe(
+          concatMap(() =>
+            this.apiService.postSpecificDecisionCriteria({
+              decisionId: this.decisionId,
+              criteriaId: this.specsService.decisionCriteria[i].id,
+            })
+          )
+        );
+      }
+      criteriaObservable.subscribe((res: any) => {
+        console.log(res);
+      });
+
+      // for (
+      //   let i = 0;
+      //   i < this.specsService.decisionAlternativesNames.length;
+      //   i++
+      // ) {
+      //   this.apiService.postSpecificDecisionAlternative({
+      //     decisionId: this.decisionId,
+      //     alternativeId: this.alternativesIds[i],
+      //   });
+      // }
+      console.log(this.alternativesIds);
+      let decisionAlternativesObservable =
+        this.apiService.postSpecificDecisionAlternative({
+          decisionId: this.decisionId,
+          alternativeId: this.alternativesIds[0],
+        });
+
+      for (
+        let i = 1;
+        i < this.specsService.decisionAlternativesNames.length;
+        i++
+      ) {
+        decisionAlternativesObservable = decisionAlternativesObservable.pipe(
+          concatMap(() =>
+            this.apiService.postSpecificDecisionAlternative({
+              decisionId: this.decisionId,
+              alternativeId: this.alternativesIds[i],
+            })
+          )
+        );
+      }
+      decisionAlternativesObservable.subscribe((res: any) => {
+        console.log(res);
+      });
+
+      let alternativeCriterionValueObservable =
+        this.apiService.postSpecificDecisionAlternativesCriterionValue({
+          decisionId: this.decisionId,
+          alternativeId: this.alternativesIds[0],
+          criterionId: this.specsService.decisionCriteria[0].id,
+          alternativeCriterionValue:
+            this.alternativesValues.value[
+              0 * this.specsService.decisionAlternativesNames.length + 0
+            ],
+        });
+      let firstTime = true;
+      for (let i = 0; i < this.specsService.decisionCriteria.length; i++) {
+        for (
+          let j = 0;
+          j < this.specsService.decisionAlternativesNames.length;
+          j++
+        ) {
+          if (firstTime) {
+            j++;
+          }
+          alternativeCriterionValueObservable =
+            alternativeCriterionValueObservable.pipe(
+              concatMap(() =>
+                this.apiService.postSpecificDecisionAlternativesCriterionValue({
+                  decisionId: this.decisionId,
+                  alternativeId: this.alternativesIds[j],
+                  criterionId: this.specsService.decisionCriteria[i].id,
+                  alternativeCriterionValue:
+                    this.alternativesValues.value[
+                      i * this.specsService.decisionAlternativesNames.length + j
+                    ],
+                })
+              )
+            );
+          firstTime = false;
+        }
+      }
+
+      alternativeCriterionValueObservable.subscribe((res: any) => {
+        console.log(res);
+      });
+
+      // for (let i = 0; i < this.specsService.decisionCriteria.length; i++) {
+      //   for (
+      //     let j = 0;
+      //     j < this.specsService.decisionAlternativesNames.length;
+      //     j++
+      //   ) {
+      //     this.apiService.postSpecificDecisionAlternativesCriterionValue({
+      //       decisionId: this.decisionId,
+      //       alternativeId: this.alternativesIds[j],
+      //       criterionId: this.specsService.decisionCriteria[i].id,
+      //       alternativeCriterionValue:
+      //         this.alternativesValues.value[
+      //           i * this.specsService.decisionAlternativesNames.length + j
+      //         ],
+      //     });
+      //   }
+      // }
+
+      for (let i = 0; i < this.specsService.participants.length; i++) {
+        console.log(this.specsService.participants[i].id);
+      }
+      console.log(this.specsService.decisionSpecs.alternatives);
+      console.log(this.alternativesIds);
+    }, 500);
   }
+
+  ////////////////////////////
 
   get alternatives() {
     return this.decisionSpecificationsForm.get('alternatives') as FormArray;

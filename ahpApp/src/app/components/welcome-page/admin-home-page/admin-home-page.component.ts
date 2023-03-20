@@ -29,6 +29,7 @@ export class AdminHomePageComponent implements OnInit {
 
     this.apiService.getDecisions().subscribe((result) => {
       console.log('entrou1');
+      console.log(result);
       this.allDecisions = result;
       for (let res of result) {
         if (res.done.data[0] === 0) {

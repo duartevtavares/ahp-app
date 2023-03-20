@@ -10,4 +10,5 @@ export class NewDecisionService {
   decisionAlternatives: any;
   decisionAlternativesId: any = [];
   decisionIntro: any;
+  alternativesCriteriaValues: number[] = [];
 }

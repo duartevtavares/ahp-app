@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Subject } from 'rxjs';
+import { concatMap, from, Subject } from 'rxjs';
 import { ApiService } from 'src/app/services/api.service';
 import { DecisionSpecificationsService } from 'src/app/services/decision-specifications.service';
 import { LoginPermissionServiceService } from 'src/app/services/login-permission-service.service';
@@ -24,6 +24,9 @@ export class NewDecisionAlternativesComponent implements OnInit {
   secondColumnCriteriaArray: string[] = [];
   firstColumnAlternativesArray: string[] = [];
   secondColumnAlternativesArray: string[] = [];
+
+  firstColumnAlternativesCriteriaValuesArray: number[] = [];
+  secondColumnAlternativesCriteriaValuesArray: number[] = [];
 
   criteriaComparisonsValues: any[] = [];
   alternativeComparisonsValues: any[] = [];
@@ -56,6 +59,7 @@ export class NewDecisionAlternativesComponent implements OnInit {
   alternativesConsistencyRatio: number[] = [];
 
   formIsSubmited: boolean = false;
+  alternativesCriteriaValues: number[] = [];
 
   formatLabel(val: any): string {
     switch (val) {
@@ -98,6 +102,10 @@ export class NewDecisionAlternativesComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.alternativesCriteriaValues = [
+      ...this.newDecisionService.alternativesCriteriaValues,
+    ];
+    console.log(this.alternativesCriteriaValues);
     this.decisionCriteria = [...this.newDecisionService.decisionCriteria];
     this.decisionAlternatives = [
       ...this.newDecisionService.decisionAlternatives,
@@ -114,6 +122,14 @@ export class NewDecisionAlternativesComponent implements OnInit {
       this.decisionAlternatives,
       'alternatives'
     );
+    console.log(this.firstColumnAlternativesArray);
+
+    this.createAlternativeCriteriaValuesColumns(
+      this.alternativesCriteriaValues
+    );
+
+    console.log(this.firstColumnAlternativesCriteriaValuesArray);
+    console.log(this.secondColumnAlternativesCriteriaValuesArray);
 
     this.createArraysInitialValues();
 
@@ -192,6 +208,39 @@ export class NewDecisionAlternativesComponent implements OnInit {
           this.secondColumnAlternativesArray.push(namesToBeCompared[j]);
           this.secondColumnAlternativesIdArray.push(
             this.newDecisionService.decisionAlternativesId[j]
+          );
+        }
+      }
+    }
+  }
+
+  createAlternativeCriteriaValuesColumns(namesToBeCompared: number[]) {
+    let i = 0;
+    let outterArray: any = [];
+    let innerArray: any = [];
+    console.log(namesToBeCompared);
+    console.log(this.decisionCriteria);
+    console.log(this.decisionAlternatives);
+    for (let k = 0; k < this.decisionCriteria.length; k++) {
+      innerArray = namesToBeCompared.slice(
+        i,
+        i + this.decisionAlternatives.length
+      );
+      i += this.decisionAlternatives.length;
+      outterArray.push(innerArray);
+      console.log(innerArray); //TODO: está mal
+      console.log('out: ', outterArray);
+    }
+    for (let k = 0; k < this.decisionCriteria.length; k++) {
+      for (let i = 0; i < outterArray[k].length - 1; i++) {
+        for (let j = 0; j < outterArray[k].length - i - 1; j++) {
+          this.firstColumnAlternativesCriteriaValuesArray.push(
+            outterArray[k][i]
+          );
+        }
+        for (let j = 1 + i; j < outterArray[k].length; j++) {
+          this.secondColumnAlternativesCriteriaValuesArray.push(
+            outterArray[k][j]
           );
         }
       }

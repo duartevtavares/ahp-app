@@ -28,6 +28,14 @@
                   }}
                 </ul>
 
+                <ul>
+                  {{
+                    firstColumnAlternativesCriteriaValuesArray[
+                      i * firstColumnAlternativesArray.length + j
+                    ]
+                  }}
+                </ul>
+
                 <mat-slider
                   class="alternative-mat-slider"
                   [attr.id]="j"
@@ -45,8 +53,16 @@
             </div>
             <div class="second-column-alternative">
               <ul
-                *ngFor="let secondAlternative of secondColumnAlternativesArray"
+                *ngFor="
+                  let secondAlternative of secondColumnAlternativesArray;
+                  let j = index
+                "
               >
+                {{
+                  secondColumnAlternativesCriteriaValuesArray[
+                    i * secondColumnAlternativesArray.length + j
+                  ]
+                }}
                 {{
                   secondAlternative
                 }}

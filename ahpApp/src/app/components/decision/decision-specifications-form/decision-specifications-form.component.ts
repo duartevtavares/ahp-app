@@ -167,8 +167,8 @@ export class DecisionSpecificationsFormComponent implements OnInit {
 
     this.apiService
       .postDecision({
-        name: this.decisionSpecifications.problemGoal,
         goal: this.decisionSpecifications.problemGoal,
+        category: this.decisionSpecifications.problemGoal,
       })
       .subscribe();
 

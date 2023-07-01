@@ -76,7 +76,7 @@ export class ApiService {
 
   //Decision
 
-  postDecision(data: { name: string; goal: string }): any {
+  postDecision(data: { goal: string; category: string }): any {
     return this.http.post<any>(decisionUrl, data);
   }
 
@@ -143,6 +143,11 @@ export class ApiService {
   }
 
   //DecisionAlternativesCriterionValue
+
+  getDecisionAlternativesCriterionValue() {
+    return this.http.get<any>(alternativesCriterionValueUrl);
+  }
+
   getSpecificDecisionAlternativesCriterionValue(data: number) {
     return this.http.get<any>(`${alternativesCriterionValueUrl}/${data}`);
   }
@@ -178,6 +183,15 @@ export class ApiService {
   }
 
   //Alternatives parwise comparisons of a specific decision from a specific participant
+
+  getSpecificParticipantDecisionAlternativesComparison(data: {
+    userId: number;
+    criterionId: number;
+  }) {
+    return this.http.get<any>(
+      `${decisionAlternativesPairwiseUrl}/${data.userId}/${data.criterionId}`
+    );
+  }
 
   postSpecificParticipantDecisionAlternativesComparison(data: {
     decisionId: number;

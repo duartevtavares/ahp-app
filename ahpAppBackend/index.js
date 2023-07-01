@@ -15,6 +15,7 @@ import {
   getCriterion,
   getDecision,
   getDecisionAlternatives,
+  getSpecificDecisionAlternativesCriterionValue,
   getDecisionAlternativesCriterionValue,
   getDecisionCriteria,
   getDecisionParticipantsByDecisionId,
@@ -25,6 +26,7 @@ import {
   getUsers,
   updateDecisionDone,
   updateDecisionParticipantsDone,
+  getSpecificParticipantDecisionAlternativesComparison,
 } from "./db.js";
 
 const app = express();
@@ -127,9 +129,9 @@ app.get("/decision/:id", async (req, res) => {
 });
 
 app.post("/decision", async (req, res) => {
-  const name = req.body.name;
   const goal = req.body.goal;
-  const decision = await addDecision(name, goal);
+  const category = req.body.category;
+  const decision = await addDecision(goal, category);
   res.status(201).send(decision);
 });
 
@@ -212,11 +214,17 @@ app.post("/decision_alternatives", async (req, res) => {
 
 //Alternatives of a specific decision   TODO
 
+app.get("/decision_alternatives_criterion_value", async (req, res) => {
+  const decisionAlternativesCriterionValue =
+    await getDecisionAlternativesCriterionValue();
+  res.status(201).send(decisionAlternativesCriterionValue);
+});
+
 app.get("/decision_alternatives_criterion_value/:id", async (req, res) => {
   const id = req.params.id;
-  const decisionAlternativesCriterionValue =
-    await getDecisionAlternativesCriterionValue(id);
-  res.status(201).send(decisionAlternativesCriterionValue);
+  const decisionSpecificAlternativesCriterionValue =
+    await getSpecificDecisionAlternativesCriterionValue(id);
+  res.status(201).send(decisionSpecificAlternativesCriterionValue);
 });
 
 app.post("/decision_alternatives_criterion_value", async (req, res) => {
@@ -271,13 +279,19 @@ app.post("/decision_criteria_pairwise", async (req, res) => {
 
 //Alternatives parwise comparisons of a specific decision from a specific participant
 
-// app.get("/decision_alternatives_pairwise/:decisionId/:userId", async (req, res) => {
-//   const decisionId = req.params.decisionId;
-//   const userId = req.params.userId;
-//   const participantDecisionAlternativeComparison =
-//     await getSpecificParticipantDecisionAlternativesComparison(decisionId, userId);
-//   res.status(201).send(participantDecisionAlternativeComparison);
-// });
+app.get(
+  "/decision_alternatives_pairwise/:userId/:criterionId",
+  async (req, res) => {
+    const userId = req.params.userId;
+    const criterionId = req.params.criterionId;
+    const participantDecisionAlternativeComparison =
+      await getSpecificParticipantDecisionAlternativesComparison(
+        userId,
+        criterionId
+      );
+    res.status(201).send(participantDecisionAlternativeComparison);
+  }
+);
 
 //post
 

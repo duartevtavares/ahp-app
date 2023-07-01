@@ -39,16 +39,11 @@ export class AppComponent implements OnInit {
     }
 
     let points: Point[] = [
-      { x: 1, y: 1 },
-      { x: 3, y: 8 },
-      { x: 7, y: 1 },
-      { x: 10, y: 11 },
-      { x: 13, y: 14 },
-      { x: 16, y: 17 },
-      { x: 19, y: 20 },
-      { x: 22, y: 23 },
+      { x: 30, y: 2 },
+      { x: 67, y: 0.5 },
+      { x: 80, y: 1.86 },
     ];
-    let external_point: Point = { x: 4, y: 3 };
+    let external_point: Point = { x: 68, y: 1.8 };
 
     for (let i = 0; i < points.length; i++) {
       for (let j = i + 1; j < points.length; j++) {

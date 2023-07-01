@@ -354,14 +354,14 @@ export async function getDecisions() {
   return rows;
 }
 
-export async function addDecision(name, goal) {
+export async function addDecision(goal, category) {
   const [result] = await pool.query(
     `
     INSERT INTO 
-      decision (name, goal)
+      decision (goal, category)
       VALUES (?, ?)
       `,
-    [name, goal]
+    [goal, category]
   );
   const id = result.insertId;
   return getDecision(id);
@@ -493,7 +493,17 @@ export async function addDecisionAlternative(decisionId, alternativeId) {
 
 //Alternatives criterion value of a specific decision
 
-export async function getDecisionAlternativesCriterionValue(id) {
+export async function getDecisionAlternativesCriterionValue() {
+  const [rows] = await pool.query(
+    `
+     SELECT *
+    FROM decision_alternatives_criterion_values
+    `
+  );
+  return rows;
+}
+
+export async function getSpecificDecisionAlternativesCriterionValue(id) {
   const [rows] = await pool.query(
     `
      SELECT *
@@ -560,6 +570,22 @@ export async function addSpecificParticipantDecisionCriteriaComparison(
 }
 
 //Alternatives parwise comparisons of a specific decision from a specific participant
+
+export async function getSpecificParticipantDecisionAlternativesComparison(
+  userId,
+  criterionId
+) {
+  const [rows] = await pool.query(
+    `
+     SELECT * 
+    FROM alternatives_comparisons
+    WHERE user_id = ?
+    AND criterion_id = ?
+    `,
+    [userId, criterionId]
+  );
+  return rows;
+}
 
 export async function addSpecificParticipantDecisionAlternativesComparison(
   decisionId,

@@ -100,8 +100,8 @@ CREATE TABLE `criteria_comparisons` (
 
 CREATE TABLE `decision` (
   `id` int(11) NOT NULL,
-  `name` varchar(45) DEFAULT NULL,
   `goal` text DEFAULT NULL,
+  `category` varchar(45) DEFAULT NULL,
   `done` bit(1) NOT NULL DEFAULT b'0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 

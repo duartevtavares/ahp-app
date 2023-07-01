@@ -374,14 +374,39 @@ export class UserHomePageComponent implements OnInit {
                       }
                     }
                   }
+                  let lengthOfEachCriteria: any = [];
+                  let cnt = 0;
+                  for (let i = 0; i < criteriaToCheck.length; i++) {
+                    lengthOfEachCriteria[i] = 0;
+                  }
                   for (let i = 0; i < firstColAltValues.length; i++) {
+                    if (i === 0) {
+                      lengthOfEachCriteria[cnt]++;
+                    } else if (
+                      i !== 0 &&
+                      previousAlernativesPairwise[i][1] ===
+                        previousAlernativesPairwise[i - 1][1]
+                    ) {
+                      lengthOfEachCriteria[cnt]++;
+                    } else if (
+                      i !== 0 &&
+                      previousAlernativesPairwise[i][1] !==
+                        previousAlernativesPairwise[i - 1][1]
+                    ) {
+                      cnt++;
+                      lengthOfEachCriteria[cnt]++;
+                    }
                     completeFinalValsPairwise.push([
-                      previousAlernativesPairwise[i][1],
+                      previousAlernativesPairwise[i][1], //criterion_id
                       firstColAltValues[i],
                       secondColAltValues[i],
                       previousAlernativesPairwise[i][4],
                     ]);
                   }
+                  console.log(
+                    'number and length of criteria: ',
+                    lengthOfEachCriteria
+                  );
 
                   //Get the current decision criteria alternatives comparison
                   for (let i = 0; i < result.length; i++) {
@@ -416,6 +441,10 @@ export class UserHomePageComponent implements OnInit {
                   }
 
                   console.log('alternativeCriteria: ', alternativeCriteria);
+                  let finalComparisonNumber =
+                    math.factorial(comparisonsNumber) /
+                    (math.factorial(2) * math.factorial(comparisonsNumber - 2));
+                  console.log('Number of comparisons: ', finalComparisonNumber);
                   console.log(first);
                   console.log(second);
                   console.log(result);
@@ -429,138 +458,221 @@ export class UserHomePageComponent implements OnInit {
                   let p: any = [];
                   let r: any = [];
                   let s: any = [];
-                  for (let i = 0; i < 21; i++) {
-                    p[i] = [
-                      Math.sqrt(
-                        completeFinalValsPairwise[i][1] *
-                          completeFinalValsPairwise[i][2]
-                      ),
-                    ];
-                    r[i] = [
-                      completeFinalValsPairwise[i][2] /
-                        completeFinalValsPairwise[i][1],
-                    ];
+                  // for (let i = 0; i < criteriaToCheck.length; i++) {
+                  //   p.push([]);
+                  //   r.push([]);
+                  //   s.push([]);
 
-                    s[i] = completeFinalValsPairwise[i][3]; // Array that keeps all the pairwise comparison values
-                  }
+                  //   for (let j = 0; j < lengthOfEachCriteria[i]; j++) {
+                  //     p[i][j] = 0;
+                  //     r[i][j] = 0;
+                  //     s[i][j] = 0;
+                  //   }
+                  // }
+                  let B;
+                  let BArray: any = [];
+                  let insideTriangleArray: any = [];
+                  let lengthOfEachCriteriaCounter = 0;
 
-                  // p = [[30], [65], [67], [73], [80]];
-                  // r = [[2], [1.7], [0.5], [1.5], [1.86]];
-                  // s = [[9], [3], [2], [7], [7]];
+                  for (let i = 0; i < criteriaToCheck.length; i++) {
+                    p = [];
+                    r = [];
+                    s = [];
+                    if (i > 0) {
+                      lengthOfEachCriteriaCounter +=
+                        lengthOfEachCriteria[i - 1];
+                    }
 
-                  console.log('P: ', p);
-                  console.log('R: ', r);
-                  console.log('S: ', s);
+                    for (let j = 0; j < lengthOfEachCriteria[i]; j++) {
+                      console.log(lengthOfEachCriteria[i]);
+                      //TODO: Change 21 and find out how to put a value
+                      p[j] = [
+                        Math.sqrt(
+                          completeFinalValsPairwise[
+                            j + lengthOfEachCriteriaCounter
+                          ][1] *
+                            completeFinalValsPairwise[
+                              j + lengthOfEachCriteriaCounter
+                            ][2]
+                        ),
+                      ];
+                      r[j] = [
+                        completeFinalValsPairwise[
+                          j + lengthOfEachCriteriaCounter
+                        ][2] /
+                          completeFinalValsPairwise[
+                            j + lengthOfEachCriteriaCounter
+                          ][1],
+                      ];
 
-                  const ones = math.ones([p.length, 1]);
-                  console.log('ones: ', ones);
-                  const DM: any = math.concat(
-                    math.dotPow(p, 2),
-                    p,
-                    math.dotPow(r, 2),
-                    r,
-                    ones,
-                    1
-                  );
-                  console.log('DM: ', DM);
-                  const B = math.multiply(
-                    math.inv(math.multiply(math.transpose(DM), DM)),
-                    math.multiply(math.transpose(DM), s)
-                  );
+                      s[j] =
+                        completeFinalValsPairwise[
+                          j + lengthOfEachCriteriaCounter
+                        ][3]; // Array that keeps all the pairwise comparison values
+                    }
 
-                  console.log(B);
+                    console.log('P: ', p);
+                    console.log('R: ', r);
+                    console.log('S: ', s);
 
-                  ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-                  //for each criteria understand if the values are inside the triagle
+                    const ones = math.ones([p.length, 1]);
+                    //console.log('ones: ', ones);
+                    const DM: any = math.concat(
+                      math.dotPow(p, 2),
+                      p,
+                      math.dotPow(r, 2),
+                      r,
+                      ones,
+                      1
+                    );
+                    console.log('DM: ', DM);
+                    B = math.multiply(
+                      math.inv(math.multiply(math.transpose(DM), DM)),
+                      math.multiply(math.transpose(DM), s)
+                    );
 
-                  for (let i = 0; i < 3; i++) {
+                    BArray[i] = B;
+                    console.log('BArray: ', BArray);
+
+                    console.log(B);
+                    console.log('contador: ', lengthOfEachCriteriaCounter);
+
+                    //console.log(B);
+
+                    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                    //for each criteria understand if the values are inside the triagle
+
+                    //Still missing how to do it for different criteria - change number 3
+                    // for (let i = 0; i < criteriaToCheck; i++) {
                     let points: any = [];
                     let stopForCicle = false;
-                    for (let j = 0; j < 18; j++) {
+                    for (let j = 0; j < lengthOfEachCriteria[i]; j++) {
                       points.push({
-                        x: completeFinalValsPairwise[j][1],
-                        y: completeFinalValsPairwise[j][2],
+                        x: completeFinalValsPairwise[
+                          j + lengthOfEachCriteriaCounter
+                        ][1],
+                        y: completeFinalValsPairwise[
+                          j + lengthOfEachCriteriaCounter
+                        ][2],
                       });
                     }
-                    console.log(points);
+                    console.log('points: ', points);
+                    insideTriangleArray.push([]);
+                    for (let n = 0; n < finalComparisonNumber; n++) {
+                      let external_point: any = {
+                        x: first[n + finalComparisonNumber * i]
+                          .alternative_criterion_value,
+                        y: second[n + finalComparisonNumber * i]
+                          .alternative_criterion_value,
+                      };
+                      stopForCicle = false;
 
-                    let external_point: any = {
-                      x: 1,
-                      y: 3,
-                    };
+                      console.group('external point: ', external_point);
 
-                    for (let i = 0; i < points.length; i++) {
-                      if (stopForCicle) {
-                        break;
-                      }
-                      for (let j = i + 1; j < points.length; j++) {
+                      for (let k = 0; k < points.length; k++) {
                         if (stopForCicle) {
                           break;
                         }
-                        for (let k = j + 1; k < points.length; k++) {
-                          let A = points[i];
-                          let B = points[j];
-                          let C = points[k];
-
-                          let inTriangle = isPointInTriangle2D(
-                            external_point,
-                            A,
-                            B,
-                            C
-                          );
-                          if (inTriangle) {
-                            console.log(
-                              `Point (${external_point.x}, ${external_point.y}) is inside triangle (${A.x}, ${A.y}), (${B.x}, ${B.y}), (${C.x}, ${C.y})`
-                            );
-                            stopForCicle = true;
+                        for (let l = k + 1; l < points.length; l++) {
+                          if (stopForCicle) {
                             break;
                           }
+                          for (let m = l + 1; m < points.length; m++) {
+                            let A = points[k];
+                            let B = points[l];
+                            let C = points[m];
+
+                            let inTriangle = isPointInTriangle2D(
+                              external_point,
+                              A,
+                              B,
+                              C
+                            );
+                            if (inTriangle) {
+                              console.log(
+                                `Point (${external_point.x}, ${external_point.y}) is inside triangle (${A.x}, ${A.y}), (${B.x}, ${B.y}), (${C.x}, ${C.y})`
+                              );
+                              stopForCicle = true;
+
+                              insideTriangleArray[i][n] = 1;
+
+                              const S = math.add(
+                                math.add(
+                                  math.add(
+                                    math.add(
+                                      math.multiply(
+                                        BArray[i][0],
+                                        math.dotPow([external_point.x], 2)
+                                      ),
+                                      math.multiply(BArray[i][1], [
+                                        external_point.x,
+                                      ])
+                                    ),
+                                    math.multiply(
+                                      BArray[i][2],
+                                      math.dotPow([external_point.y], 2)
+                                    )
+                                  ),
+                                  math.multiply(BArray[i][3], [
+                                    external_point.y,
+                                  ])
+                                ),
+                                math.multiply(BArray[i][4], 1)
+                              );
+
+                              console.log('RESULTADO FINALISSIMO: ', S);
+
+                              break;
+                            }
+                          }
+                          //  }
                         }
                       }
-                    }
+                      if (!stopForCicle) {
+                        console.log(
+                          `Point (${external_point.x}, ${external_point.y}) is not inside any triangle`
+                        );
 
-                    function isPointInTriangle2D(
-                      point: any,
-                      A: any,
-                      B: any,
-                      C: any
-                    ): boolean {
-                      let lambda1 =
-                        ((B.y - C.y) * (point.x - C.x) +
-                          (C.x - B.x) * (point.y - C.y)) /
-                        ((B.y - C.y) * (A.x - C.x) + (C.x - B.x) * (A.y - C.y));
-                      let lambda2 =
-                        ((C.y - A.y) * (point.x - C.x) +
-                          (A.x - C.x) * (point.y - C.y)) /
-                        ((B.y - C.y) * (A.x - C.x) + (C.x - B.x) * (A.y - C.y));
-                      let lambda3 = 1 - lambda1 - lambda2;
-                      return (
-                        lambda1 >= 0 &&
-                        lambda1 <= 1 &&
-                        lambda2 >= 0 &&
-                        lambda2 <= 1 &&
-                        lambda3 >= 0 &&
-                        lambda3 <= 1
-                      );
+                        insideTriangleArray[i][n] = 0;
+                      }
                     }
                   }
 
-                  ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-                  const S = math.add(
-                    math.add(
-                      math.add(
-                        math.add(
-                          math.multiply(B[0], math.dotPow([75.102], 2)),
-                          math.multiply(B[1], [75.102])
-                        ),
-                        math.multiply(B[2], math.dotPow([1.74408], 2))
-                      ),
-                      math.multiply(B[3], [1.74408])
-                    ),
-                    math.multiply(B[4], 1)
+                  console.log(
+                    'number of comparisons and criteria:',
+                    lengthOfEachCriteriaCounter
+                  );
+                  console.log(
+                    'array that shows if points from different criteria are inside a triangle: ',
+                    insideTriangleArray
                   );
 
-                  console.log(S);
+                  function isPointInTriangle2D(
+                    point: any,
+                    A: any,
+                    B: any,
+                    C: any
+                  ): boolean {
+                    let lambda1 =
+                      ((B.y - C.y) * (point.x - C.x) +
+                        (C.x - B.x) * (point.y - C.y)) /
+                      ((B.y - C.y) * (A.x - C.x) + (C.x - B.x) * (A.y - C.y));
+                    let lambda2 =
+                      ((C.y - A.y) * (point.x - C.x) +
+                        (A.x - C.x) * (point.y - C.y)) /
+                      ((B.y - C.y) * (A.x - C.x) + (C.x - B.x) * (A.y - C.y));
+                    let lambda3 = 1 - lambda1 - lambda2;
+                    return (
+                      lambda1 >= 0 &&
+                      lambda1 <= 1 &&
+                      lambda2 >= 0 &&
+                      lambda2 <= 1 &&
+                      lambda3 >= 0 &&
+                      lambda3 <= 1
+                    );
+                  }
+
+                  ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
                   //TODO:
 

@@ -18,11 +18,11 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Banco de dados: `newnew`
+-- Banco de dados: `final_thesis`
 --
 
-CREATE SCHEMA IF NOT EXISTS `newnew` DEFAULT CHARACTER SET utf8 ;
-USE `newnew` ;
+CREATE SCHEMA IF NOT EXISTS `final_thesis` DEFAULT CHARACTER SET utf8 ;
+USE `final_thesis` ;
 
 -- --------------------------------------------------------
 
@@ -69,6 +69,22 @@ CREATE TABLE `criteria` (
 
 --
 -- Extraindo dados da tabela `criteria`
+--
+
+
+-- --------------------------------------------------------
+
+--
+-- Estrutura da tabela `category`
+--
+
+CREATE TABLE `category` (
+  `id` int(11) NOT NULL,
+  `name` varchar(45) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Extraindo dados da tabela `category`
 --
 
 -- --------------------------------------------------------
@@ -153,6 +169,20 @@ CREATE TABLE `decision_criteria` (
 -- Extraindo dados da tabela `decision_criteria`
 --
 
+-- --------------------------------------------------------
+
+--
+-- Estrutura da tabela `category_criteria`
+--
+
+CREATE TABLE `category_criteria` (
+  `category_id` int(11) NOT NULL,
+  `criterion_id` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Extraindo dados da tabela `category_criteria`
+--
 
 
 -- --------------------------------------------------------
@@ -193,6 +223,42 @@ CREATE TABLE `users` (
 --
 
 
+-- --------------------------------------------------------
+
+--
+-- Estrutura da tabela `users_final_results`
+--
+
+CREATE TABLE `users_final_results` (
+  `decision_id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `alternative_id` int(11) NOT NULL,
+  `final_result` float(4) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Extraindo dados da tabela `users_final_results`
+--
+
+
+-- --------------------------------------------------------
+
+--
+-- Estrutura da tabela `decision_final_results`
+--
+
+CREATE TABLE `decision_final_results` (
+  `decision_id` int(11) NOT NULL,
+  `alternative_id` int(11) NOT NULL,
+  `final_result` float(4) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Extraindo dados da tabela `decision_final_results`
+--
+
+-- -----------------------------------------------------------------------------------------------------------
+
 --
 -- Índices para tabelas despejadas
 --
@@ -220,6 +286,13 @@ ALTER TABLE `alternatives_comparisons`
 ALTER TABLE `criteria`
   ADD PRIMARY KEY (`id`);
 
+
+--
+-- Índices para tabela `criteria`
+--
+ALTER TABLE `category`
+  ADD PRIMARY KEY (`id`);
+
 --
 -- Índices para tabela `criteria_comparisons`
 --
@@ -235,6 +308,7 @@ ALTER TABLE `criteria_comparisons`
 --
 ALTER TABLE `decision`
   ADD PRIMARY KEY (`id`);
+
 
 --
 -- Índices para tabela `decision_alternatives`
@@ -263,6 +337,16 @@ ALTER TABLE `decision_criteria`
   ADD KEY `fk_decision_has_criterion_criterion1_idx` (`criterion_id`),
   ADD KEY `fk_decision_has_criteria_decision1_idx` (`decision_id`);
 
+
+--
+-- Índices para tabela `category_criteria`
+--
+ALTER TABLE `category_criteria`
+  ADD PRIMARY KEY (`criterion_id`, `category_id`),
+  ADD KEY `fk_decision_has_criterion_criterion2_idx` (`criterion_id`),
+  ADD KEY `fk_decision_has_criterion_category1_idx` (`category_id`);
+
+
 --
 -- Índices para tabela `decision_participant`
 --
@@ -271,11 +355,37 @@ ALTER TABLE `decision_participant`
   ADD KEY `fk_decision_has_users_users1_idx` (`user_id`),
   ADD KEY `fk_decision_has_participants_decision1_idx` (`decision_id`);
 
+
 --
 -- Índices para tabela `users`
 --
 ALTER TABLE `users`
   ADD PRIMARY KEY (`id`);
+
+
+--
+-- Índices para tabela `users_final_results`
+--
+ALTER TABLE `users_final_results`
+ADD PRIMARY KEY (`decision_id`, `user_id`, `alternative_id`),
+  ADD KEY `fk_decision_has_alternatives_decision5_idx` (`decision_id`),
+  ADD KEY `fk_decision_has_users_users5_idx` (`user_id`),
+  ADD KEY `fk_decision_has_alternative_alternative5_idx` (`alternative_id`);
+
+
+--
+-- Índices para tabela `decision_final_results`
+--
+ALTER TABLE `decision_final_results`
+ADD PRIMARY KEY (`decision_id`, `alternative_id`),
+  ADD KEY `fk_decision_has_alternatives_decision6_idx` (`decision_id`),
+  ADD KEY `fk_decision_has_alternative_alternative6_idx` (`alternative_id`);
+
+
+
+-- -------------------------------------------------------------------------------------------
+
+
 
 --
 -- AUTO_INCREMENT de tabelas despejadas
@@ -297,6 +407,12 @@ ALTER TABLE `alternatives_comparisons`
 -- AUTO_INCREMENT de tabela `criteria`
 --
 ALTER TABLE `criteria`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1;
+
+--
+-- AUTO_INCREMENT de tabela `category`
+--
+ALTER TABLE `category`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1;
 
 --
@@ -332,6 +448,10 @@ ALTER TABLE `users`
 --
 -- Restrições para despejos de tabelas
 --
+
+
+-- -----------------------------------------------------------------------------------
+
 
 --
 -- Limitadores para a tabela `alternatives_comparisons`
@@ -376,12 +496,43 @@ ALTER TABLE `decision_criteria`
   ADD CONSTRAINT `fk_decision_has_criterion_criterion` FOREIGN KEY (`criterion_id`) REFERENCES `criteria` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   ADD CONSTRAINT `fk_decision_has_criterion_decision1` FOREIGN KEY (`decision_id`) REFERENCES `decision` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
+
+--
+-- Limitadores para a tabela `category_criteria`
+--
+ALTER TABLE `category_criteria`
+  ADD CONSTRAINT `fk_decision_has_criterion_criterion2` FOREIGN KEY (`criterion_id`) REFERENCES `criteria` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  ADD CONSTRAINT `fk_decision_has_criterion_category1` FOREIGN KEY (`category_id`) REFERENCES `category` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+
 --
 -- Limitadores para a tabela `decision_participant`
 --
 ALTER TABLE `decision_participant`
   ADD CONSTRAINT `fk_decision_has_participants_decision1` FOREIGN KEY (`decision_id`) REFERENCES `decision` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   ADD CONSTRAINT `fk_decision_has_users_users1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+
+--
+-- Limitadores para a tabela `users_final_results`
+--
+ALTER TABLE `users_final_results`
+  ADD CONSTRAINT `fk_decision_has_participants_decision5` FOREIGN KEY (`decision_id`) REFERENCES `decision` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  ADD CONSTRAINT `fk_decision_has_users_users5` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  ADD CONSTRAINT `fk_decision_has_alternative_alternative5` FOREIGN KEY (`alternative_id`) REFERENCES `alternatives` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+
+--
+-- Limitadores para a tabela `decision_final_results`
+--
+ALTER TABLE `decision_final_results`
+  ADD CONSTRAINT `fk_decision_has_participants_decision6` FOREIGN KEY (`decision_id`) REFERENCES `decision` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  ADD CONSTRAINT `fk_decision_has_alternative_alternative5` FOREIGN KEY (`alternative_id`) REFERENCES `alternatives` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+  
+
+
+
+
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

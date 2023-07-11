@@ -2,20 +2,24 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { DecisionSpecificationsService } from './decision-specifications.service';
 
-const participantsUrl = 'http://localhost:8080/participants';
 const usersUrl = 'http://localhost:8080/users';
 const criteriaUrl = 'http://localhost:8080/criteria';
 const alternativesUrl = 'http://localhost:8080/alternatives';
+const categoryUrl = 'http://localhost:8080/category';
 const alternativesCriterionValueUrl =
   'http://localhost:8080/decision_alternatives_criterion_value';
 const decisionUrl = 'http://localhost:8080/decision';
 const decisionParticipantsUrl = 'http://localhost:8080/decision_participants';
+const categoryCriteriaUrl = 'http://localhost:8080/category_criteria';
 const decisionCriteriaUrl = 'http://localhost:8080/decision_criteria';
 const decisionAlternativesUrl = 'http://localhost:8080/decision_alternatives';
 const decisionCriteriaPairwiseUrl =
   'http://localhost:8080/decision_criteria_pairwise';
 const decisionAlternativesPairwiseUrl =
   'http://localhost:8080/decision_alternatives_pairwise';
+const participantDecisionFinalResultUrl =
+  'http://localhost:8080/users_final_results';
+const decisionFinalResultUrl = 'http://localhost:8080/decision_final_results';
 
 @Injectable({
   providedIn: 'root',
@@ -26,19 +30,7 @@ export class ApiService {
     private specsService: DecisionSpecificationsService
   ) {}
 
-  //Participants
-
-  // postParticipant(data: string) {
-  //   return this.http.post<any>(participantsUrl, data).subscribe();
-  // }
-
-  // getParticipants() {
-  //   return this.http.get<any>(participantsUrl);
-  // }
-
-  // getSpecificParticipant(data: number) {
-  //   return this.http.get<any>(`${participantsUrl}/${data}`);
-  // }
+  ///////////////////////////////////////////////////////////////////////////////////////////
 
   //Users
 
@@ -50,6 +42,8 @@ export class ApiService {
     return this.http.get<any>(`${usersUrl}/${data}`);
   }
 
+  ///////////////////////////////////////////////////////////////////////////////////////////
+
   //Criteria
 
   getCriteria() {
@@ -59,6 +53,8 @@ export class ApiService {
   getSpecificCriterion(data: number) {
     return this.http.get<any>(`${criteriaUrl}/${data}`);
   }
+
+  ///////////////////////////////////////////////////////////////////////////////////////////
 
   //Alternatives
 
@@ -73,6 +69,24 @@ export class ApiService {
   postAlternative(data: { name: string }): any {
     return this.http.post<any>(alternativesUrl, data);
   }
+
+  ///////////////////////////////////////////////////////////////////////////////////////////
+
+  //Category
+
+  getCategories() {
+    return this.http.get<any>(categoryUrl);
+  }
+
+  getSpecificCategory(data: number) {
+    return this.http.get<any>(`${categoryUrl}/${data}`);
+  }
+
+  postCategory(data: { name: string }): any {
+    return this.http.post<any>(categoryUrl, data);
+  }
+
+  ///////////////////////////////////////////////////////////////////////////////////////////
 
   //Decision
 
@@ -92,7 +106,7 @@ export class ApiService {
     return this.http.put<any>(decisionUrl, data);
   }
 
-  ///////////////////////////////////////////////
+  ///////////////////////////////////////////////////////////////////////////////////////////
 
   //DecisionParticipants
   getSpecificDecisionParticipantsByDecisionId(data: number) {
@@ -118,6 +132,16 @@ export class ApiService {
     return this.http.put<any>(decisionParticipantsUrl, data).subscribe();
   }
 
+  ///////////////////////////////////////////////////////////////////////////////////////////
+
+  //CategoryCriteria
+
+  getSpecificCategoryCriteria(data: number) {
+    return this.http.get<any>(`${categoryCriteriaUrl}/${data}`);
+  }
+
+  ///////////////////////////////////////////////////////////////////////////////////////////
+
   //DecisionCriteria
   getSpecificDecisionCriteria(data: number) {
     return this.http.get<any>(`${decisionCriteriaUrl}/${data}`);
@@ -130,6 +154,8 @@ export class ApiService {
     return this.http.post<any>(decisionCriteriaUrl, data);
   }
 
+  ///////////////////////////////////////////////////////////////////////////////////////////
+
   //DecisionAlternatives
   getSpecificDecisionAlternatives(data: number) {
     return this.http.get<any>(`${decisionAlternativesUrl}/${data}`);
@@ -141,6 +167,8 @@ export class ApiService {
   }) {
     return this.http.post<any>(decisionAlternativesUrl, data);
   }
+
+  ///////////////////////////////////////////////////////////////////////////////////////////
 
   //DecisionAlternativesCriterionValue
 
@@ -160,6 +188,8 @@ export class ApiService {
   }) {
     return this.http.post<any>(alternativesCriterionValueUrl, data);
   }
+
+  ///////////////////////////////////////////////////////////////////////////////////////////
 
   //Criteria parwise comparisons of a specific decision from a specific participant
 
@@ -181,6 +211,8 @@ export class ApiService {
   }) {
     return this.http.post<any>(decisionCriteriaPairwiseUrl, data).subscribe();
   }
+
+  ///////////////////////////////////////////////////////////////////////////////////////////
 
   //Alternatives parwise comparisons of a specific decision from a specific participant
 
@@ -204,5 +236,50 @@ export class ApiService {
     return this.http
       .post<any>(decisionAlternativesPairwiseUrl, data)
       .subscribe();
+  }
+
+  ///////////////////////////////////////////////////////////////////////////////////////////
+
+  //Final results of a specific decision from a specific participant
+
+  getSpecificParticipantDecisionFinalResults(data: {
+    decisionId: number;
+    userId: number;
+  }) {
+    return this.http.get<any>(
+      `${participantDecisionFinalResultUrl}/${data.decisionId}/${data.userId}`
+    );
+  }
+
+  postSpecificParticipantDecisionFinalResults(data: {
+    decisionId: number;
+    userId: number;
+    alternativeId: number;
+    finalResult: number;
+  }) {
+    return this.http
+      .post<any>(participantDecisionFinalResultUrl, data)
+      .subscribe();
+  }
+
+  ///////////////////////////////////////////////////////////////////////////////////////////
+
+  //Final results of a specific decision
+
+  getSpecificDecisionFinalResults(data: {
+    decisionId: number;
+    userId: number;
+  }) {
+    return this.http.get<any>(
+      `${decisionFinalResultUrl}/${data.decisionId}/${data.userId}`
+    );
+  }
+
+  postSpecificDecisionFinalResults(data: {
+    decisionId: number;
+    alternativeId: number;
+    finalResult: number;
+  }) {
+    return this.http.post<any>(decisionFinalResultUrl, data).subscribe();
   }
 }

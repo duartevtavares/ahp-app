@@ -61,6 +61,8 @@ export class NewDecisionAlternativesComponent implements OnInit {
   formIsSubmited: boolean = false;
   alternativesCriteriaValues: number[] = [];
 
+  predictedPairwiseValue: any = [];
+
   formatLabel(val: any): string {
     switch (val) {
       case 1:
@@ -102,6 +104,9 @@ export class NewDecisionAlternativesComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.predictedPairwiseValue =
+      this.newDecisionService.predictedPairwiseValue;
+    console.log(this.predictedPairwiseValue);
     this.alternativesCriteriaValues = [
       ...this.newDecisionService.alternativesCriteriaValues,
     ];
@@ -117,7 +122,7 @@ export class NewDecisionAlternativesComponent implements OnInit {
     // } //TODO need to change to see which decision it is
     //this.decisionAlternatives = this.specsService.decisionSpecs.alternatives;
 
-    this.createDecisionComparisonColumns(this.decisionCriteria, 'criteria');
+    // this.createDecisionComparisonColumns(this.decisionCriteria, 'criteria');
     this.createDecisionComparisonColumns(
       this.decisionAlternatives,
       'alternatives'
@@ -136,10 +141,10 @@ export class NewDecisionAlternativesComponent implements OnInit {
     this.createEmptyMatrix();
     this.createAlternativesEmptyMatrix();
 
-    this.changeInputValuesToMatrixValues(
-      this.criteriaComparisonsValues,
-      'criteria'
-    );
+    // this.changeInputValuesToMatrixValues(
+    //   this.criteriaComparisonsValues,
+    //   'criteria'
+    // );
     for (let i = 0; i < this.decisionCriteria.length; i++) {
       this.changeInputValuesToMatrixValues(
         this.alternativeComparisonsValues,
@@ -147,21 +152,31 @@ export class NewDecisionAlternativesComponent implements OnInit {
       );
     }
 
-    this.createMatrix(
-      this.realCriteriaValuesArray,
-      this.criteriaStringArray,
-      'criteria'
-    );
+    // this.createMatrix(
+    //   this.realCriteriaValuesArray,
+    //   this.criteriaStringArray,
+    //   'criteria'
+    // );
     this.createMatrix(
       this.realAlternativesValuesArray,
       this.alternativesStringArray,
       'alternatives'
     );
 
-    this.criteriaWeightsArray = this.mathService.weightCalculation(
-      this.realCriteriaMatrix,
-      this.decisionCriteria.length
+    this.criteriaWeightsArray = this.newDecisionService.criteriaWeightArray;
+    this.criteriaComparisonsValues =
+      this.newDecisionService.criteriaPairWiseValues;
+
+    console.log('pesos dos criterios: ', this.criteriaWeightsArray);
+    console.log(
+      'valores das comparacoes dos criterios: ',
+      this.criteriaComparisonsValues
     );
+
+    // this.mathService.weightCalculation(
+    //   this.realCriteriaMatrix,
+    //   this.decisionCriteria.length
+    // );
 
     for (let i = 0; i < this.decisionCriteria.length; i++) {
       this.alternativesWeightsArray[i] = this.createWeightsArray(
@@ -179,6 +194,18 @@ export class NewDecisionAlternativesComponent implements OnInit {
     for (let i = 0; i < this.decisionCriteria.length; i++) {
       this.alternativesConsistencyRatio[i] = 0;
     }
+
+    // for (let i = 0; i < this.decisionCriteria.length; i++) {
+    //   for (let j = 0; j < this.firstColumnAlternativesArray.length; j++) {
+    //     this.changeAlternativeValue(
+    //       this.alternativesConsistencyRatio[
+    //         i * this.firstColumnAlternativesArray.length + j
+    //       ],
+    //       i,
+    //       j
+    //     );
+    //   }
+    // }
   }
 
   createDecisionComparisonColumns(namesToBeCompared: string[], step: string) {
@@ -254,49 +281,50 @@ export class NewDecisionAlternativesComponent implements OnInit {
         this.alternativeComparisonsValues[i][j] = this.initialValue;
       }
     }
-    for (let i = 0; i < this.firstColumnCriteriaArray.length; i++) {
-      this.criteriaComparisonsValues.push(this.initialValue);
-    }
+    // for (let i = 0; i < this.firstColumnCriteriaArray.length; i++) {
+    //   this.criteriaComparisonsValues.push(this.initialValue);
+    // }
   }
 
-  changeCriteriaValue(event: any, index: number) {
-    this.criteriaComparisonsValues[index] = event.value;
-    this.isCriteriaMatrixActive = true;
+  // changeCriteriaValue(event: any, index: number) {
+  //   this.criteriaComparisonsValues[index] = event.value;
+  //   this.isCriteriaMatrixActive = true;
 
-    this.changeInputValuesToMatrixValues(
-      this.criteriaComparisonsValues,
-      'criteria'
-    );
-    this.createMatrix(
-      this.realCriteriaValuesArray,
-      this.criteriaStringArray,
-      'criteria'
-    );
+  //   this.changeInputValuesToMatrixValues(
+  //     this.criteriaComparisonsValues,
+  //     'criteria'
+  //   );
+  //   this.createMatrix(
+  //     this.realCriteriaValuesArray,
+  //     this.criteriaStringArray,
+  //     'criteria'
+  //   );
 
-    this.criteriaWeightsArray = this.mathService.weightCalculation(
-      this.realCriteriaMatrix,
-      this.decisionCriteria.length
-    );
+  //   this.criteriaWeightsArray = this.mathService.weightCalculation(
+  //     this.realCriteriaMatrix,
+  //     this.decisionCriteria.length
+  //   );
 
-    this.criteriaConsistencyRatio = this.createConsistencyRatios(
-      this.realCriteriaMatrix,
-      this.criteriaWeightsArray
-    );
-    // console.log(this.criteriaConsistencyRatio);
-    this.createCriteriaChartData();
+  //   this.criteriaConsistencyRatio = this.createConsistencyRatios(
+  //     this.realCriteriaMatrix,
+  //     this.criteriaWeightsArray
+  //   );
+  //   // console.log(this.criteriaConsistencyRatio);
+  //   this.createCriteriaChartData();
 
-    this.finalWeightsArray = this.computeFinalWeights(
-      this.alternativesWeightsArray,
-      this.criteriaWeightsArray
-    );
-    this.createFinalResultschartData();
+  //   this.finalWeightsArray = this.computeFinalWeights(
+  //     this.alternativesWeightsArray,
+  //     this.criteriaWeightsArray
+  //   );
+  //   this.createFinalResultschartData();
 
-    console.log(this.criteriaComparisonsValues);
-    console.log(this.realCriteriaValuesArray);
-  }
+  //   console.log(this.criteriaComparisonsValues);
+  //   console.log(this.realCriteriaValuesArray);
+  // }
 
   changeAlternativeValue(event: any, index: number, otherIndex: number) {
-    this.alternativeComparisonsValues[index][otherIndex] = event.value;
+    this.alternativeComparisonsValues[index][otherIndex] = event;
+    console.log(event);
     this.changeInputValuesToMatrixValues(
       this.alternativeComparisonsValues,
       'alternatives'
@@ -333,6 +361,12 @@ export class NewDecisionAlternativesComponent implements OnInit {
       this.criteriaWeightsArray
     );
     this.createFinalResultschartData();
+
+    console.log('finalllllllllll: ', this.finalResultsChartData);
+    console.log(
+      'alternatives Ids: ',
+      this.newDecisionService.decisionAlternativesId
+    );
   }
 
   createEmptyMatrix() {
@@ -403,66 +437,66 @@ export class NewDecisionAlternativesComponent implements OnInit {
   }
 
   changeInputValuesToMatrixValues(valuesArray: any[], parameter: string) {
-    if (parameter === 'criteria') {
-      for (let i = 0; i < valuesArray.length; i++) {
-        switch (valuesArray[i]) {
-          case 1:
-            this.realCriteriaValuesArray[i] = 9;
-            this.criteriaStringArray[i] = '1/9';
-            this.criteriaStringArray[i + this.firstColumnCriteriaArray.length] =
-              '9';
-            break;
-          case 2:
-            this.realCriteriaValuesArray[i] = 7;
-            this.criteriaStringArray[i] = '1/7';
-            this.criteriaStringArray[i + this.firstColumnCriteriaArray.length] =
-              '7';
-            break;
-          case 3:
-            this.realCriteriaValuesArray[i] = 5;
-            this.criteriaStringArray[i] = '1/5';
-            this.criteriaStringArray[i + this.firstColumnCriteriaArray.length] =
-              '5';
-            break;
-          case 4:
-            this.realCriteriaValuesArray[i] = 3;
-            this.criteriaStringArray[i] = '1/3';
-            this.criteriaStringArray[i + this.firstColumnCriteriaArray.length] =
-              '3';
-            break;
-          case 5:
-            this.realCriteriaValuesArray[i] = 1;
-            this.criteriaStringArray[i] = '1';
-            this.criteriaStringArray[i + this.firstColumnCriteriaArray.length] =
-              '1';
-            break;
-          case 6:
-            this.realCriteriaValuesArray[i] = 1 / 3;
-            this.criteriaStringArray[i] = '3';
-            this.criteriaStringArray[i + this.firstColumnCriteriaArray.length] =
-              '1/3';
-            break;
-          case 7:
-            this.realCriteriaValuesArray[i] = 1 / 5;
-            this.criteriaStringArray[i] = '5';
-            this.criteriaStringArray[i + this.firstColumnCriteriaArray.length] =
-              '1/5';
-            break;
-          case 8:
-            this.realCriteriaValuesArray[i] = 1 / 7;
-            this.criteriaStringArray[i] = '7';
-            this.criteriaStringArray[i + this.firstColumnCriteriaArray.length] =
-              '1/7';
-            break;
-          case 9:
-            this.realCriteriaValuesArray[i] = 1 / 9;
-            this.criteriaStringArray[i] = '9';
-            this.criteriaStringArray[i + this.firstColumnCriteriaArray.length] =
-              '1/9';
-            break;
-        }
-      }
-    }
+    // if (parameter === 'criteria') {
+    //   for (let i = 0; i < valuesArray.length; i++) {
+    //     switch (valuesArray[i]) {
+    //       case 1:
+    //         this.realCriteriaValuesArray[i] = 9;
+    //         this.criteriaStringArray[i] = '1/9';
+    //         this.criteriaStringArray[i + this.firstColumnCriteriaArray.length] =
+    //           '9';
+    //         break;
+    //       case 2:
+    //         this.realCriteriaValuesArray[i] = 7;
+    //         this.criteriaStringArray[i] = '1/7';
+    //         this.criteriaStringArray[i + this.firstColumnCriteriaArray.length] =
+    //           '7';
+    //         break;
+    //       case 3:
+    //         this.realCriteriaValuesArray[i] = 5;
+    //         this.criteriaStringArray[i] = '1/5';
+    //         this.criteriaStringArray[i + this.firstColumnCriteriaArray.length] =
+    //           '5';
+    //         break;
+    //       case 4:
+    //         this.realCriteriaValuesArray[i] = 3;
+    //         this.criteriaStringArray[i] = '1/3';
+    //         this.criteriaStringArray[i + this.firstColumnCriteriaArray.length] =
+    //           '3';
+    //         break;
+    //       case 5:
+    //         this.realCriteriaValuesArray[i] = 1;
+    //         this.criteriaStringArray[i] = '1';
+    //         this.criteriaStringArray[i + this.firstColumnCriteriaArray.length] =
+    //           '1';
+    //         break;
+    //       case 6:
+    //         this.realCriteriaValuesArray[i] = 1 / 3;
+    //         this.criteriaStringArray[i] = '3';
+    //         this.criteriaStringArray[i + this.firstColumnCriteriaArray.length] =
+    //           '1/3';
+    //         break;
+    //       case 7:
+    //         this.realCriteriaValuesArray[i] = 1 / 5;
+    //         this.criteriaStringArray[i] = '5';
+    //         this.criteriaStringArray[i + this.firstColumnCriteriaArray.length] =
+    //           '1/5';
+    //         break;
+    //       case 8:
+    //         this.realCriteriaValuesArray[i] = 1 / 7;
+    //         this.criteriaStringArray[i] = '7';
+    //         this.criteriaStringArray[i + this.firstColumnCriteriaArray.length] =
+    //           '1/7';
+    //         break;
+    //       case 9:
+    //         this.realCriteriaValuesArray[i] = 1 / 9;
+    //         this.criteriaStringArray[i] = '9';
+    //         this.criteriaStringArray[i + this.firstColumnCriteriaArray.length] =
+    //           '1/9';
+    //         break;
+    //     }
+    //   }
+    // }
 
     if (parameter === 'alternatives') {
       for (let i = 0; i < valuesArray.length; i++) {
@@ -542,16 +576,16 @@ export class NewDecisionAlternativesComponent implements OnInit {
     }
   }
 
-  createCriteriaChartData() {
-    for (let i = 0; i < this.decisionCriteria.length; i++) {
-      this.chartData[i] = {
-        name: this.decisionCriteria[i],
-        value: this.criteriaWeightsArray[i],
-      };
-    }
-    this.chartData = [...this.chartData];
-    this.update$.next(true);
-  }
+  // createCriteriaChartData() {
+  //   for (let i = 0; i < this.decisionCriteria.length; i++) {
+  //     this.chartData[i] = {
+  //       name: this.decisionCriteria[i],
+  //       value: this.criteriaWeightsArray[i],
+  //     };
+  //   }
+  //   this.chartData = [...this.chartData];
+  //   this.update$.next(true);
+  // }
 
   createFinalResultschartData() {
     for (let i = 0; i < this.decisionAlternatives.length; i++) {
@@ -560,15 +594,17 @@ export class NewDecisionAlternativesComponent implements OnInit {
         value: this.finalWeightsArray[i],
       };
     }
+    this.finalResultsChartData = [...this.finalResultsChartData];
+    this.update$.next(true);
   }
 
-  displayCriteriaMatrix() {
-    if (this.isCriteriaMatrixActive === false) {
-      this.isCriteriaMatrixActive = true;
-    } else {
-      this.isCriteriaMatrixActive = false;
-    }
-  }
+  // displayCriteriaMatrix() {
+  //   if (this.isCriteriaMatrixActive === false) {
+  //     this.isCriteriaMatrixActive = true;
+  //   } else {
+  //     this.isCriteriaMatrixActive = false;
+  //   }
+  // }
 
   createWeightsArray(matrix: any[], vectorLength: number): number[] {
     return this.mathService.weightCalculation(matrix, vectorLength);
@@ -639,5 +675,14 @@ export class NewDecisionAlternativesComponent implements OnInit {
       decisionId: this.newDecisionService.decisionIntro.id,
       participantsId: userId,
     });
+
+    for (let i = 0; i < this.decisionAlternatives.length; i++) {
+      this.apiService.postSpecificParticipantDecisionFinalResults({
+        decisionId: this.newDecisionService.decisionIntro.id,
+        userId: userId,
+        alternativeId: this.newDecisionService.decisionAlternativesId[i],
+        finalResult: this.finalResultsChartData[i].value * 100,
+      });
+    }
   }
 }

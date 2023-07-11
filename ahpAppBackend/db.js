@@ -5,227 +5,9 @@ const pool = mysql
     host: "localhost",
     user: "root",
     password: "",
-    database: "newnew",
+    database: "final_thesis",
   })
   .promise();
-
-// export async function getParticipants() {
-//   const [rows] = await pool.query("SELECT * FROM participants");
-//   return rows;
-// }
-
-// export async function getParticipant(id) {
-//   const [rows] = await pool.query(
-//     `
-//      SELECT *
-//     FROM participants
-//     WHERE id = ?
-//     `,
-//     [id]
-//   );
-//   return rows[0];
-// }
-
-// export async function addParticipant(name) {
-//   const [result] = await pool.query(
-//     `
-//     INSERT INTO
-//       participants (name)
-//       VALUES (?)
-//       `,
-//     [name]
-//   );
-//   const id = result.insertId;
-//   // return getParticipant(id);
-// }
-
-// //Users
-
-// export async function getUsers() {
-//   const [rows] = await pool.query("SELECT * FROM users");
-//   return rows;
-// }
-
-// export async function getUser(id) {
-//   const [rows] = await pool.query(
-//     `
-//      SELECT *
-//     FROM users
-//     WHERE id = ?
-//     `,
-//     [id]
-//   );
-//   return rows[0];
-// }
-
-// export async function addUser(name, username, password) {
-//   const [result] = await pool.query(
-//     `
-//     INSERT INTO
-//       users (name, username, password)
-//       VALUES (?, ?, ?)
-//       `,
-//     [name, username, password]
-//   );
-//   const id = result.insertId;
-// }
-
-// //Criteria
-
-// export async function getCriteria() {
-//   const [rows] = await pool.query("SELECT * FROM criteria");
-//   return rows;
-// }
-
-// //Decision
-
-// export async function getDecision(id) {
-//   const [rows] = await pool.query(
-//     `
-//      SELECT *
-//     FROM decision
-//     WHERE id = ?
-//     `,
-//     [id]
-//   );
-//   return rows[0];
-// }
-
-// export async function getDecisions() {
-//   const [rows] = await pool.query("SELECT * FROM decision");
-//   return rows;
-// }
-
-// export async function addDecision(name, goal) {
-//   const [result] = await pool.query(
-//     `
-//     INSERT INTO
-//       decision (name, goal)
-//       VALUES (?, ?)
-//       `,
-//     [name, goal]
-//   );
-//   const id = result.insertId;
-//   console.log(id);
-//   return getDecision(id);
-// }
-
-// //Participants of a specific decision
-
-// export async function getDecisionParticipants(id) {
-//   const [rows] = await pool.query(
-//     `
-//      SELECT *
-//     FROM decision_participant
-//     WHERE participants_id = ?
-//     `,
-//     [id]
-//   );
-//   return rows;
-// }
-
-// //post
-// export async function addDecisionParticipants(
-//   decisionId,
-//   participantsId,
-//   participantWeight
-// ) {
-//   const [result] = await pool.query(
-//     `
-//     INSERT INTO
-//       decision_participant (decision_id, participants_id, participant_weight)
-//       VALUES (?, ?, ?)
-//       `,
-//     [decisionId, participantsId, participantWeight]
-//   );
-//   return result;
-// }
-
-// //Criteria of a specific decision
-
-// export async function getDecisionCriteria(id) {
-//   const [rows] = await pool.query(
-//     `
-//      SELECT *
-//     FROM decision_criteria
-//     WHERE decision_id = ?
-//     `,
-//     [id]
-//   );
-//   return rows;
-// }
-
-// //post
-// export async function addDecisionCriteria(
-//   decisionId,
-//   criteriaId,
-//   criterionvalue
-// ) {
-//   const [result] = await pool.query(
-//     `
-//     INSERT INTO
-//       decision_participant (decision_id, criteria_id, criterion_value)
-//       VALUES (?, ?, ?)
-//       `,
-//     [decisionId, criteriaId, criterionvalue]
-//   );
-//   return result;
-// }
-
-// //Alternatives of a specific decision
-
-// export async function getDecisionAlternatives(id) {
-//   const [rows] = await pool.query(
-//     `
-//      SELECT *
-//     FROM decision_alternatives
-//     WHERE decision_id = ?
-//     `,
-//     [id]
-//   );
-//   return rows;
-// }
-
-// //post
-// export async function addDecisionAlternative(
-//   decisionId,
-//   alternativesId,
-//   alternativeValue
-// ) {
-//   const [result] = await pool.query(
-//     `
-//     INSERT INTO
-//       decision_participant (decision_id, alternatives_id, alternative_value)
-//       VALUES (?, ?, ?)
-//       `,
-//     [decisionId, alternativesId, alternativeValue]
-//   );
-//   return result;
-// }
-
-// const participant = await getParticipant(1);
-// console.log("o participante pedido: ", participant);
-
-// const result = await addParticipant("João Francisco Pereira");
-// console.log(result);
-
-// const participants = await getParticipants();
-// console.log("todos os participantes: ", participants);
-
-// const result = await addUser("Paula Fernandes Gonçalves", "pfg", "password");
-// console.log(result);
-
-// const users = await getUsers();
-// const criteria = await getCriteria();
-
-// const decision = await getDecisions();
-// // const decision1 = await addDecision("name", "goal");
-// const participantsDecision1 = await getDecisionParticipants(1);
-
-// //const participantsDecision2 = await addDecisionParticipants(1, 4, 20);
-
-// console.log("todos os criterios: ", criteria);
-// console.log("todos os decisions: ", decision);
 
 //Users;
 
@@ -258,37 +40,7 @@ export async function addUser(name, username, password) {
   const id = result.insertId;
 }
 
-// //Participants
-
-// export async function getParticipants() {
-//   const [rows] = await pool.query("SELECT * FROM participants");
-//   return rows;
-// }
-
-// export async function getParticipant(id) {
-//   const [rows] = await pool.query(
-//     `
-//      SELECT *
-//     FROM participants
-//     WHERE id = ?
-//     `,
-//     [id]
-//   );
-//   return rows[0];
-// }
-
-// export async function addParticipant(name) {
-//   const [result] = await pool.query(
-//     `
-//     INSERT INTO
-//       participants (name)
-//       VALUES (?)
-//       `,
-//     [name]
-//   );
-//   const id = result.insertId;
-//   // return getParticipant(id);
-// }
+////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 //Criteria
 
@@ -305,6 +57,8 @@ export async function getCriterion(id) {
   );
   return rows;
 }
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 //Alternatives
 
@@ -334,6 +88,39 @@ export async function addAlternative(name) {
   const id = result.insertId;
   return getAlternative(id);
 }
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+//Category
+
+export async function getCategories() {
+  const [rows] = await pool.query("SELECT * FROM category");
+  return rows;
+}
+
+export async function getSpecificCategory(id) {
+  const [rows] = await pool.query(
+    `SELECT * FROM category WHERE id = ?
+  `,
+    [id]
+  );
+  return rows;
+}
+
+export async function addCategory(name) {
+  const [result] = await pool.query(
+    `
+    INSERT INTO 
+      category (name)
+      VALUES (?)
+      `,
+    [name]
+  );
+  const id = result.insertId;
+  return getSpecificCategory(id);
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 //Decision
 
@@ -378,6 +165,8 @@ export async function updateDecisionDone(id) {
   );
   return result;
 }
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 //Participants of a specific decision
 
@@ -437,6 +226,24 @@ export async function updateDecisionParticipantsDone(
   return result;
 }
 
+////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+//Category and specific Criteria
+
+export async function getCategoryCriteria(id) {
+  const [rows] = await pool.query(
+    `
+     SELECT * 
+    FROM category_criteria
+    WHERE category_id = ?
+    `,
+    [id]
+  );
+  return rows;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 //Criteria of a specific decision
 
 export async function getDecisionCriteria(id) {
@@ -464,6 +271,8 @@ export async function addDecisionCriteria(decisionId, criterionId) {
   return result;
 }
 
+////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 //Alternatives of a specific decision
 
 export async function getDecisionAlternatives(id) {
@@ -490,6 +299,8 @@ export async function addDecisionAlternative(decisionId, alternativeId) {
   );
   return result;
 }
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 //Alternatives criterion value of a specific decision
 
@@ -533,6 +344,8 @@ export async function addDecisionAlternativesCriterionValue(
   return result;
 }
 
+////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 //Criteria parwise comparisons of a specific decision from a specific participant
 
 export async function getSpecificParticipantDecisionCriteriaComparison(
@@ -568,6 +381,8 @@ export async function addSpecificParticipantDecisionCriteriaComparison(
   );
   return result;
 }
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 //Alternatives parwise comparisons of a specific decision from a specific participant
 
@@ -609,6 +424,75 @@ export async function addSpecificParticipantDecisionAlternativesComparison(
       alternative2Id,
       pairwiseValue,
     ]
+  );
+  return result;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+//Final results of a specific decision from a specific participant
+
+export async function getSpecificParticipantDecisionFinalResults(
+  decisionId,
+  userId
+) {
+  const [rows] = await pool.query(
+    `
+     SELECT * 
+    FROM users_final_results
+    WHERE decision_id = ? 
+    AND user_id = ?
+    `,
+    [decisionId, userId]
+  );
+  return rows;
+}
+
+export async function AddSpecificParticipantDecisionFinalResults(
+  decisionId,
+  userId,
+  alternativeId,
+  finalResult
+) {
+  const [result] = await pool.query(
+    `
+    INSERT INTO 
+    users_final_results (decision_id, user_id, alternative_id, final_result)
+      VALUES (?, ?, ?, ?)
+      `,
+    [decisionId, userId, alternativeId, finalResult]
+  );
+  return result;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+//Final results of a specific decision from a specific participant
+
+export async function getSpecificDecisionFinalResults(decisionId) {
+  const [rows] = await pool.query(
+    `
+     SELECT * 
+    FROM decision_final_results
+    WHERE decision_id = ?
+    `,
+    [decisionId]
+  );
+  return rows;
+}
+
+export async function AddSpecificDecisionFinalResults(
+  decisionId,
+  alternativeId,
+  finalResult
+) {
+  const [result] = await pool.query(
+    `
+    INSERT INTO 
+    decision_final_results (decision_id, alternative_id, final_result)
+      VALUES (?, ?, ?)
+      `,
+    [decisionId, alternativeId, finalResult]
   );
   return result;
 }

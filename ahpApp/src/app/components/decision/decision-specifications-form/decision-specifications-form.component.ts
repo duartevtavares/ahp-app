@@ -36,7 +36,13 @@ export class DecisionSpecificationsFormComponent implements OnInit {
     public apiService: ApiService
   ) {}
 
+  categoryChoosen?: any;
+  categoryNameChoosen?: any;
   myCriteriaControl = new FormControl('');
+  myCategoryCriteriaControl = new FormControl('');
+  categoryCriteriaOptions: Observable<any>[] = [];
+  myCategoryControl = new FormControl('');
+  categoryOptions: Observable<any>[] = [];
   criteriaOptions: any = [];
   criteriaOptionsNames: string[] = [];
   filteredOptions?: Observable<any>;
@@ -53,7 +59,52 @@ export class DecisionSpecificationsFormComponent implements OnInit {
         console.log('erro', error);
       }
     );
+
+    /////////////////////////////////////////////////////////////////////
+
+    this.apiService.getCategories().subscribe((r) => {
+      this.categoryOptions = r;
+      console.log(this.categoryOptions);
+    });
+
+    /////////////////////////////////////////////////////////////////////
   }
+
+  onSelectCategory() {
+    // console.log('category ID: ', categoryId);
+    this.categoryCriteriaOptions = [];
+
+    this.categoryChoosen = this.myCategoryControl.value;
+    this.categoryNameChoosen = this.categoryChoosen.name;
+
+    this.apiService
+      .getSpecificCategoryCriteria(this.categoryChoosen.id)
+      .subscribe((res) => {
+        let categoryCriteriaObservable = this.apiService.getSpecificCriterion(
+          res[0].criterion_id
+        );
+
+        categoryCriteriaObservable.subscribe((resultt) => {
+          this.categoryCriteriaOptions.push(resultt);
+        });
+        // this.categoryCriteriaOptions.push(categoryCriteriaObservable);
+
+        for (let i = 1; i < res.length; i++) {
+          categoryCriteriaObservable = categoryCriteriaObservable.pipe(
+            concatMap(() =>
+              this.apiService.getSpecificCriterion(res[i].criterion_id)
+            )
+          );
+          categoryCriteriaObservable.subscribe((result: any) => {
+            this.categoryCriteriaOptions.push(result);
+          });
+
+          // this.categoryCriteriaOptions.push(categoryCriteriaObservable);
+        }
+      });
+  }
+
+  ////////////////////////////////////////////////////////////////////
 
   openDialog() {
     this.dialog.open(AlertComponent);
@@ -74,12 +125,22 @@ export class DecisionSpecificationsFormComponent implements OnInit {
     // if (this.criteria.value[this.criteria.value.length - 1] === '') {
     //   this.criteria.removeAt(this.criteria.value.length - 1);
     // }
+
     this.decisionSpecificationsForm.disable();
     this.disabledAddButton = true;
     this.formSubmited = true;
     this.decisionSpecifications = this.decisionSpecificationsForm.value;
     this.specsService.decisionSpecs = this.decisionSpecifications;
-    this.specsService.decisionCriteria = this.myCriteriaControl.value;
+    let criteriaArray: any = [];
+    let criteriaArrayFinal: any = [];
+    if (this.myCriteriaControl.value) {
+      for (let i = 0; i < this.myCriteriaControl.value.length; i++) {
+        criteriaArray[i] = this.myCriteriaControl.value?.at(i);
+        criteriaArrayFinal[i] = criteriaArray[i][0];
+      }
+    }
+
+    this.specsService.decisionCriteria = criteriaArrayFinal;
     this.specsService.decisionAlternativesNames =
       this.specsService.decisionSpecs.alternatives;
 
@@ -96,8 +157,6 @@ export class DecisionSpecificationsFormComponent implements OnInit {
       this.decisionId = res.length + 1;
       console.log(res);
     });
-
-    console.log('counter: ', this.alternativesValuesCounter);
 
     console.log(this.decisionSpecifications);
     console.log(this.specsService.decisionSpecs);
@@ -168,7 +227,7 @@ export class DecisionSpecificationsFormComponent implements OnInit {
     this.apiService
       .postDecision({
         goal: this.decisionSpecifications.problemGoal,
-        category: this.decisionSpecifications.problemGoal,
+        category: this.categoryNameChoosen,
       })
       .subscribe();
 

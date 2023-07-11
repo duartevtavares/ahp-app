@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { Subject } from 'rxjs';
 import { ApiService } from 'src/app/services/api.service';
-import { DecisionSpecificationsService } from 'src/app/services/decision-specifications.service';
 
 @Component({
   selector: 'admin-home-page-component',
@@ -14,11 +14,12 @@ export class AdminHomePageComponent implements OnInit {
   allDecisionsName: any;
   decisionsParticipants: any;
   decisionsCriteria: any;
+  decisionsCategory: any;
   decisionsAlternatives: any;
-  constructor(
-    private specsService: DecisionSpecificationsService,
-    private apiService: ApiService
-  ) {}
+  chartData: { name: string; value: number }[] = [];
+  chartDataArray: any = [];
+
+  constructor(private apiService: ApiService) {}
 
   async ngOnInit(): Promise<void> {
     this.incompleteDecisions = [];
@@ -26,14 +27,21 @@ export class AdminHomePageComponent implements OnInit {
     this.decisionsParticipants = [];
     this.decisionsCriteria = [];
     this.decisionsAlternatives = [];
+    this.decisionsCategory = [];
+
+    this.apiService.getCategories().subscribe((result) => {
+      console.log('categories: ', result);
+    });
+
+    this.apiService.getSpecificCategoryCriteria(1).subscribe((result) => {
+      console.log('category and its criteria: ', result);
+    });
 
     this.apiService.getDecisions().subscribe((result) => {
-      console.log('entrou1');
-      console.log(result);
       this.allDecisions = result;
+
       for (let res of result) {
         if (res.done.data[0] === 0) {
-          console.log('entrou2');
           let isDone = true;
           this.apiService
             .getSpecificDecisionParticipantsByDecisionId(res.id)
@@ -44,12 +52,15 @@ export class AdminHomePageComponent implements OnInit {
                 }
               }
               if (isDone === true) {
-                console.log('entrou3');
                 this.completeDecisions.push(res);
                 const decisionId = res.id;
                 this.apiService
                   .updateSpecificDecisionDone({ decisionId: decisionId })
-                  .subscribe();
+                  .subscribe(() => {
+                    this.apiService.getDecisions().subscribe((result) => {
+                      this.allDecisions = result;
+                    });
+                  });
               } else {
                 this.incompleteDecisions.push(res);
               }
@@ -63,11 +74,58 @@ export class AdminHomePageComponent implements OnInit {
         this.decisionsParticipants.push([]);
         this.decisionsCriteria.push([]);
         this.decisionsAlternatives.push([]);
+
+        this.chartDataArray.push([]);
       }
-      for (let i = 0; i < result.length; i++) {
-        this.showDecision(i, result[i]);
-      }
+      setTimeout(() => {
+        for (let i = 0; i < result.length; i++) {
+          this.showDecision(i, result[i]);
+        }
+      }, 300);
     });
+  }
+
+  open(index: number) {
+    let finalResults: any = [];
+    this.chartData = [];
+    let finalResultHelperArray: any = [];
+    if (this.allDecisions[index].done.data[0] === 1) {
+      this.apiService
+        .getSpecificDecisionParticipantsByDecisionId(
+          this.allDecisions[index].id
+        )
+        .subscribe((result) => {
+          for (let j = 0; j < result.length; j++) {
+            this.apiService
+              .getSpecificParticipantDecisionFinalResults({
+                decisionId: this.allDecisions[index].id,
+                userId: result[j].user_id,
+              })
+              .subscribe((res) => {
+                finalResultHelperArray.push(res);
+              });
+          }
+          setTimeout(() => {
+            for (let m = 0; m < finalResultHelperArray[0].length; m++) {
+              let counter = 0;
+              for (let n = 0; n < finalResultHelperArray.length; n++) {
+                counter += finalResultHelperArray[n][m].final_result;
+              }
+              counter = counter / finalResultHelperArray.length;
+              finalResults[m] = counter;
+            }
+            console.log('Final results: ', finalResults);
+            for (let i = 0; i < this.decisionsAlternatives[index].length; i++) {
+              this.chartData.push({
+                name: this.decisionsAlternatives[index][i],
+                value: finalResults[i],
+              });
+            }
+            console.log('chart data: ', this.chartData);
+            this.chartDataArray[index] = this.chartData;
+          }, 200);
+        });
+    }
   }
 
   showDecision(index: number, decision: any) {
@@ -82,6 +140,7 @@ export class AdminHomePageComponent implements OnInit {
             });
         }
       });
+
     this.apiService
       .getSpecificDecisionCriteria(decision.id)
       .subscribe((result) => {
@@ -89,8 +148,6 @@ export class AdminHomePageComponent implements OnInit {
           this.apiService
             .getSpecificCriterion(result[j].criterion_id)
             .subscribe((res) => {
-              console.log(res);
-              console.log(res[0].name);
               this.decisionsCriteria[index][j] = res[0].name;
             });
         }
@@ -98,13 +155,10 @@ export class AdminHomePageComponent implements OnInit {
     this.apiService
       .getSpecificDecisionAlternatives(decision.id)
       .subscribe((result) => {
-        console.log(result);
         for (let j = 0; j < result.length; j++) {
           this.apiService
             .getSpecificAlternative(result[j].alternative_id)
             .subscribe((res) => {
-              console.log(res);
-              console.log(res[0].name);
               this.decisionsAlternatives[index][j] = res[0].name;
             });
         }

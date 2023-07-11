@@ -1,11 +1,98 @@
-.buttons {
+.wecolme-page-wrapper {
   display: flex;
-  flex-direction: row;
-  gap: 16px;
+  width: 100%;
 
-  //   .users-buttons {
-  //     display: flex;
-  //     flex-direction: row;
-  //     gap: 10px;
-  //   }
+  .users-profile {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    justify-content: space-between;
+    margin: 30px;
+    gap: 20px;
+
+    .admin {
+      flex-direction: column;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 30px;
+      border: solid black 3px;
+      border-radius: 10px;
+      width: 100%;
+      padding: 40px 20px;
+      background-color: rgb(30, 32, 35);
+
+      .mat-icon {
+        color: white;
+        display: flex;
+        justify-content: center;
+        width: 100%;
+        font-size: 100px;
+        height: 100%;
+      }
+      .admin-name {
+        color: white;
+      }
+
+      .decisions {
+        text-align: center;
+        font-weight: 500;
+        padding: 8px;
+        border: solid white;
+        border-radius: 5px;
+        background-color: white;
+        cursor: pointer;
+      }
+    }
+
+    .users {
+      flex-direction: column;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 30px;
+      border: solid black 3px;
+      border-radius: 10px;
+      width: 100%;
+      padding: 40px 20px;
+      background-color: rgb(55, 70, 87);
+      .mat-icon {
+        color: white;
+        display: flex;
+        justify-content: center;
+        width: 100%;
+        font-size: 100px;
+        height: 100%;
+      }
+      .user-name {
+        color: white;
+      }
+
+      .description {
+        font-size: 10px;
+        text-align: justify;
+      }
+      .decisions {
+        text-align: center;
+        font-weight: 500;
+        padding: 8px;
+        border: solid white;
+        border-radius: 5px;
+        background-color: white;
+        cursor: pointer;
+      }
+    }
+
+    //   .users-buttons {
+    //     display: flex;
+    //     flex-direction: row;
+    //     gap: 10px;
+    //   }
+  }
+}
+
+.decisions:hover,
+.decisions:focus {
+  box-shadow: 0 0.5em 0.5em -0.4em var(--hover);
+  transform: translateY(-0.25em);
 }

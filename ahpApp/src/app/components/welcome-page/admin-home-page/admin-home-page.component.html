@@ -12,6 +12,7 @@
       <mat-accordion>
         <mat-expansion-panel
           *ngFor="let decision of allDecisions; let i = index"
+          (opened)="open(i)"
         >
           <mat-expansion-panel-header>
             <mat-panel-title
@@ -28,6 +29,11 @@
             </div>
 
             <div class="participants">
+              <h5><strong>Category:</strong></h5>
+              <p>{{ decision.category }}</p>
+            </div>
+
+            <div class="participants">
               <h5><strong>Criteria:</strong></h5>
               <p *ngFor="let criteria of decisionsCriteria[i]">
                 {{ criteria }}
@@ -40,10 +46,30 @@
                 {{ alternative }}
               </p>
             </div>
+
             <div class="participants">
               <h5><strong>Done:</strong></h5>
-              <p>{{ decision.done.data[0] }}</p>
+              <p>{{ decision.done.data[0] === 1 ? "Yes" : "No" }}</p>
             </div>
+
+            <ng-container *ngIf="chartDataArray[i].length">
+              <div class="participants">
+                <h5><strong>Final result:</strong></h5>
+                <ng-container>
+                  <ngx-charts-bar-vertical
+                    [view]="[450, 200]"
+                    [results]="chartDataArray[i]"
+                    [gradient]="false"
+                    [xAxis]="true"
+                    [yAxis]="true"
+                    [legend]="false"
+                    [showXAxisLabel]="true"
+                    [showYAxisLabel]="true"
+                  >
+                  </ngx-charts-bar-vertical>
+                </ng-container>
+              </div>
+            </ng-container>
           </div>
         </mat-expansion-panel>
       </mat-accordion>

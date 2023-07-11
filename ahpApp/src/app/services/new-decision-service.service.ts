@@ -11,4 +11,7 @@ export class NewDecisionService {
   decisionAlternativesId: any = [];
   decisionIntro: any;
   alternativesCriteriaValues: number[] = [];
+  predictedPairwiseValue: number[] = [];
+  criteriaPairWiseValues: number[] = [];
+  criteriaWeightArray: number[] = [];
 }

@@ -1,6 +1,9 @@
 import express from "express";
 import {
+  AddSpecificDecisionFinalResults,
+  AddSpecificParticipantDecisionFinalResults,
   addAlternative,
+  addCategory,
   addDecision,
   addDecisionAlternative,
   addDecisionAlternativesCriterionValue,
@@ -11,22 +14,27 @@ import {
   addUser,
   getAlternative,
   getAlternatives,
+  getCategories,
+  getCategoryCriteria,
   getCriteria,
   getCriterion,
   getDecision,
   getDecisionAlternatives,
-  getSpecificDecisionAlternativesCriterionValue,
   getDecisionAlternativesCriterionValue,
   getDecisionCriteria,
   getDecisionParticipantsByDecisionId,
   getDecisionParticipantsByUserId,
   getDecisions,
+  getSpecificCategory,
+  getSpecificDecisionAlternativesCriterionValue,
+  getSpecificDecisionFinalResults,
+  getSpecificParticipantDecisionAlternativesComparison,
   getSpecificParticipantDecisionCriteriaComparison,
+  getSpecificParticipantDecisionFinalResults,
   getUser,
   getUsers,
   updateDecisionDone,
   updateDecisionParticipantsDone,
-  getSpecificParticipantDecisionAlternativesComparison,
 } from "./db.js";
 
 const app = express();
@@ -44,23 +52,6 @@ app.use(function (req, res, next) {
   );
   next();
 });
-
-// app.get("/participants", async (req, res) => {
-//   const participants = await getParticipants();
-//   res.send(participants);
-// });
-
-// app.get("/participants/:id", async (req, res) => {
-//   const id = req.params.id;
-//   const participant = await getParticipant(id);
-//   res.status(201).send(participant);
-// });
-
-// app.post("/participants", async (req, res) => {
-//   const name = req.body;
-//   const participant = await addParticipant(name);
-//   res.status(201).send(participant);
-// });
 
 //User
 
@@ -113,6 +104,25 @@ app.post("/alternatives", async (req, res) => {
   const name = req.body.name;
   const alternative = await addAlternative(name);
   res.status(201).send(alternative);
+});
+
+//Category
+
+app.get("/category", async (req, res) => {
+  const categories = await getCategories();
+  res.send(categories);
+});
+
+app.get("/category/:id", async (req, res) => {
+  const id = req.params.id;
+  const category = await getSpecificCategory(id);
+  res.status(201).send(category);
+});
+
+app.post("/category", async (req, res) => {
+  const name = req.body.name;
+  const category = await addCategory(name);
+  res.status(201).send(category);
 });
 
 //Decision
@@ -175,6 +185,14 @@ app.put("/decision_participants", async (req, res) => {
     participantsId
   );
   res.status(201).send(decisionParticipantsDone);
+});
+
+//Category and specific Criteria
+
+app.get("/category_criteria/:id", async (req, res) => {
+  const id = req.params.id;
+  const categoryCriteria = await getCategoryCriteria(id);
+  res.status(201).send(categoryCriteria);
 });
 
 //Criteria of a specific decision
@@ -312,6 +330,61 @@ app.post("/decision_alternatives_pairwise", async (req, res) => {
       pairwiseValue
     );
   res.status(201).send(participantDecisionAlternativeComparison);
+});
+
+//////////////////////////////////////////////////////////////////////////////////////
+
+//Final results of specific decision from a specific participant
+
+app.get("/users_final_results/:decisionId/:userId", async (req, res) => {
+  const decisionId = req.params.decisionId;
+  const userId = req.params.userId;
+  const participantDecisionFinalResult =
+    await getSpecificParticipantDecisionFinalResults(decisionId, userId);
+  res.status(201).send(participantDecisionFinalResult);
+});
+
+//post
+
+app.post("/users_final_results", async (req, res) => {
+  const decisionId = req.body.decisionId;
+  const userId = req.body.userId;
+  const alternativeId = req.body.alternativeId;
+  const finalResult = req.body.finalResult;
+  const participantDecisionFinalResult =
+    await AddSpecificParticipantDecisionFinalResults(
+      decisionId,
+      userId,
+      alternativeId,
+      finalResult
+    );
+  res.status(201).send(participantDecisionFinalResult);
+});
+
+//////////////////////////////////////////////////////////////////////////////////////
+
+//Final results of specific decision
+
+app.get("/decision_final_results/:decisionId", async (req, res) => {
+  const decisionId = req.params.decisionId;
+  const participantDecisionFinalResult = await getSpecificDecisionFinalResults(
+    decisionId
+  );
+  res.status(201).send(participantDecisionFinalResult);
+});
+
+//post
+
+app.post("/decision_final_results", async (req, res) => {
+  const decisionId = req.body.decisionId;
+  const alternativeId = req.body.alternativeId;
+  const finalResult = req.body.finalResult;
+  const decisionFinalResult = await AddSpecificDecisionFinalResults(
+    decisionId,
+    alternativeId,
+    finalResult
+  );
+  res.status(201).send(decisionFinalResult);
 });
 
 /////////////////

@@ -36,6 +36,12 @@
                   }}
                 </ul>
 
+                <!-- 
+                   value="{{
+                    predictedPairwiseValue[
+                      j + firstColumnAlternativesArray.length * i
+                    ][2]
+                  }}" -->
                 <mat-slider
                   class="alternative-mat-slider"
                   [attr.id]="j"
@@ -46,7 +52,7 @@
                   min="1"
                   max="9"
                   value="5"
-                  (input)="changeAlternativeValue($event, i, j)"
+                  (input)="changeAlternativeValue($event.value, i, j)"
                 ></mat-slider>
                 <br />
               </div>
@@ -114,8 +120,9 @@
       </a>
     </div>
     <div class="final-results">
-      <ng-container *ngIf="formIsSubmited">
+      <ng-container>
         <ngx-charts-bar-vertical
+          [view]="[450, 200]"
           [results]="finalResultsChartData"
           [gradient]="false"
           [xAxis]="true"

@@ -1,30 +1,41 @@
 <div class="wecolme-page-wrapper">
-  <h1>Welcome!</h1>
-
-  <div class="buttons">
-    <div class="admin-button">
-      <button
-        class="criteria-matrix-btn"
-        mat-raised-button
-        type="button"
+  <div class="users-profile">
+    <div class="admin">
+      <mat-icon class="material-icons"> account_circle </mat-icon>
+      <div class="admin-name">Administrator</div>
+      <div
+        class="decisions"
         (click)="isAdmin(true, 0)"
         routerLink="/admin-home-page-component"
         routerLinkActive="active"
       >
-        Admin
-      </button>
+        All decisions
+      </div>
     </div>
 
-    <div class="users-buttons" *ngFor="let user of users">
-      <button
-        class="criteria-matrix-btn"
-        mat-raised-button
-        type="button"
+    <div class="users" *ngFor="let user of users">
+      <mat-icon class="material-icons"> account_circle </mat-icon>
+      <div class="user-name">
+        {{ user.name }}
+      </div>
+      <!-- <div class="profile-picture">
+        <img src="C:/xampp/htdocs/fotografias_users/0.jpg" />
+      </div> -->
+      <div
+        class="decisions"
         (click)="isAdmin(false, user)"
         routerLink="/user-home-page-component"
       >
-        {{ user.username }}
-      </button>
+        User decisions
+      </div>
+      <!-- <p class="description">
+        Carla cresceu em um ambiente onde a estabilidade e segurança eram
+        altamente valorizadas. Seus pais sempre enfatizaram a importância de
+        evitar riscos e tomar decisões seguras. Essa mentalidade foi
+        internalizada por Carla ao longo dos anos, levando-a a desenvolver uma
+        aversão ao risco. Ela prefere opções estáveis e previsíveis em vez de se
+        aventurar no desconhecido.
+      </p> -->
     </div>
   </div>
 </div>

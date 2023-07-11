@@ -2,7 +2,7 @@
   <mat-card class="form-card">
     <form [formGroup]="decisionSpecificationsForm" (ngSubmit)="onSubmit()">
       <div class="problem-goal">
-        <h2>Firstly, start by defining the goal of the problem:</h2>
+        <h2>Goal of the decision:</h2>
         <mat-form-field class="goal-form-field" appearance="fill">
           <textarea
             matInput
@@ -34,8 +34,29 @@
         </mat-select>
       </mat-form-field> -->
 
+      <!--/////////////////////////////////////////////////////Category//////////////////////////////////////// -->
+      <div class="problem-category">
+        <h3>Category of the decision:</h3>
+        <mat-form-field class="criteria-full-width" appearance="fill">
+          <mat-select
+            [formControl]="myCategoryControl"
+            [disabled]="disabledAddButton"
+            (selectionChange)="onSelectCategory()"
+          >
+            <mat-select-trigger>
+              {{ categoryNameChoosen }}
+            </mat-select-trigger>
+            <mat-option *ngFor="let optns of categoryOptions" [value]="optns">{{
+              optns.name
+            }}</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+
+      <!--//////////////////////////////////////////////////////////// -->
+
       <div formArrayName="alternatives" class="problem-alternatives">
-        <h2>Next, add the alternatives to solve the problem:</h2>
+        <h3>Alternatives to solve the initial problem:</h3>
         <div
           class="new-alternative-wrapper"
           *ngFor="let alternatives of alternatives.controls; let i = index"
@@ -78,60 +99,33 @@
         </div>
       </div>
 
-      <!-- <div formArrayName="criteria" class="problem-criteria">
-        <h2>Finally, choose the criteria to evaluate the alternatives:</h2>
-        <div
-          class="new-criteria-wrapper"
-          *ngFor="let criteria of criteria.controls; let i = index"
-        >
-          
-          <mat-form-field class="criteria-form-field" appearance="fill">
-            <input
-              matInput
-              id="criteria-{{ i }}"
-              type="text"
-              [formControlName]="i"
-            /> </mat-form-field
-          ><button
-            class="delete-criteria-btn"
-            *ngIf="i > 0"
-            mat-icon-button
-            [disabled]="disabledAddButton"
-            (click)="deleteCriteria(i)"
-          >
-            <mat-icon>close</mat-icon>
-          </button>
-        </div>
-        <button
-          mat-raised-button
-          name="addButton"
-          [disabled]="disabledAddButton"
-          type="button"
-          (click)="addCriteria(criteria.length)"
-        >
-          Add another criteria
-        </button>
-      </div> -->
+      <!-- ////////////////////////////////////////// -->
 
-      <mat-form-field class="criteria-full-width" appearance="fill">
-        <mat-label>Criteria</mat-label>
-        <mat-select
-          [formControl]="myCriteriaControl"
-          multiple
-          [disabled]="disabledAddButton"
-        >
-          <mat-select-trigger>
-            {{ myCriteriaControl.value?.length || 0 }}
-            {{
-              myCriteriaControl.value?.length === 1 ? "criterion" : "Criteria"
-            }}
-            selected
-          </mat-select-trigger>
-          <mat-option *ngFor="let option of criteriaOptions" [value]="option">{{
-            option.name
-          }}</mat-option>
-        </mat-select>
-      </mat-form-field>
+      <div class="problem-criteria">
+        <h3>Criteria of the decision:</h3>
+        <mat-form-field class="criteria-full-width" appearance="fill">
+          <mat-select
+            [formControl]="myCriteriaControl"
+            multiple
+            [disabled]="disabledAddButton"
+          >
+            <mat-select-trigger>
+              {{ myCriteriaControl.value?.length || 0 }}
+              {{
+                myCriteriaControl.value?.length === 1 ? "criterion" : "criteria"
+              }}
+              selected
+            </mat-select-trigger>
+            <mat-option
+              *ngFor="let opt of categoryCriteriaOptions"
+              [value]="opt"
+              >{{ opt[0].name }}</mat-option
+            >
+          </mat-select>
+        </mat-form-field>
+      </div>
+
+      <!--//////////////////////////////////////////////////////////////////////////////////////////////////////-->
 
       <div class="form-buttons">
         <button
@@ -175,7 +169,11 @@
           let i = index
         "
       >
-        <mat-label>Regarding the criteria {{ criterionOption.name }}</mat-label>
+        <mat-label
+          >Regarding the criteria<strong>
+            {{ criterionOption.name }}</strong
+          ></mat-label
+        >
         <div
           *ngFor="
             let alternativeOption of specsService.decisionAlternativesNames;

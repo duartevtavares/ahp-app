@@ -455,6 +455,42 @@ export class UserHomePageComponent implements OnInit {
                     completeFinalValsPairwise
                   ); //array com o criterio, valores das alternativas e valor da pairwise comparison
 
+                  let rightOrderCompleteFinalValsPairwise: any = [];
+                  for (let i = 0; i < completeFinalValsPairwise.length; i++) {
+                    if (
+                      completeFinalValsPairwise[i][1] >
+                      completeFinalValsPairwise[i][2]
+                    ) {
+                      let criterionId = completeFinalValsPairwise[i][0];
+                      let firstComparisonValue =
+                        completeFinalValsPairwise[i][1];
+                      let secondComparisonValue =
+                        completeFinalValsPairwise[i][2];
+                      let pairwiseNewValue =
+                        5 - (completeFinalValsPairwise[i][3] - 5);
+                      let orderChanged = 1;
+                      rightOrderCompleteFinalValsPairwise.push([
+                        criterionId,
+                        secondComparisonValue,
+                        firstComparisonValue,
+                        pairwiseNewValue,
+                        orderChanged,
+                      ]);
+                    } else {
+                      rightOrderCompleteFinalValsPairwise.push([
+                        completeFinalValsPairwise[i][0],
+                        completeFinalValsPairwise[i][1],
+                        completeFinalValsPairwise[i][2],
+                        completeFinalValsPairwise[i][3],
+                        0,
+                      ]);
+                    }
+                  }
+                  console.log(
+                    'Com a ordem correta: ',
+                    rightOrderCompleteFinalValsPairwise
+                  );
+
                   let p: any = [];
                   let r: any = [];
                   let s: any = [];
@@ -473,7 +509,7 @@ export class UserHomePageComponent implements OnInit {
                   let BArray: any = [];
                   let insideTriangleArray: any = [];
                   let lengthOfEachCriteriaCounter = 0;
-
+                  let SArray: any = [];
                   for (let i = 0; i < criteriaToCheck.length; i++) {
                     p = [];
                     r = [];
@@ -485,28 +521,28 @@ export class UserHomePageComponent implements OnInit {
 
                     for (let j = 0; j < lengthOfEachCriteria[i]; j++) {
                       console.log(lengthOfEachCriteria[i]);
-                      //TODO: Change 21 and find out how to put a value
+
                       p[j] = [
                         Math.sqrt(
-                          completeFinalValsPairwise[
+                          rightOrderCompleteFinalValsPairwise[
                             j + lengthOfEachCriteriaCounter
                           ][1] *
-                            completeFinalValsPairwise[
+                            rightOrderCompleteFinalValsPairwise[
                               j + lengthOfEachCriteriaCounter
                             ][2]
                         ),
                       ];
                       r[j] = [
-                        completeFinalValsPairwise[
+                        rightOrderCompleteFinalValsPairwise[
                           j + lengthOfEachCriteriaCounter
                         ][2] /
-                          completeFinalValsPairwise[
+                          rightOrderCompleteFinalValsPairwise[
                             j + lengthOfEachCriteriaCounter
                           ][1],
                       ];
 
                       s[j] =
-                        completeFinalValsPairwise[
+                        rightOrderCompleteFinalValsPairwise[
                           j + lengthOfEachCriteriaCounter
                         ][3]; // Array that keeps all the pairwise comparison values
                     }
@@ -547,23 +583,50 @@ export class UserHomePageComponent implements OnInit {
                     let points: any = [];
                     let stopForCicle = false;
                     for (let j = 0; j < lengthOfEachCriteria[i]; j++) {
+                      let past_p =
+                        rightOrderCompleteFinalValsPairwise[
+                          j + lengthOfEachCriteriaCounter
+                        ][1];
+                      let past_r =
+                        rightOrderCompleteFinalValsPairwise[
+                          j + lengthOfEachCriteriaCounter
+                        ][2];
+
                       points.push({
-                        x: completeFinalValsPairwise[
-                          j + lengthOfEachCriteriaCounter
-                        ][1],
-                        y: completeFinalValsPairwise[
-                          j + lengthOfEachCriteriaCounter
-                        ][2],
+                        x: Math.sqrt(past_p * past_r),
+                        y: past_r / past_p,
                       });
                     }
                     console.log('points: ', points);
                     insideTriangleArray.push([]);
+
+                    let columnValueOrderChanged = 0;
+
                     for (let n = 0; n < finalComparisonNumber; n++) {
+                      let currentFirstValue =
+                        first[n + finalComparisonNumber * i]
+                          .alternative_criterion_value;
+                      let currentSecondValue =
+                        second[n + finalComparisonNumber * i]
+                          .alternative_criterion_value;
+                      let finalFirstValue;
+                      let finalSecondValue;
+
+                      columnValueOrderChanged = 0;
+
+                      if (currentFirstValue > currentSecondValue) {
+                        finalFirstValue = currentSecondValue;
+                        finalSecondValue = currentFirstValue;
+                        columnValueOrderChanged = 1;
+                      } else {
+                        finalFirstValue = currentFirstValue;
+                        finalSecondValue = currentSecondValue;
+                        columnValueOrderChanged = 0;
+                      }
+
                       let external_point: any = {
-                        x: first[n + finalComparisonNumber * i]
-                          .alternative_criterion_value,
-                        y: second[n + finalComparisonNumber * i]
-                          .alternative_criterion_value,
+                        x: Math.sqrt(finalFirstValue * finalSecondValue),
+                        y: finalSecondValue / finalFirstValue,
                       };
                       stopForCicle = false;
 
@@ -596,7 +659,7 @@ export class UserHomePageComponent implements OnInit {
 
                               insideTriangleArray[i][n] = 1;
 
-                              const S = math.add(
+                              let S = math.add(
                                 math.add(
                                   math.add(
                                     math.add(
@@ -619,8 +682,31 @@ export class UserHomePageComponent implements OnInit {
                                 ),
                                 math.multiply(BArray[i][4], 1)
                               );
+                              let S_new;
 
-                              console.log('RESULTADO FINALISSIMO: ', S);
+                              if (columnValueOrderChanged === 1) {
+                                S_new = 5 - (S - 5);
+                                //console.log(S);
+                              } else {
+                                S_new = S;
+                              }
+
+                              console.log('S antigo: ', S);
+                              console.log('RESULTADO FINALISSIMO: ', S_new);
+
+                              if (columnValueOrderChanged === 1) {
+                                SArray.push([
+                                  finalSecondValue,
+                                  finalFirstValue,
+                                  math.round(S_new),
+                                ]);
+                              } else {
+                                SArray.push([
+                                  finalFirstValue,
+                                  finalSecondValue,
+                                  math.round(S[0]),
+                                ]);
+                              }
 
                               break;
                             }
@@ -632,12 +718,13 @@ export class UserHomePageComponent implements OnInit {
                         console.log(
                           `Point (${external_point.x}, ${external_point.y}) is not inside any triangle`
                         );
-
+                        SArray.push([finalSecondValue, finalFirstValue, 0]);
                         insideTriangleArray[i][n] = 0;
                       }
                     }
                   }
-
+                  console.log(SArray);
+                  this.newDecisionService.predictedPairwiseValue = SArray;
                   console.log(
                     'number of comparisons and criteria:',
                     lengthOfEachCriteriaCounter
@@ -676,8 +763,6 @@ export class UserHomePageComponent implements OnInit {
 
                   //TODO:
 
-                  //Falta traçar matriz e grafico para perceber valores
-                  // perceber a fórmula e depois aplicar para cada uma das alternativas da decisao atual
                   //colocar tudo num array e mandar para o html para que as escolhas estejam feitas automaticamente
                 });
             });
